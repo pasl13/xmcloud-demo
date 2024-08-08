@@ -1,0 +1,120 @@
+{
+    "$schema": "../.sitecore/schemas/ModuleFile.schema.json",
+    "namespace": "Project.HeadlessSxaExample",
+    "items": {
+      "includes": [
+        {
+            "name": "templatesProject",
+            "path": "/sitecore/templates/Project/<SITE_COLLECTION_NAME>",
+            "allowedPushOperations": "CreateUpdateAndDelete"
+        },
+        {
+            "name": "templatesFeature",
+            "path": "/sitecore/templates/Feature/<SITE_COLLECTION_NAME>",
+            "allowedPushOperations": "CreateUpdateAndDelete"
+        },
+        {
+            "name": "branchesProject",
+            "path": "/sitecore/templates/Branches/Project/<SITE_COLLECTION_NAME>",
+            "allowedPushOperations": "CreateUpdateAndDelete"
+        },
+        {
+            "name": "branchesFeature",
+            "path": "/sitecore/templates/Branches/Feature/<SITE_COLLECTION_NAME>",
+            "allowedPushOperations": "CreateUpdateAndDelete"
+        },
+        {
+            "name": "modules",
+            "path": "/sitecore/system/Settings/Feature/<SITE_COLLECTION_NAME>",
+            "allowedPushOperations": "CreateUpdateAndDelete"
+        },           
+        {
+          "name": "projectMediaFolders",
+          "path": "/sitecore/Media Library/Project/<SITE_COLLECTION_NAME>",
+          "rules": [
+            {
+              "path": "/shared",
+              "scope": "SingleItem",
+              "allowedPushOperations": "CreateOnly"
+            },
+            {
+              "path": "/<SITE_NAME>",
+              "scope": "SingleItem",
+              "allowedPushOperations": "CreateOnly"
+            }
+          ]
+        },
+        {
+            "name": "layoutsProject",
+            "path": "/sitecore/Layout/Layouts/Project/<SITE_COLLECTION_NAME>",
+            "allowedPushOperations": "CreateUpdateAndDelete"
+        },
+        {
+            "name": "layoutsFeature",
+            "path": "/sitecore/Layout/Layouts/Feature/<SITE_COLLECTION_NAME>",
+            "allowedPushOperations": "CreateUpdateAndDelete"
+        },
+        {
+          "name": "projectRenderings",
+          "path": "/sitecore/Layout/Renderings/Project/<SITE_COLLECTION_NAME>",
+          "allowedPushOperations": "CreateUpdateAndDelete"
+        },
+        {
+          "name": "projectPlaceholderSettings",
+          "path": "/sitecore/Layout/Placeholder Settings/Project/<SITE_COLLECTION_NAME>",
+          "allowedPushOperations": "CreateUpdateAndDelete"
+        },
+        {
+          "name": "tenantRoot",
+          "path": "/sitecore/content/<SITE_COLLECTION_NAME>",
+          "scope": "SingleItem",
+          "allowedPushOperations": "CreateAndUpdate"
+        },
+        {
+          "name": "site",
+          "path": "/sitecore/content/<SITE_COLLECTION_NAME>/<SITE_NAME>",
+          "rules": [
+            {
+              "path": "/home",
+              "scope": "SingleItem",
+              "allowedPushOperations": "CreateOnly"
+            },
+            {
+              "path": "/Media",
+              "scope": "SingleItem",
+              "allowedPushOperations": "CreateAndUpdate"
+            },
+            {
+              "path": "/Data",
+              "scope": "ItemAndChildren",
+              "allowedPushOperations": "CreateAndUpdate"
+            },
+            {
+              "path": "/Dictionary",
+              "scope": "ItemAndChildren",
+              "allowedPushOperations": "CreateOnly"
+            },
+            {
+              "path": "/Presentation",
+              "scope": "ItemAndDescendants",
+              "allowedPushOperations": "CreateAndUpdate"
+            },
+            {
+              "path": "/Settings/Site Grouping",
+              "scope": "ItemAndDescendants",
+              "allowedPushOperations": "CreateOnly"
+            },
+            {
+              "path": "/Settings",
+              "scope": "ItemAndChildren",
+              "allowedPushOperations": "CreateAndUpdate"
+            },
+            {
+              "path": "*", 
+              "scope": "Ignored"
+            }
+          ]
+        }
+      ]
+    }
+  }

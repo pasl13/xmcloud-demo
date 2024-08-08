@@ -1,0 +1,120 @@
+{
+    "$schema": "../.sitecore/schemas/ModuleFile.schema.json",
+    "namespace": "Project.HeadlessSxaExample",
+    "items": {
+      "includes": [
+        {
+            "name": "templatesProject",
+            "path": "/sitecore/templates/Project/Demo",
+            "allowedPushOperations": "CreateUpdateAndDelete"
+        },
+        {
+            "name": "templatesFeature",
+            "path": "/sitecore/templates/Feature/Demo",
+            "allowedPushOperations": "CreateUpdateAndDelete"
+        },
+        {
+            "name": "branchesProject",
+            "path": "/sitecore/templates/Branches/Project/Demo",
+            "allowedPushOperations": "CreateUpdateAndDelete"
+        },
+        {
+            "name": "branchesFeature",
+            "path": "/sitecore/templates/Branches/Feature/Demo",
+            "allowedPushOperations": "CreateUpdateAndDelete"
+        },
+        {
+            "name": "modules",
+            "path": "/sitecore/system/Settings/Feature/Demo",
+            "allowedPushOperations": "CreateUpdateAndDelete"
+        },           
+        {
+          "name": "projectMediaFolders",
+          "path": "/sitecore/Media Library/Project/Demo",
+          "rules": [
+            {
+              "path": "/shared",
+              "scope": "SingleItem",
+              "allowedPushOperations": "CreateOnly"
+            },
+            {
+              "path": "/Demo",
+              "scope": "SingleItem",
+              "allowedPushOperations": "CreateOnly"
+            }
+          ]
+        },
+        {
+            "name": "layoutsProject",
+            "path": "/sitecore/Layout/Layouts/Project/Demo",
+            "allowedPushOperations": "CreateUpdateAndDelete"
+        },
+        {
+            "name": "layoutsFeature",
+            "path": "/sitecore/Layout/Layouts/Feature/Demo",
+            "allowedPushOperations": "CreateUpdateAndDelete"
+        },
+        {
+          "name": "projectRenderings",
+          "path": "/sitecore/Layout/Renderings/Project/Demo",
+          "allowedPushOperations": "CreateUpdateAndDelete"
+        },
+        {
+          "name": "projectPlaceholderSettings",
+          "path": "/sitecore/Layout/Placeholder Settings/Project/Demo",
+          "allowedPushOperations": "CreateUpdateAndDelete"
+        },
+        {
+          "name": "tenantRoot",
+          "path": "/sitecore/content/Demo",
+          "scope": "SingleItem",
+          "allowedPushOperations": "CreateAndUpdate"
+        },
+        {
+          "name": "site",
+          "path": "/sitecore/content/Demo/Demo",
+          "rules": [
+            {
+              "path": "/home",
+              "scope": "SingleItem",
+              "allowedPushOperations": "CreateOnly"
+            },
+            {
+              "path": "/Media",
+              "scope": "SingleItem",
+              "allowedPushOperations": "CreateAndUpdate"
+            },
+            {
+              "path": "/Data",
+              "scope": "ItemAndChildren",
+              "allowedPushOperations": "CreateAndUpdate"
+            },
+            {
+              "path": "/Dictionary",
+              "scope": "ItemAndChildren",
+              "allowedPushOperations": "CreateOnly"
+            },
+            {
+              "path": "/Presentation",
+              "scope": "ItemAndDescendants",
+              "allowedPushOperations": "CreateAndUpdate"
+            },
+            {
+              "path": "/Settings/Site Grouping",
+              "scope": "ItemAndDescendants",
+              "allowedPushOperations": "CreateOnly"
+            },
+            {
+              "path": "/Settings",
+              "scope": "ItemAndChildren",
+              "allowedPushOperations": "CreateAndUpdate"
+            },
+            {
+              "path": "*", 
+              "scope": "Ignored"
+            }
+          ]
+        }
+      ]
+    }
+  }
