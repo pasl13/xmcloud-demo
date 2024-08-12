@@ -1,3 +1,4 @@
+import { registerComponent } from '@sitecore-feaas/clientside';
 import React from 'react';
 import { ComponentParams, ComponentRendering } from '@sitecore-jss/sitecore-jss-nextjs';
 import Image from 'next/image';
@@ -10,8 +11,12 @@ interface CustomCardProps {
 }
 
 export const Default = (props: CustomCardProps): JSX.Element => {
-  const id = props.params?.RenderingIdentifier;
+  registerComponent(Default, {
+    name: 'CustomCard',
+    description: 'Custom Card Component',
+  });
 
+  const id = props.params?.RenderingIdentifier;
   // console.log("props:", props);
 
   return (
