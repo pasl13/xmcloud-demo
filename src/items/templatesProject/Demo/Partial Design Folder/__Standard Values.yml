@@ -1,0 +1,37 @@
+﻿---
+ID: "9af2b3e3-1b0c-403e-98f0-007c18ec418e"
+Parent: "2f5b1293-e8c3-46fc-93e0-4bf8445a03d0"
+Template: "2f5b1293-e8c3-46fc-93e0-4bf8445a03d0"
+Path: /sitecore/templates/Project/Demo/Partial Design Folder/__Standard Values
+SharedFields:
+- ID: "1172f251-dad4-4efb-a329-0c63500e4f1e"
+  Hint: __Masters
+  Value: |
+    {2F5B1293-E8C3-46FC-93E0-4BF8445A03D0}
+    {FD2059FD-6043-4DFE-8C04-E2437CE87634}
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20240730T112310Z
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\pedro.a.luis@noesis.pt
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\pedro.a.luis@noesis.pt
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "24580f32-1010-4c9e-a69c-594768cb48a5"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\pedro.a.luis@noesis.pt
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20240730T112315Z

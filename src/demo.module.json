@@ -9,25 +9,10 @@
             "allowedPushOperations": "CreateUpdateAndDelete"
         },
         {
-            "name": "templatesFeature",
-            "path": "/sitecore/templates/Feature/Demo",
-            "allowedPushOperations": "CreateUpdateAndDelete"
-        },
-        {
             "name": "branchesProject",
             "path": "/sitecore/templates/Branches/Project/Demo",
             "allowedPushOperations": "CreateUpdateAndDelete"
         },
-        {
-            "name": "branchesFeature",
-            "path": "/sitecore/templates/Branches/Feature/Demo",
-            "allowedPushOperations": "CreateUpdateAndDelete"
-        },
-        {
-            "name": "modules",
-            "path": "/sitecore/system/Settings/Feature/Demo",
-            "allowedPushOperations": "CreateUpdateAndDelete"
-        },           
         {
           "name": "projectMediaFolders",
           "path": "/sitecore/Media Library/Project/Demo",
@@ -43,16 +28,6 @@
               "allowedPushOperations": "CreateOnly"
             }
           ]
-        },
-        {
-            "name": "layoutsProject",
-            "path": "/sitecore/Layout/Layouts/Project/Demo",
-            "allowedPushOperations": "CreateUpdateAndDelete"
-        },
-        {
-            "name": "layoutsFeature",
-            "path": "/sitecore/Layout/Layouts/Feature/Demo",
-            "allowedPushOperations": "CreateUpdateAndDelete"
         },
         {
           "name": "projectRenderings",
