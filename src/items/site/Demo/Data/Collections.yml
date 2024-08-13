@@ -1,0 +1,23 @@
+﻿---
+ID: "07a843ec-86ca-4002-b551-d58f5707c507"
+Parent: "4a104a43-1efd-41e9-8045-16a2242d9366"
+Template: "b3809824-c882-47a7-b65b-e94b6ed5aa82"
+Path: /sitecore/content/Demo/Demo/Data/Collections
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20240807T124913Z
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "41a892d9-d5ec-485f-8cd3-19536e258c4e"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\williker.c.carmo@noesis.pt
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20240807T124929Z
