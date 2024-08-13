@@ -1,36 +1,20 @@
 ﻿---
-ID: "dffee92b-0441-45a4-9207-67810b72bd46"
-Parent: "895e25c4-12b2-4b2c-8233-82f3b79eef53"
-Template: "bc71d442-3e4f-46ba-887c-746e54f9bb83"
-Path: /sitecore/system/Settings/Services/Rendering Hosts/Default
-SharedFields:
-- ID: "3121c257-53cf-464a-b736-98b418876057"
-  Hint: AppName
-  Value: Default
-- ID: "94470b31-e282-4d8d-bc54-85689efb294c"
-  Hint: ServerSideRenderingEngineConfigUrl
-  Value: "https://xmc-eh-5dmqju55ujeyd8vqowr6vo.sitecorecloud.io:443/api/editing/config"
-- ID: "9c6106ea-7a5a-48e2-8cad-f0f693b1e2d4"
-  Hint: __Read Only
-  Value: 1
-- ID: "e32c1801-79b3-4fc1-a9c4-3c6e6c2968ae"
-  Hint: ServerSideRenderingEngineApplicationUrl
-  Value: "https://xmc-eh-5dmqju55ujeyd8vqowr6vo.sitecorecloud.io/"
-- ID: "fc76919b-0d7c-4732-865d-2af795fb38a4"
-  Hint: ServerSideRenderingEngineEndpointUrl
-  Value: "https://xmc-eh-5dmqju55ujeyd8vqowr6vo.sitecorecloud.io:443/api/editing/render"
+ID: "b09f97bf-26ca-4b33-8a9e-7019fec5e0cb"
+Parent: "42e53ef2-32bd-43e5-85f5-2e13fef5a174"
+Template: "35e75c72-4985-4e09-88c3-0eac6cd1e64f"
+Path: /sitecore/templates/Branches/Project/Demo/Services/Available Headless Services Renderings
 Languages:
 - Language: "de-DE"
   Fields:
   - ID: "b5e02ad9-d56f-4c41-a065-a133db87bdeb"
     Hint: __Display name
-    Value: Default
+    Value: Leer verfügbare Renderings
   Versions:
   - Version: 1
     Fields:
     - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
       Hint: __Created
-      Value: 20240813T101937Z
+      Value: 20240807T130947Z
     - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
       Hint: __Owner
       Value: |
@@ -41,39 +25,46 @@ Languages:
         sitecore\Admin
     - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
       Hint: __Revision
-      Value: "47519671-6627-47f9-81a4-3b6e3fecbcb9"
+      Value: "0d15b381-5113-411b-a53b-8b0d59c11627"
     - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
       Hint: __Updated by
       Value: |
         sitecore\Admin
     - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
       Hint: __Updated
-      Value: 20240813T101937Z
+      Value: 20240807T130947Z
 - Language: en
   Versions:
   - Version: 1
     Fields:
     - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
       Hint: __Created
-      Value: 20240813T135637Z
+      Value: 20171113T104335Z
     - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
       Hint: __Created by
       Value: |
-        sitecore\Admin
+        sitecore\admin
     - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
       Hint: __Revision
-      Value: "986522ec-d58b-403f-b3c6-aa2a94164d53"
+      Value: "9d102856-2623-408b-849d-999aef792580"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\jonatas.m.ribeiro@noesis.pt
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20240807T150813Z
 - Language: "ja-JP"
   Fields:
   - ID: "b5e02ad9-d56f-4c41-a065-a133db87bdeb"
     Hint: __Display name
-    Value: デフォルト
+    Value: 利用可能なレンダリングを空にする
   Versions:
   - Version: 1
     Fields:
     - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
       Hint: __Created
-      Value: 20240813T101937Z
+      Value: 20240807T130947Z
     - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
       Hint: __Owner
       Value: |
@@ -84,25 +75,25 @@ Languages:
         sitecore\Admin
     - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
       Hint: __Revision
-      Value: "47519671-6627-47f9-81a4-3b6e3fecbcb9"
+      Value: "0d15b381-5113-411b-a53b-8b0d59c11627"
     - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
       Hint: __Updated by
       Value: |
         sitecore\Admin
     - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
       Hint: __Updated
-      Value: 20240813T101937Z
+      Value: 20240807T130947Z
 - Language: "zh-CN"
   Fields:
   - ID: "b5e02ad9-d56f-4c41-a065-a133db87bdeb"
     Hint: __Display name
-    Value: 默认
+    Value: 空的可用渲染
   Versions:
   - Version: 1
     Fields:
     - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
       Hint: __Created
-      Value: 20240813T101937Z
+      Value: 20240807T130947Z
     - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
       Hint: __Owner
       Value: |
@@ -113,11 +104,11 @@ Languages:
         sitecore\Admin
     - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
       Hint: __Revision
-      Value: "47519671-6627-47f9-81a4-3b6e3fecbcb9"
+      Value: "0d15b381-5113-411b-a53b-8b0d59c11627"
     - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
       Hint: __Updated by
       Value: |
         sitecore\Admin
     - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
       Hint: __Updated
-      Value: 20240813T101937Z
+      Value: 20240807T130947Z
