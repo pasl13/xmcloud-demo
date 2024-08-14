@@ -65,17 +65,13 @@
     <PackageReference Include="Sitecore.Assemblies.SitecoreHeadlessServicesServer" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Config\Include\TestPatchFileSetting.config" />
-    <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
-    <Content Include="obj\Debug\Platform.csproj.AssemblyReference.cache" />
     <None Include="Platform.wpp.targets" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="README.md" />
     <None Include="web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="bin\" />
-    <Folder Include="obj\Debug\TempPE\" />
+    <Folder Include="App_Config\Include\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
