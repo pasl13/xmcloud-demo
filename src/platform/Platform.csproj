@@ -66,6 +66,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Config\Include\TestPatchFileSetting.config" />
+    <Content Include="bin\XmCloudSXAStarter.dll" />
+    <Content Include="bin\XmCloudSXAStarter.pdb" />
     <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
     <Content Include="obj\Debug\Platform.csproj.AssemblyReference.cache" />
     <None Include="Platform.wpp.targets" />
@@ -74,7 +76,6 @@
     <None Include="web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="bin\" />
     <Folder Include="obj\Debug\TempPE\" />
   </ItemGroup>
   <PropertyGroup>
