@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Config\Include\TestPatchFileSetting.config" />
+    <Content Include="App_Config\Include\CORS\Sitecore.CORS.AllowedOrigins.config" />
     <None Include="Platform.wpp.targets" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="README.md" />
