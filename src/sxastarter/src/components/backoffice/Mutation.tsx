@@ -1,5 +1,6 @@
 import React from 'react';
 import { GraphQLRequestClient } from '@sitecore-jss/sitecore-jss';
+import config from 'temp/config';
 
 const QUERY = `
   query GetItem($path: String!, $language: String!) {
@@ -12,8 +13,8 @@ const QUERY = `
 
 export const Default = (): JSX.Element => {
   const handleFetchItem = async () => {
-    const client = new GraphQLRequestClient('https://xmc-noesis136a1-demob96b-devteamd85c.sitecorecloud.io/sitecore/api/graph/edge', {
-      apiKey: "{911A87DB-4939-478A-8633-34869EFB2453}"
+    const client = new GraphQLRequestClient(config.graphQLEndpoint, {
+      apiKey: config.sitecoreApiKey
     });
 
     try {
