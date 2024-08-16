@@ -1,0 +1,34 @@
+﻿---
+ID: "35550b9d-e50d-4aab-9130-30fe23c3b46b"
+Parent: "ba432b66-6da1-41e4-9de2-877475b28688"
+Template: "ba432b66-6da1-41e4-9de2-877475b28688"
+Path: /sitecore/templates/Project/Demo/Cookies Tab/CookiesTab/__Standard Values
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20240816T095609Z
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\jonatas.m.ribeiro@noesis.pt
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\jonatas.m.ribeiro@noesis.pt
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "23693806-e4ec-4c45-b400-e2394e23e53b"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\jonatas.m.ribeiro@noesis.pt
+    - ID: "c0920ee3-9d4a-4aab-836b-4bd11606f43b"
+      Hint: Title
+      Value: $name
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20240816T095615Z

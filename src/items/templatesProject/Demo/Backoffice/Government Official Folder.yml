@@ -1,18 +1,18 @@
 ﻿---
-ID: "53108f9a-6b6b-4625-9b16-ff6dad36d00a"
-Parent: "c4f22e0b-974c-4049-91db-4bed879fc443"
-Template: "76da0a8d-fc7e-42b2-af1e-205b49e43f98"
-Path: /sitecore/content/Demo/Demo/Presentation/Available Renderings/Backoffice
-BranchID: "df159bd9-cbb6-4a88-9499-33ff46bef3a4"
+ID: "5d8df906-2abe-4010-8fb3-b97ba6626782"
+Parent: "78800d69-c63d-4a92-892d-98404225bf9f"
+Template: "ab86861a-6030-46c5-b394-e8f99e8b87db"
+Path: /sitecore/templates/Project/Demo/Backoffice/Government Official Folder
 SharedFields:
-- ID: "715ae6c0-71c8-4744-ab4f-65362d20ad65"
-  Hint: Renderings
-  Value: |
-    {E0F2FCA4-26A0-4658-9278-195E83D2F5A4}
-    {1FCA1B88-E053-4ABA-93A7-A2B6FE3A4DD6}
-- ID: "f6d8a61c-2f84-4401-bd24-52d2068172bc"
-  Hint: __Originator
-  Value: "{CD95B916-0177-4D12-A3D5-9B158C2F266A}"
+- ID: "06d5295c-ed2f-4a54-9bf2-26228d113318"
+  Hint: __Icon
+  Value: Office/32x32/users3.png
+- ID: "12c33f3f-86c5-43a5-aeb4-5598cec45116"
+  Hint: __Base template
+  Value: "{1930BBEB-7805-471A-A3BE-4858AC7CF696}"
+- ID: "f7d48a55-2158-4f02-9356-756654404f73"
+  Hint: __Standard values
+  Value: "{911BA3D4-7B87-4F5F-856D-E3BD64F889E1}"
 Languages:
 - Language: en
   Versions:
@@ -20,7 +20,7 @@ Languages:
     Fields:
     - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
       Hint: __Created
-      Value: 20240812T152406Z
+      Value: 20240806T183111Z
     - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
       Hint: __Owner
       Value: |
@@ -31,11 +31,11 @@ Languages:
         sitecore\williker.c.carmo@noesis.pt
     - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
       Hint: __Revision
-      Value: "6a8e39fb-2e6d-4e6f-a068-3981dda79200"
+      Value: "405fc748-d15e-4145-b545-2256ae11a37a"
     - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
       Hint: __Updated by
       Value: |
         sitecore\williker.c.carmo@noesis.pt
     - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
       Hint: __Updated
-      Value: 20240815T100513Z
+      Value: 20240815T100324Z
