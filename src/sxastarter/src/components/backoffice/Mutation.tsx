@@ -14,7 +14,7 @@ const QUERY = `
 export const Default = (): JSX.Element => {
   const handleFetchItem = async () => {
     const client = new GraphQLRequestClient(config.graphQLEndpoint, {
-      apiKey: config.sitecoreApiKey
+      apiKey: config.sitecoreApiKey,
     });
 
     try {
@@ -34,9 +34,7 @@ export const Default = (): JSX.Element => {
 
   return (
     <div>
-      <button onClick={handleFetchItem}>
-        Fetch Item
-      </button>
+      <button onClick={handleFetchItem}>Fetch Item</button>
     </div>
   );
 };
