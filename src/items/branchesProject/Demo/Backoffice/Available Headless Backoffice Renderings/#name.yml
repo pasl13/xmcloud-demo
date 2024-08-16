@@ -6,9 +6,7 @@ Path: /sitecore/templates/Branches/Project/Demo/Backoffice/Available Headless Ba
 SharedFields:
 - ID: "715ae6c0-71c8-4744-ab4f-65362d20ad65"
   Hint: Renderings
-  Value: |
-    {E0F2FCA4-26A0-4658-9278-195E83D2F5A4}
-    {1FCA1B88-E053-4ABA-93A7-A2B6FE3A4DD6}
+  Value: "{E0F2FCA4-26A0-4658-9278-195E83D2F5A4}"
 Languages:
 - Language: en
   Versions:
@@ -23,11 +21,11 @@ Languages:
         sitecore\admin
     - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
       Hint: __Revision
-      Value: "199662fd-7081-4b5f-ab7a-d1519bec04e3"
+      Value: "411c6d71-fcae-46f0-86b1-4edd7d867f13"
     - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
       Hint: __Updated by
       Value: |
         sitecore\williker.c.carmo@noesis.pt
     - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
       Hint: __Updated
-      Value: 20240815T100326Z
+      Value: 20240812T150601Z

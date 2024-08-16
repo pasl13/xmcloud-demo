@@ -7,9 +7,7 @@ BranchID: "df159bd9-cbb6-4a88-9499-33ff46bef3a4"
 SharedFields:
 - ID: "715ae6c0-71c8-4744-ab4f-65362d20ad65"
   Hint: Renderings
-  Value: |
-    {E0F2FCA4-26A0-4658-9278-195E83D2F5A4}
-    {1FCA1B88-E053-4ABA-93A7-A2B6FE3A4DD6}
+  Value: "{E0F2FCA4-26A0-4658-9278-195E83D2F5A4}"
 - ID: "f6d8a61c-2f84-4401-bd24-52d2068172bc"
   Hint: __Originator
   Value: "{CD95B916-0177-4D12-A3D5-9B158C2F266A}"
@@ -31,11 +29,11 @@ Languages:
         sitecore\williker.c.carmo@noesis.pt
     - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
       Hint: __Revision
-      Value: "6a8e39fb-2e6d-4e6f-a068-3981dda79200"
+      Value: "1701bb27-85b6-4b17-88d8-4fd1b337de97"
     - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
       Hint: __Updated by
       Value: |
         sitecore\williker.c.carmo@noesis.pt
     - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
       Hint: __Updated
-      Value: 20240815T100513Z
+      Value: 20240812T152406Z
