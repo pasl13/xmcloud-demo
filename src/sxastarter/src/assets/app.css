@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 a[target='_blank']:after {
   content: '\1F5D7'
 }

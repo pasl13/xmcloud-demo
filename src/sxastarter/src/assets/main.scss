@@ -1,7 +1,9 @@
+
 @import "basic/fonts";
 @import "sass/main.scss";
 @import "basic/main.scss";
-@import "@tailwind/base";
-@import "@tailwind/components";
-@import "@tailwind/utilities";
+@import "node_modules/tailwindcss/base.css";
+@import "node_modules/tailwindcss/components.css";
+@import "node_modules/tailwindcss/utilities.css";
+
 
