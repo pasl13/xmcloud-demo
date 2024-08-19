@@ -34,16 +34,15 @@ export const Default = (props: OfficialManagerProps): JSX.Element => {
   const datasource = props.fields?.data?.datasource;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [officials, setOfficials] = useState<ResultsFieldText[]>(datasource?.children.results || []);
+  const [officials, setOfficials] = useState<ResultsFieldText[]>(
+    datasource?.children.results || []
+  );
 
   const handleOpenModal = (): void => setIsModalOpen(true);
   const handleCloseModal = (): void => setIsModalOpen(false);
 
   const handleAddOfficial = (name: string): void => {
-    setOfficials((prevOfficials) => [
-      ...prevOfficials,
-      { field: { jsonValue: { value: name } } }
-    ]);
+    setOfficials((prevOfficials) => [...prevOfficials, { field: { jsonValue: { value: name } } }]);
 
     handleCloseModal();
   };
@@ -60,10 +59,20 @@ export const Default = (props: OfficialManagerProps): JSX.Element => {
 
   return (
     <div className={`component official-manager ${props.params.styles}`} id={id ? id : undefined}>
-      <div className="component-content">
-        <h1>Official Manager Component</h1>
-        <select className="officials-dropdown">{dropdownOptions}</select>
-        <button onClick={handleOpenModal}>Open Modal</button>
+      <div className="component-content container">
+        <h1 className="my-4">Official Manager Component</h1>
+
+        <div className="form-group">
+          <label htmlFor="officialsDropdown">Select Official</label>
+          <select className="form-control" id="officialsDropdown">
+            {dropdownOptions}
+          </select>
+        </div>
+
+        <button className="btn btn-primary mt-3" onClick={handleOpenModal}>
+          Open Modal
+        </button>
+
         <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
           <AddGovernmentOfficial onAddOfficial={handleAddOfficial} />
         </Modal>

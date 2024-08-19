@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import client from 'src/config/apolloClient'
+import client from 'src/config/apolloClient';
 
 type AddGovernmentOfficialFormProps = {
   onAddOfficial: (name: string) => void;
@@ -43,7 +43,7 @@ const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps
 
       onAddOfficial(name);
 
-      setName('');
+      setName(''); // Limpa o campo de nome após o envio
     } catch (error) {
       console.error('Error:', error);
       setResponse(error);
@@ -51,25 +51,27 @@ const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps
   };
 
   return (
-    <div>
+    <div className="container mt-4">
       <h2>Add Government Official</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            Name:
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </label>
+      <form onSubmit={handleSubmit} className="mb-4">
+        <div className="form-group">
+          <label htmlFor="officialName">Name:</label>
+          <input
+            type="text"
+            className="form-control"
+            id="officialName"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
         </div>
-        <button type="submit">Add Official</button>
+        <button type="submit" className="btn btn-primary">
+          Add Official
+        </button>
       </form>
       {response && (
-        <div>
-          <h3>Response:</h3>
+        <div className="alert alert-info" role="alert">
+          <h4 className="alert-heading">Response:</h4>
           <pre>{JSON.stringify(response, null, 2)}</pre>
         </div>
       )}
