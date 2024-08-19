@@ -1,23 +1,17 @@
+import gql from 'graphql-tag';
 import React, { useState } from 'react';
 import client from 'src/config/apolloClient';
-
-interface GovernmentOfficialResponse {
-  createItem: {
-    item: {
-      itemId: string;
-      name: string;
-      path: string;
-    };
-  };
-}
 
 type AddGovernmentOfficialFormProps = {
   onAddOfficial: (name: string) => void;
 };
 
 const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps): JSX.Element => {
-  const [name, setName] = useState<string>('');
-  const [response, setResponse] = useState<GovernmentOfficialResponse | null>(null); // Tipagem correta para a resposta
+  const [fullName, setFullName] = useState<string>('');
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+  const [sex, setSex] = useState<string>('');
+  const [response, setResponse] = useState<any>(null);
 
   const templateId = '{3234C01C-183D-45E5-80D1-BADFB58536A0}';
   const parentId = '{1AB3F54B-AB1B-4B40-90FF-517A726F7A32}';
@@ -26,11 +20,24 @@ const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const mutation = `
-      mutation CreateSimpleGovernmentOfficial($name: String!, $templateId: ID!, $parent: ID!, $language: String!) {
+    const mutation = gql`
+      mutation CreateSimpleGovernmentOfficial(
+        $fullName: String!, 
+        $firstName: String!, 
+        $lastName: String!, 
+        $sex: String!, 
+        $templateId: ID!, 
+        $parent: ID!, 
+        $language: String!
+      ) {
         createItem(
           input: {
-            name: $name,
+            name: $fullName,
+            fields: [
+              { name: "First Name", value: $firstName },
+              { name: "Last Name", value: $lastName },
+              { name: "Sex", value: $sex }
+            ],
             templateId: $templateId,
             parent: $parent,
             language: $language
@@ -45,18 +52,22 @@ const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps
       }
     `;
 
-    const variables = { name, templateId, parent: parentId, language };
+    const variables = { fullName, firstName, lastName, sex, templateId, parent: parentId, language };
 
     try {
-      const data = await client.request<GovernmentOfficialResponse>(mutation, variables); // Definindo o tipo da resposta aqui
+      const data = await client.request(mutation, variables);
       setResponse(data);
 
-      onAddOfficial(name);
+      onAddOfficial(fullName);
 
-      setName('');
+      // Reset fields after submit
+      setFullName('');
+      setFirstName('');
+      setLastName('');
+      setSex('');
     } catch (error) {
       console.error('Error:', error);
-      setResponse(null); // Definindo null em caso de erro
+      setResponse(error);
     }
   };
 
@@ -65,17 +76,58 @@ const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps
       <h2>Add Government Official</h2>
       <form onSubmit={handleSubmit} className="mb-4">
         <div className="form-group">
-          <label htmlFor="officialName">Name:</label>
+          <label htmlFor="fullName">Full Name:</label>
           <input
             type="text"
             className="form-control"
-            id="officialName"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            id="fullName"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary">
+
+        <div className="form-group">
+          <label htmlFor="firstName">First Name:</label>
+          <input
+            type="text"
+            className="form-control"
+            id="firstName"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="lastName">Last Name:</label>
+          <input
+            type="text"
+            className="form-control"
+            id="lastName"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="sex">Sex:</label>
+          <select
+            className="form-control"
+            id="sex"
+            value={sex}
+            onChange={(e) => setSex(e.target.value)}
+            required
+          >
+            <option value="">Select Sex</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <button type="submit" className="btn btn-primary mt-3">
           Add Official
         </button>
       </form>
