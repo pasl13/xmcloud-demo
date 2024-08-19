@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ComponentParams, ComponentRendering, TextField } from '@sitecore-jss/sitecore-jss-nextjs';
 import Modal from 'src/components/shared/Modal';
 import AddGovernmentOfficial from './AddGovernmentOfficial';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 type ResultsFieldText = {
   field: {
@@ -62,16 +63,32 @@ export const Default = (props: OfficialManagerProps): JSX.Element => {
       <div className="component-content container">
         <h1 className="my-4">Official Manager Component</h1>
 
-        <div className="form-group">
-          <label htmlFor="officialsDropdown">Select Official</label>
-          <select className="form-control" id="officialsDropdown">
-            {dropdownOptions}
-          </select>
-        </div>
+        <div className="d-flex align-items-center">
+          <div className="position-relative">
+            <i
+              className="bi bi-person position-absolute"
+              style={{ top: '50%', left: '10px', transform: 'translateY(-50%)' }}
+            ></i>
+            <select
+              className="form-control ps-5"
+              id="officialsDropdown"
+              style={{ height: '48px', fontSize: '1.25rem' }}
+            >
+              {dropdownOptions}
+            </select>
+          </div>
 
-        <button className="btn btn-primary mt-3" onClick={handleOpenModal}>
-          Open Modal
-        </button>
+          <div className="ms-3">
+            <button
+              className="btn btn-primary d-flex align-items-center justify-content-center"
+              style={{ height: '36px', width: '36px', padding: 0, fontSize: '1.25rem' }}
+              onClick={handleOpenModal}
+              title="Add New Official"
+            >
+              <i className="bi bi-plus"></i>
+            </button>
+          </div>
+        </div>
 
         <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
           <AddGovernmentOfficial onAddOfficial={handleAddOfficial} />

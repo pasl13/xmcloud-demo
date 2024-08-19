@@ -1,13 +1,23 @@
 import React, { useState } from 'react';
 import client from 'src/config/apolloClient';
 
+interface GovernmentOfficialResponse {
+  createItem: {
+    item: {
+      itemId: string;
+      name: string;
+      path: string;
+    };
+  };
+}
+
 type AddGovernmentOfficialFormProps = {
   onAddOfficial: (name: string) => void;
 };
 
 const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps): JSX.Element => {
   const [name, setName] = useState<string>('');
-  const [response, setResponse] = useState<any>(null);
+  const [response, setResponse] = useState<GovernmentOfficialResponse | null>(null); // Tipagem correta para a resposta
 
   const templateId = '{3234C01C-183D-45E5-80D1-BADFB58536A0}';
   const parentId = '{1AB3F54B-AB1B-4B40-90FF-517A726F7A32}';
@@ -38,15 +48,15 @@ const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps
     const variables = { name, templateId, parent: parentId, language };
 
     try {
-      const data = await client.request(mutation, variables);
+      const data = await client.request<GovernmentOfficialResponse>(mutation, variables); // Definindo o tipo da resposta aqui
       setResponse(data);
 
       onAddOfficial(name);
 
-      setName(''); // Limpa o campo de nome após o envio
+      setName('');
     } catch (error) {
       console.error('Error:', error);
-      setResponse(error);
+      setResponse(null); // Definindo null em caso de erro
     }
   };
 
