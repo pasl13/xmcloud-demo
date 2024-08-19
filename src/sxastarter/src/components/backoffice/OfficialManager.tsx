@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ComponentParams, ComponentRendering, TextField } from '@sitecore-jss/sitecore-jss-nextjs';
+import Modal from 'src/components/shared/Modal';
+import AddGovernmentOfficialForm from './AddGovernmentOfficial';
 
 type ResultsFieldText = {
   field: {
@@ -31,6 +33,11 @@ export const Default = (props: OfficialManagerProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
   const datasource = props.fields?.data?.datasource;
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = (): void => setIsModalOpen(true);
+  const handleCloseModal = (): void => setIsModalOpen(false);
+
   if (datasource) {
     const dropdownOptions = datasource.children.results
       .filter((element: ResultsFieldText) => element?.field?.jsonValue?.value)
@@ -47,6 +54,10 @@ export const Default = (props: OfficialManagerProps): JSX.Element => {
         <div className="component-content">
           <h1>Official Manager Component</h1>
           <select className="officials-dropdown">{dropdownOptions}</select>
+          <button onClick={handleOpenModal}>Open Modal</button>
+          <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+          <AddGovernmentOfficialForm />
+          </Modal>
         </div>
       </div>
     );
