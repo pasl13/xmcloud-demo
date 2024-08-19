@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import client from 'src/config/apolloClient'
 
-const AddGovernmentOfficial = (): JSX.Element => {
+type AddGovernmentOfficialFormProps = {
+  onAddOfficial: (name: string) => void;
+};
+
+const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps): JSX.Element => {
   const [name, setName] = useState<string>('');
   const [response, setResponse] = useState<any>(null);
 
@@ -11,7 +15,7 @@ const AddGovernmentOfficial = (): JSX.Element => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+
     const mutation = `
       mutation CreateSimpleGovernmentOfficial($name: String!, $templateId: ID!, $parent: ID!, $language: String!) {
         createItem(
@@ -30,17 +34,16 @@ const AddGovernmentOfficial = (): JSX.Element => {
         }
       }
     `;
-    
-    const variables = {
-      name,
-      templateId,
-      parent: parentId,
-      language,
-    };
+
+    const variables = { name, templateId, parent: parentId, language };
 
     try {
       const data = await client.request(mutation, variables);
       setResponse(data);
+
+      onAddOfficial(name);
+
+      setName('');
     } catch (error) {
       console.error('Error:', error);
       setResponse(error);
