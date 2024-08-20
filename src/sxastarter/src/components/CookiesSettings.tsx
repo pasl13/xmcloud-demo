@@ -62,10 +62,10 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
       <div className="component-content container mx-auto p-4">
         <div className="grid grid-cols-2 gap-8">
           <div className="container">
-            {Title && <h3 className="text-white">{Title.value}</h3>}
-            {Description && <p className="text-white">{Description.value}</p>}
+            {Title && <h3 className="text-white py-2">{Title.value}</h3>}
+            {Description && <p className="text-white py-2">{Description.value}</p>}
           </div>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 justify-center items-center">
             {AcceptAllButtonLabel && (
               <button
                 className="mt-2 py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
