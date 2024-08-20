@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { gql, useMutation, useQuery } from '@apollo/client';
+import { formatUUID } from 'src/utils/formatUUID';
 
 type AddGovernmentOfficialFormProps = {
   onAddOfficial: (name: string) => void;
@@ -147,13 +148,12 @@ const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps
               <option>Loading...</option>
             ) : (
               data?.item?.children?.edges.map(({ node }: any) => (
-                <option key={node.itemId} value={node.itemId}>
+                <option key={node.itemId} value={formatUUID(node.itemId)}>
                   {node.name}
                 </option>
               ))
             )}
           </select>
-          {gendersError && <p className="text-danger">Failed to load genders.</p>}
         </div>
 
         <button type="submit" className="btn btn-primary mt-3" disabled={loading}>
