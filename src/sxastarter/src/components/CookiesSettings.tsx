@@ -40,12 +40,13 @@ interface CookiesSettingsProps {
 
 export const Default = (props: CookiesSettingsProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
-  const { fields, ...restProps } = props;
+  // const { fields, ...restProps } = props;
+  const { fields } = props;
   const {
     Items,
     Title,
     Description,
-    Icon,
+    // Icon,
     OnlyRequiredButtonLabel,
     SubmitChangesButtonLabel,
     AcceptAllButtonLabel,
@@ -141,14 +142,19 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
             {/* Footer Section */}
             <div className="w-full bg-gray-200 p-4 rounded-b-lg flex justify-end gap-4">
               <button
+                type="button"
                 className="
                   py-2 px-4 bg-gray-500 hover:bg-gray-700 text-white font-bold rounded"
                 onClick={handleClose}
               >
-                Close
+                Cancelar
               </button>
-              <button className="py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded">
-                Save Changes
+              <button
+                type="button"
+                className="py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
+                onClick={handleClose}
+              >
+                Gravar Preferências
               </button>
             </div>
           </div>
@@ -157,20 +163,3 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
     </div>
   );
 };
-
-
-// <div className="flex flex-col justify-between h-full w-full">
-//             <div className="flex flex-col mt-auto mb-auto items-center p-8">
-//               <span className="text-white">Close Modal?</span>
-//               <span className="text-white">All current progress will be lost</span>
-//             </div>
-//             <div className="flex flex-col sm:flex-row justify-center gap-8 align-center">
-//               <button
-//                 className="py-2 px-8 font-bold hover:bg-violet-600 border rounded text-white"
-//                 type="button"
-//                 onClick={handleClose}
-//               >
-//                 Submit and close
-//               </button>
-//             </div>
-//           </div>
