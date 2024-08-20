@@ -1,16 +1,33 @@
 import React, { useState } from 'react';
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 
 type AddGovernmentOfficialFormProps = {
   onAddOfficial: (name: string) => void;
 };
+
+const GET_GENDERS = gql`
+  query GetGenders {
+    item(
+      where: { path: "/sitecore/content/Demo/Demo/Data/Collections/Genders" }
+    ) {
+      children {
+        edges {
+          node {
+            name
+            itemId
+          }
+        }
+      }
+    }
+  }
+`;
 
 const CREATE_SIMPLE_GOVERNMENT_OFFICIAL = gql`
   mutation CreateSimpleGovernmentOfficial(
     $fullName: String!, 
     $firstName: String!, 
     $lastName: String!, 
-    $sex: String!, 
+    $genderId: ID!, 
     $templateId: ID!, 
     $parent: ID!, 
     $language: String!
@@ -21,7 +38,7 @@ const CREATE_SIMPLE_GOVERNMENT_OFFICIAL = gql`
         fields: [
           { name: "First Name", value: $firstName },
           { name: "Last Name", value: $lastName },
-          { name: "Sex", value: $sex }
+          { name: "Sex", value: $genderId }  # Pass genderId as the value for the "Sex" field
         ],
         templateId: $templateId,
         parent: $parent,
@@ -41,22 +58,25 @@ const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps
   const [fullName, setFullName] = useState<string>('');
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
-  const [sex, setSex] = useState<string>('');
+  const [genderId, setGenderId] = useState<string>(''); // Store the selected gender's itemId
   const [response, setResponse] = useState<any>(null);
 
   const templateId = '{3234C01C-183D-45E5-80D1-BADFB58536A0}';
   const parentId = '{1AB3F54B-AB1B-4B40-90FF-517A726F7A32}';
   const language = 'en';
 
+  // Fetch genders from the GraphQL query
+  const { data, loading: gendersLoading, error: gendersError } = useQuery(GET_GENDERS);
+
   // Apollo's useMutation hook for handling the mutation
-  const [createGovernmentOfficial, { data, loading, error }] = useMutation(CREATE_SIMPLE_GOVERNMENT_OFFICIAL);
+  const [createGovernmentOfficial, { loading, error }] = useMutation(CREATE_SIMPLE_GOVERNMENT_OFFICIAL);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
       const result = await createGovernmentOfficial({
-        variables: { fullName, firstName, lastName, sex, templateId, parent: parentId, language },
+        variables: { fullName, firstName, lastName, genderId, templateId, parent: parentId, language },
       });
       setResponse(result.data);
 
@@ -67,7 +87,7 @@ const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps
       setFullName('');
       setFirstName('');
       setLastName('');
-      setSex('');
+      setGenderId('');
     } catch (e) {
       console.error('Error:', e);
     }
@@ -118,15 +138,22 @@ const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps
           <select
             className="form-control"
             id="sex"
-            value={sex}
-            onChange={(e) => setSex(e.target.value)}
+            value={genderId} // Set to the selected gender's itemId
+            onChange={(e) => setGenderId(e.target.value)} // Update genderId on change
             required
           >
-            <option value="">Select Sex</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
+            <option value="">Select Gender</option>
+            {gendersLoading ? (
+              <option>Loading...</option>
+            ) : (
+              data?.item?.children?.edges.map(({ node }: any) => (
+                <option key={node.itemId} value={node.itemId}>
+                  {node.name}
+                </option>
+              ))
+            )}
           </select>
+          {gendersError && <p className="text-danger">Failed to load genders.</p>}
         </div>
 
         <button type="submit" className="btn btn-primary mt-3" disabled={loading}>
