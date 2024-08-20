@@ -11,27 +11,42 @@ interface CookiesSettingsProps {
 export const Default = (props: CookiesSettingsProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
   const [modalOpen, setModalOpen] = useState(false);
+  const handleClose = () => {
+    console.log('Close Modal function');
+    console.log('Current state:', modalOpen);
+    setModalOpen(false);
+  };
 
+  console.log('CookiesSettings Component', props);
   return (
-    <div className={`component ${props.params.styles}`} id={id ? id : undefined}>
+    <div
+      className={`
+      fixed bottom-0 w-full bg-gray-800 text-white component ${props.params.styles}`}
+      id={id ? id : undefined}
+    >
       <div className="component-content">
         <p className="">CookiesSettings Component</p>
-        <button onClick={() => setModalOpen(true)}>Open Modal</button>
+        <button
+          className="mt-2 py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
+          onClick={() => setModalOpen(true)}
+        >
+          Open Modal
+        </button>
       </div>
       {modalOpen && (
-        <CookieModal isOpen={modalOpen} handleClose={() => setModalOpen(!modalOpen)}>
+        <CookieModal isOpen={modalOpen} handleClose={handleClose}>
           <div className="flex flex-col justify-between h-full w-full">
             <div className="flex flex-col mt-auto mb-auto items-center p-8">
-              <span>Close Modal?</span>
-              <span>All current progress will be lost</span>
+              <span className="text-white">Close Modal?</span>
+              <span className="text-white">All current progress will be lost</span>
             </div>
             <div className="flex flex-col sm:flex-row justify-center gap-8 align-center">
               <button
-                className="py-2 px-8 font-bold hover:bg-violet-600 border rounded"
+                className="py-2 px-8 font-bold hover:bg-violet-600 border rounded text-white"
                 type="button"
-                onClick={() => setModalOpen(!modalOpen)}
+                onClick={handleClose}
               >
-                Continue Working
+                Submit and close
               </button>
             </div>
           </div>

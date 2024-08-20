@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import ReactPortal from './ReactPortal';
 
 interface CookieModalProps {
-  children: React.ReactChildren | React.ReactChild;
+  children: React.ReactNode;
   isOpen: boolean;
   handleClose: () => void;
 }
@@ -28,14 +28,14 @@ const CookieModal = ({ children, isOpen, handleClose }: CookieModalProps) => {
   return (
     <ReactPortal wrapperId="react-portal-modal-container">
       <>
-        <div className="fixed top-0 left-0 w-screen h-screen z-40 bg-neutral-800 opacity-50" />
+        <div className="fixed top-0 left-0 w-screen h-screen bg-neutral-800 opacity-50" />
         <div
           className="fixed rounded flex flex-col box-border min-w-fit overflow-hidden p-5 bg-zinc-800 inset-y-32 
         inset-x-1"
         >
           <button
             onClick={handleClose}
-            className="py-2 px-8 self-end font-bold hover:bg-violet-600 border rounded"
+            className="py-2 px-8 self-end font-bold hover:bg-violet-600 border rounded text-white"
           >
             close
           </button>
