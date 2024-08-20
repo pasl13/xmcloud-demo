@@ -1,31 +1,32 @@
 'use client';
 import React, { useState } from 'react';
-import { ComponentParams, ComponentRendering } from '@sitecore-jss/sitecore-jss-nextjs';
+import { ComponentParams, ComponentRendering, Field } from '@sitecore-jss/sitecore-jss-nextjs';
 import CookieModal from 'src/atoms/Shared Components/CookieModal';
 
+
 interface FieldsTypes {
-  'Only Required Button Label': string;
-  Title: string;
-  Description: string;
-  Icon: string;
-  'Submit Changes Button Label': string;
-  'Accept All Button Label': string;
+  OnlyRequiredButtonLabel: Field<string>;
+  Title: Field<string>;
+  Description: Field<string>;
+  Icon: Field<string>;
+  SubmitChangesButtonLabel: Field<string>;
+  AcceptAllButtonLabel: Field<string>;
   Items: Item[];
 }
 
 interface Item {
-  id: string;
-  url: string;
-  name: string;
-  displayName: string;
+  id: Field<string>;
+  url: Field<string>;
+  name: Field<string>;
+  displayName: Field<string>;
   fields: Fields;
 }
 
 interface Fields {
-  Title: string;
-  Description: string;
-  'Is Selected': string;
-  Enabled: string;
+  Title: Field<string>;
+  Description: Field<string>;
+  'Is Selected': Field<string>;
+  Enabled: Field<string>;
 }
 
 interface CookiesSettingsProps {
@@ -36,6 +37,16 @@ interface CookiesSettingsProps {
 
 export const Default = (props: CookiesSettingsProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
+  const { fields, ...restProps } = props;
+  const { 
+    Items, 
+    Title, 
+    Description, 
+    Icon, 
+    OnlyRequiredButtonLabel, 
+    SubmitChangesButtonLabel, 
+    AcceptAllButtonLabel 
+  } = fields;
   const [modalOpen, setModalOpen] = useState(false);
   const handleClose = () => {
     setModalOpen(false);
@@ -48,14 +59,39 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
       fixed bottom-0 w-full bg-gray-800 text-white  ${props.params.styles}`}
       id={id ? id : undefined}
     >
-      <div className="component-content">
-        <p className="">CookiesSettings Component</p>
-        <button
-          className="mt-2 py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
-          onClick={() => setModalOpen(true)}
-        >
-          Open Modal
-        </button>
+      <div className="component-content container mx-auto p-4">
+        <div className="grid grid-cols-2 gap-8">
+          <div className="container">
+            {Title && <h3 className="text-white">{Title.value}</h3>}
+            {Description && <p className="text-white">{Description.value}</p>}
+          </div>
+          <div className="flex flex-col gap-4">
+            {AcceptAllButtonLabel && (
+              <button
+                className="mt-2 py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
+                onClick={() => setModalOpen(true)}
+              >
+                {AcceptAllButtonLabel.value}
+              </button>
+            )}
+            {OnlyRequiredButtonLabel && (
+              <button
+                className="mt-2 py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
+                onClick={() => setModalOpen(true)}
+              >
+                {OnlyRequiredButtonLabel.value}
+              </button>
+            )}
+            {SubmitChangesButtonLabel && (
+              <button
+                className="mt-2 py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
+                onClick={() => setModalOpen(true)}
+              >
+                {SubmitChangesButtonLabel.value}
+              </button>
+            )}
+          </div>
+        </div>
       </div>
       {modalOpen && (
         <CookieModal isOpen={modalOpen} handleClose={handleClose}>
