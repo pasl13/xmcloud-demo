@@ -73,18 +73,6 @@ const nextConfig = {
       },
     ];
   },
-
-  async headers() {
-    return [
-        {
-            source: '/_next/:path*',
-            headers: [
-                { key: 'Access-Control-Allow-Origin', value: process.env.SITECORE_API_HOST || 'http://localhost:3000' },
-                { key: 'Access-Control-Allow-Methods', value: 'GET,POST,OPTIONS' },
-            ],
-        },
-    ];
-},
 };
 
 module.exports = () => {
