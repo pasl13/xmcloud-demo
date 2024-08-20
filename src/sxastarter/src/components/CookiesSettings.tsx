@@ -95,18 +95,31 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
       </div>
       {modalOpen && (
         <CookieModal isOpen={modalOpen} handleClose={handleClose}>
-          <div className="flex flex-col justify-between h-full w-full">
-            <div className="flex flex-col mt-auto mb-auto items-center p-8">
-              <span className="text-white">Close Modal?</span>
-              <span className="text-white">All current progress will be lost</span>
+          <div className="flex flex-col h-full w-full bg-white rounded-lg shadow-lg">
+            {/* Header Section */}
+            <div className="w-full bg-gray-800 text-white p-4 rounded-t-lg">
+              <h2 className="text-xl font-bold">Modal Header</h2>
             </div>
-            <div className="flex flex-col sm:flex-row justify-center gap-8 align-center">
+            {/* Content Section */}
+            <div className="flex flex-1 p-4 gap-4">
+              <div className="w-1/3">
+                <p>Left Column Content</p>
+              </div>
+              <div className="w-2/3">
+                <p>Right Column Content</p>
+              </div>
+            </div>
+            {/* Footer Section */}
+            <div className="w-full bg-gray-200 p-4 rounded-b-lg flex justify-end gap-4">
               <button
-                className="py-2 px-8 font-bold hover:bg-violet-600 border rounded text-white"
-                type="button"
+                className="
+                  py-2 px-4 bg-gray-500 hover:bg-gray-700 text-white font-bold rounded"
                 onClick={handleClose}
               >
-                Submit and close
+                Close
+              </button>
+              <button className="py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded">
+                Save Changes
               </button>
             </div>
           </div>
@@ -115,3 +128,20 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
     </div>
   );
 };
+
+
+// <div className="flex flex-col justify-between h-full w-full">
+//             <div className="flex flex-col mt-auto mb-auto items-center p-8">
+//               <span className="text-white">Close Modal?</span>
+//               <span className="text-white">All current progress will be lost</span>
+//             </div>
+//             <div className="flex flex-col sm:flex-row justify-center gap-8 align-center">
+//               <button
+//                 className="py-2 px-8 font-bold hover:bg-violet-600 border rounded text-white"
+//                 type="button"
+//                 onClick={handleClose}
+//               >
+//                 Submit and close
+//               </button>
+//             </div>
+//           </div>

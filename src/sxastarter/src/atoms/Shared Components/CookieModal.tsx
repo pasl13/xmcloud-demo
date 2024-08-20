@@ -30,8 +30,8 @@ const CookieModal = ({ children, isOpen, handleClose }: CookieModalProps) => {
       <>
         <div className="fixed top-0 left-0 w-screen h-screen bg-neutral-800 opacity-50" />
         <div
-          className="fixed rounded flex flex-col box-border min-w-fit overflow-hidden p-5 bg-zinc-800 inset-y-32 
-        inset-x-1"
+          className="fixed rounded flex flex-col box-border min-w-fit overflow-hidden p-5 bg-zinc-800 inset-0 
+          justify-center w-3/5 mx-auto"
         >
           <button
             onClick={handleClose}
