@@ -3,17 +3,41 @@ import React, { useState } from 'react';
 import { ComponentParams, ComponentRendering } from '@sitecore-jss/sitecore-jss-nextjs';
 import CookieModal from 'src/atoms/Shared Components/CookieModal';
 
+interface FieldsTypes {
+  'Only Required Button Label': string;
+  Title: string;
+  Description: string;
+  Icon: string;
+  'Submit Changes Button Label': string;
+  'Accept All Button Label': string;
+  Items: Item[];
+}
+
+interface Item {
+  id: string;
+  url: string;
+  name: string;
+  displayName: string;
+  fields: Fields;
+}
+
+interface Fields {
+  Title: string;
+  Description: string;
+  'Is Selected': string;
+  Enabled: string;
+}
+
 interface CookiesSettingsProps {
   rendering: ComponentRendering & { params: ComponentParams };
   params: ComponentParams;
+  fields: FieldsTypes;
 }
 
 export const Default = (props: CookiesSettingsProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
   const [modalOpen, setModalOpen] = useState(false);
   const handleClose = () => {
-    console.log('Close Modal function');
-    console.log('Current state:', modalOpen);
     setModalOpen(false);
   };
 
@@ -21,7 +45,7 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
   return (
     <div
       className={`
-      fixed bottom-0 w-full bg-gray-800 text-white component ${props.params.styles}`}
+      fixed bottom-0 w-full bg-gray-800 text-white  ${props.params.styles}`}
       id={id ? id : undefined}
     >
       <div className="component-content">
