@@ -28,7 +28,7 @@ export default function ReactPortal({
       element = createWrapperAndAppendToBody(wrapperId);
     }
 
-    setWrapperElement(element!);
+    setWrapperElement(element);
     return () => {
       if (systemCreated && element?.parentNode) {
         element.parentNode.removeChild(element);
@@ -36,7 +36,7 @@ export default function ReactPortal({
     };
   }, [wrapperId]);
 
-  if (!wrapperElement) return null;
+  if (!wrapperElement || !children) return null;
 
   return createPortal(children, wrapperElement);
 }
