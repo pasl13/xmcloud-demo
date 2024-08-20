@@ -51,13 +51,18 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
     AcceptAllButtonLabel,
   } = fields;
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  const [selectedItem, setSelectedItem] = useState<Item | null>(Items[0]);
   const handleClose = () => {
     setModalOpen(false);
   };
 
   // console.log('CookiesSettings Component', props);
-  console.log('Items', Items);
+  Items.map((item, index) => {
+    console.log('item', item);
+    console.log('---');
+    console.log('index', index);
+  });
+  // console.log('Items', Items);
   return (
     <div
       className={`
@@ -108,10 +113,14 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
             </div>
             {/* Content Section */}
             <div className="flex flex-1 p-4 gap-4">
-              <div className="w-1/3">
+              <div className="w-1/3 space-y-4">
                 {/* <p>Left Column Content</p> */}
                 {Items.map((item, index) => (
-                  <div key={index}>
+                  <div
+                    key={index}
+                    className="
+                    py-2 px-4 bg-gray-500 hover:bg-gray-700 text-white font-bold rounded justify-center"
+                  >
                     <button onClick={() => setSelectedItem(item)}>
                       <h4>{item.fields.Title.value}</h4>
                     </button>
@@ -122,7 +131,7 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
               <div className="w-2/3">
                 {/* <p>Right Column Content</p> */}
                 {selectedItem && (
-                  <div className="container bg-white-200">
+                  <div className="container bg-gray-700 rounded text-white">
                     <h4>{selectedItem.fields.Title.value}</h4>
                     <p>{selectedItem.fields.Description.value}</p>
                   </div>
