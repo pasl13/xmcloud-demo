@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { ComponentParams, ComponentRendering, Field } from '@sitecore-jss/sitecore-jss-nextjs';
 import CookieModal from 'src/atoms/Shared Components/CookieModal';
 
-
 interface FieldsTypes {
   OnlyRequiredButtonLabel: Field<string>;
   Title: Field<string>;
@@ -29,6 +28,10 @@ interface Fields {
   Enabled: Field<string>;
 }
 
+// interface ItemFields extends Fields{
+
+// }
+
 interface CookiesSettingsProps {
   rendering: ComponentRendering & { params: ComponentParams };
   params: ComponentParams;
@@ -38,21 +41,23 @@ interface CookiesSettingsProps {
 export const Default = (props: CookiesSettingsProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
   const { fields, ...restProps } = props;
-  const { 
-    Items, 
-    Title, 
-    Description, 
-    Icon, 
-    OnlyRequiredButtonLabel, 
-    SubmitChangesButtonLabel, 
-    AcceptAllButtonLabel 
+  const {
+    Items,
+    Title,
+    Description,
+    Icon,
+    OnlyRequiredButtonLabel,
+    SubmitChangesButtonLabel,
+    AcceptAllButtonLabel,
   } = fields;
   const [modalOpen, setModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const handleClose = () => {
     setModalOpen(false);
   };
 
-  console.log('CookiesSettings Component', props);
+  // console.log('CookiesSettings Component', props);
+  console.log('Items', Items);
   return (
     <div
       className={`
@@ -97,16 +102,31 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
         <CookieModal isOpen={modalOpen} handleClose={handleClose}>
           <div className="flex flex-col h-full w-full bg-white rounded-lg shadow-lg">
             {/* Header Section */}
-            <div className="w-full bg-gray-800 text-white p-4 rounded-t-lg">
-              <h2 className="text-xl font-bold">Modal Header</h2>
+            <div className="w-full bg-gray-800 text-white p-4 rounded-t-lg flex flex-row">
+              <h2 className="text-xl font-bold">Cookies Management</h2>
+              <h3 className="text-xl font-bold ml-10">Centro de Preferências</h3>
             </div>
             {/* Content Section */}
             <div className="flex flex-1 p-4 gap-4">
               <div className="w-1/3">
-                <p>Left Column Content</p>
+                {/* <p>Left Column Content</p> */}
+                {Items.map((item, index) => (
+                  <div key={index}>
+                    <button onClick={() => setSelectedItem(item)}>
+                      <h4>{item.fields.Title.value}</h4>
+                    </button>
+                    {/* <p>{item.fields.Description.value}</p> */}
+                  </div>
+                ))}
               </div>
               <div className="w-2/3">
-                <p>Right Column Content</p>
+                {/* <p>Right Column Content</p> */}
+                {selectedItem && (
+                  <div className="container bg-white-200">
+                    <h4>{selectedItem.fields.Title.value}</h4>
+                    <p>{selectedItem.fields.Description.value}</p>
+                  </div>
+                )}
               </div>
             </div>
             {/* Footer Section */}
