@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { ComponentParams, ComponentRendering, TextField } from '@sitecore-jss/sitecore-jss-nextjs';
+import { ApolloProvider } from '@apollo/client';
+import client from 'src/config/apolloClient';
 import Modal from 'src/components/shared/Modal';
 import AddGovernmentOfficial from './AddGovernmentOfficial';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -59,41 +61,43 @@ export const Default = (props: OfficialManagerProps): JSX.Element => {
     ));
 
   return (
-    <div className={`component official-manager ${props.params.styles}`} id={id ? id : undefined}>
-      <div className="component-content container">
-        <h1 className="my-4">Official Manager Component</h1>
+    <ApolloProvider client={client}>
+      <div className={`component official-manager ${props.params.styles}`} id={id ? id : undefined}>
+        <div className="component-content container">
+          <h1 className="my-4">Official Manager Component</h1>
 
-        <div className="d-flex align-items-center">
-          <div className="position-relative">
-            <i
-              className="bi bi-person position-absolute"
-              style={{ top: '50%', left: '10px', transform: 'translateY(-50%)' }}
-            ></i>
-            <select
-              className="form-control ps-5"
-              id="officialsDropdown"
-              style={{ height: '48px', fontSize: '1.25rem' }}
-            >
-              {dropdownOptions}
-            </select>
+          <div className="d-flex align-items-center">
+            <div className="position-relative">
+              <i
+                className="bi bi-person position-absolute"
+                style={{ top: '50%', left: '10px', transform: 'translateY(-50%)' }}
+              ></i>
+              <select
+                className="form-control ps-5"
+                id="officialsDropdown"
+                style={{ height: '48px', fontSize: '1.25rem' }}
+              >
+                {dropdownOptions}
+              </select>
+            </div>
+
+            <div className="ms-3">
+              <button
+                className="btn btn-primary d-flex align-items-center justify-content-center"
+                style={{ height: '36px', width: '36px', padding: 0, fontSize: '1.25rem' }}
+                onClick={handleOpenModal}
+                title="Add New Official"
+              >
+                <i className="bi bi-plus"></i>
+              </button>
+            </div>
           </div>
 
-          <div className="ms-3">
-            <button
-              className="btn btn-primary d-flex align-items-center justify-content-center"
-              style={{ height: '36px', width: '36px', padding: 0, fontSize: '1.25rem' }}
-              onClick={handleOpenModal}
-              title="Add New Official"
-            >
-              <i className="bi bi-plus"></i>
-            </button>
-          </div>
+          <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+            <AddGovernmentOfficial onAddOfficial={handleAddOfficial} />
+          </Modal>
         </div>
-
-        <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-          <AddGovernmentOfficial onAddOfficial={handleAddOfficial} />
-        </Modal>
       </div>
-    </div>
+    </ApolloProvider>
   );
 };
