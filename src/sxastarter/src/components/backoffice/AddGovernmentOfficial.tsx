@@ -121,12 +121,12 @@ const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps
       const resultPresigned = await uploadMedia({
         variables: { itemPath },
       });
-      debugger;
+
       const presignedUrl = resultPresigned.data.uploadMedia.presignedUploadUrl;
       const formData = new FormData();
       formData.append('file', bioPhoto);
 
-      await fetch(presignedUrl, {
+      const resultUploadMedia = await fetch(presignedUrl, {
         method: 'POST',
         headers: {
           Authorization:
@@ -134,6 +134,8 @@ const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps
         },
         body: formData,
       });
+
+      console.log(resultUploadMedia);
 
       const result = await createGovernmentOfficial({
         variables: {
