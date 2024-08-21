@@ -126,7 +126,7 @@ const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps
       const formData = new FormData();
       formData.append('file', bioPhoto);
 
-      const resultUploadMedia = await fetch(presignedUrl, {
+      const resultUploadMedia = fetch(presignedUrl, {
         method: 'POST',
         headers: {
           Authorization:
@@ -135,7 +135,7 @@ const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps
         body: formData,
       });
 
-      console.log(resultUploadMedia);
+      console.log('resultUploadMedia', (await resultUploadMedia).json());
 
       const result = await createGovernmentOfficial({
         variables: {
@@ -164,14 +164,16 @@ const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps
   };
 
   return (
-    <div className="container mt-4">
-      <h2>Add Government Official</h2>
-      <form onSubmit={handleSubmit} className="mb-4">
-        <div className="form-group">
-          <label htmlFor="fullName">Full Name:</label>
+    <div className="container mx-auto mt-8">
+      <h2 className="text-2xl font-bold mb-4">Add Government Official</h2>
+      <form onSubmit={handleSubmit} className="space-y-4 mb-8">
+        <div className="flex flex-col space-y-2">
+          <label htmlFor="fullName" className="text-sm font-medium">
+            Full Name:
+          </label>
           <input
             type="text"
-            className="form-control"
+            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="fullName"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
@@ -179,11 +181,13 @@ const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps
           />
         </div>
 
-        <div className="form-group">
-          <label htmlFor="firstName">First Name:</label>
+        <div className="flex flex-col space-y-2">
+          <label htmlFor="firstName" className="text-sm font-medium">
+            First Name:
+          </label>
           <input
             type="text"
-            className="form-control"
+            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="firstName"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
@@ -191,11 +195,13 @@ const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps
           />
         </div>
 
-        <div className="form-group">
-          <label htmlFor="lastName">Last Name:</label>
+        <div className="flex flex-col space-y-2">
+          <label htmlFor="lastName" className="text-sm font-medium">
+            Last Name:
+          </label>
           <input
             type="text"
-            className="form-control"
+            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="lastName"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
@@ -203,10 +209,12 @@ const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps
           />
         </div>
 
-        <div className="form-group">
-          <label htmlFor="sex">Sex:</label>
+        <div className="flex flex-col space-y-2">
+          <label htmlFor="sex" className="text-sm font-medium">
+            Sex:
+          </label>
           <select
-            className="form-control"
+            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="sex"
             value={genderId} // Set to the selected gender's itemId
             onChange={(e) => setGenderId(e.target.value)} // Update genderId on change
@@ -225,32 +233,38 @@ const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps
           </select>
         </div>
 
-        <div className="form-group">
-          <label htmlFor="bioPhoto">Bio Photo:</label>
+        <div className="flex flex-col space-y-2">
+          <label htmlFor="bioPhoto" className="text-sm font-medium">
+            Bio Photo:
+          </label>
           <input
             type="file"
-            className="form-control"
+            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="bioPhoto"
             onChange={(e) => setBioPhoto(e.target.files?.[0] || null)}
             required
           />
         </div>
 
-        <button type="submit" className="btn btn-primary mt-3" disabled={loading}>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 mt-4 disabled:opacity-50"
+          disabled={loading}
+        >
           {loading ? 'Adding...' : 'Add Official'}
         </button>
       </form>
 
       {response && (
-        <div className="alert alert-info" role="alert">
-          <h4 className="alert-heading">Response:</h4>
+        <div className="bg-blue-100 text-blue-800 p-4 rounded-md">
+          <h4 className="font-bold">Response:</h4>
           <pre>{JSON.stringify(response, null, 2)}</pre>
         </div>
       )}
 
       {error && (
-        <div className="alert alert-danger" role="alert">
-          <h4 className="alert-heading">Error:</h4>
+        <div className="bg-red-100 text-red-800 p-4 rounded-md">
+          <h4 className="font-bold">Error:</h4>
           <pre>{JSON.stringify(error.message, null, 2)}</pre>
         </div>
       )}

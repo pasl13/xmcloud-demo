@@ -63,28 +63,23 @@ export const Default = (props: OfficialManagerProps): JSX.Element => {
   return (
     <ApolloProvider client={client}>
       <div className={`component official-manager ${props.params.styles}`} id={id ? id : undefined}>
-        <div className="component-content container">
-          <h1 className="my-4">Official Manager Component</h1>
+        <div className="component-content container mx-auto px-4">
+          <h1 className="my-4 text-2xl font-bold">Official Manager Component</h1>
 
-          <div className="d-flex align-items-center">
-            <div className="position-relative">
-              <i
-                className="bi bi-person position-absolute"
-                style={{ top: '50%', left: '10px', transform: 'translateY(-50%)' }}
-              ></i>
+          <div className="flex items-center">
+            <div className="relative">
+              <i className="bi bi-person absolute left-4 top-1/2 transform -translate-y-1/2"></i>
               <select
-                className="form-control ps-5"
+                className="form-control pl-10 pr-3 py-2 h-12 text-lg rounded border-gray-300"
                 id="officialsDropdown"
-                style={{ height: '48px', fontSize: '1.25rem' }}
               >
                 {dropdownOptions}
               </select>
             </div>
 
-            <div className="ms-3">
+            <div className="ml-3">
               <button
-                className="btn btn-primary d-flex align-items-center justify-content-center"
-                style={{ height: '36px', width: '36px', padding: 0, fontSize: '1.25rem' }}
+                className="bg-blue-500 text-white flex items-center justify-center h-9 w-9 p-0 text-lg rounded-full"
                 onClick={handleOpenModal}
                 title="Add New Official"
               >
