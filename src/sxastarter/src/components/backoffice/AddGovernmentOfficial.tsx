@@ -114,10 +114,12 @@ const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps
       console.error('Bio photo is required.');
       return;
     }
+    
+    const itemPath = `Images/Government Officials/${fullName}`;
 
     try {
       const resultPresigned = await uploadMedia({
-        variables: { itemPath: 'Images/Government Officials/Bio Photos' },
+        variables: { itemPath },
       });
       debugger;
       const presignedUrl = resultPresigned.data.uploadMedia.presignedUploadUrl;
