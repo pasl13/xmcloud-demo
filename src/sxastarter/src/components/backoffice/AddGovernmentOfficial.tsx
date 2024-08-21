@@ -114,7 +114,7 @@ const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps
       console.error('Bio photo is required.');
       return;
     }
-    
+
     const itemPath = `Images/Government Officials/${fullName}`;
 
     try {
