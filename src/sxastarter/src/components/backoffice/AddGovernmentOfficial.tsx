@@ -119,7 +119,7 @@ const AddGovernmentOfficial = ({ onAddOfficial }: AddGovernmentOfficialFormProps
       const resultPresigned = await uploadMedia({
         variables: { itemPath: 'Images/Government Officials/Bio Photos' },
       });
-      debugger
+      debugger;
       const presignedUrl = resultPresigned.data.uploadMedia.presignedUploadUrl;
       const formData = new FormData();
       formData.append('file', bioPhoto);
