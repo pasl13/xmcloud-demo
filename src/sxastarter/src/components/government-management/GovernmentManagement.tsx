@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { ComponentParams, ComponentRendering, TextField } from '@sitecore-jss/sitecore-jss-nextjs';
+import { ApolloProvider } from '@apollo/client';
+import client from 'src/config/apolloClient';
 import OfficialsDropdown from './OfficialsDropdown';
 
 type ResultsFieldText = {
@@ -47,16 +49,18 @@ export const Default = (props: GovernmentManagementProps): JSX.Element => {
   };
 
   return (
-    <div
-      className={`component government-management ${props.params.styles}`}
-      id={id ? id : undefined}
-    >
-      <div className="component-content space-y-4">
-        <h1 className="font-bold text-gray-800">Government Management</h1>
+    <ApolloProvider client={client}>
+      <div
+        className={`component government-management ${props.params.styles}`}
+        id={id ? id : undefined}
+      >
+        <div className="component-content space-y-4">
+          <h1 className="font-bold text-gray-800">Government Management</h1>
 
-        {/* Render the OfficialsDropdown component */}
-        <OfficialsDropdown officials={officialsList} onSelect={handleOfficialSelect} />
+          {/* Render the OfficialsDropdown component */}
+          <OfficialsDropdown officials={officialsList} onSelect={handleOfficialSelect} />
+        </div>
       </div>
-    </div>
+    </ApolloProvider>
   );
 };
