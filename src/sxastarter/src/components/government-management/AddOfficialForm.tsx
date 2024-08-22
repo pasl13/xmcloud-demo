@@ -46,6 +46,7 @@ const AddOfficialForm = ({
 }: AddOfficialFormProps): JSX.Element => {
   const [fullName, setFullName] = useState<string>('');
   const [response, setResponse] = useState<GovernmentOfficialResponse | null>(null);
+  console.log(response, setResponse);
 
   // Apollo's useMutation hook for handling the mutation
   const [createGovernmentOfficial] = useMutation(CREATE_GOVERNMENT_OFFICIAL);

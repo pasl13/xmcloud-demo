@@ -37,7 +37,7 @@ interface GovernmentManagementProps {
 
 export const Default = (props: GovernmentManagementProps): JSX.Element => {
   console.log('GovernmentManagementProps', props);
-  
+
   const id = props.params.RenderingIdentifier;
   const parent = `{${props.rendering.dataSource?.toUpperCase()}}`;
   const templateId = formatUUID(props.fields.data.datasource.children.results[0].template.id);
