@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 import React, { useState } from 'react';
 
 interface AddOfficialFormProps {
-  onAddOfficial: (officialName: string) => void;
+  onAddOfficial: (officialId: string, officialName: string) => void;
   templateId: string | undefined;
   parent: string | undefined;
   language: string | undefined;
@@ -61,10 +61,14 @@ const AddOfficialForm = ({
         language,
       },
     });
-    setResponse(result.data);
 
-    // Call the callback to notify parent component
-    onAddOfficial(fullName);
+    // Extract the new official's ID and name from the mutation response
+    const newOfficial = result.data?.createItem?.item;
+
+    // Call the callback to notify the parent component about the new official
+    if (newOfficial) {
+      onAddOfficial(newOfficial.itemId, newOfficial.name);
+    }
 
     // Reset fields after submit
     setFullName('');

@@ -19,13 +19,16 @@ const OfficialsDropdown = ({ officials, onSelect }: OfficialsDropdownProps): JSX
     onSelect(selectedId);
   };
 
+  // Sort the officials by name alphabetically
+  const sortedOfficials = officials?.sort((a, b) => a.name.localeCompare(b.name));
+
   return (
     <div className="officials-dropdown my-4">
       <select
         id="officials-dropdown"
         value={selectedOfficial}
         onChange={handleSelectChange}
-        disabled={!officials || officials.length === 0}
+        disabled={!sortedOfficials || sortedOfficials.length === 0}
         className="
           block w-full                       /* Full width and block-level element */
           px-4 py-2                          /* Padding for comfortable interaction */
@@ -39,8 +42,8 @@ const OfficialsDropdown = ({ officials, onSelect }: OfficialsDropdownProps): JSX
         <option value="">-- Select an Official --</option>
 
         {/* Conditionally render options based on availability */}
-        {officials && officials.length > 0 ? (
-          officials.map((official) => (
+        {sortedOfficials && sortedOfficials.length > 0 ? (
+          sortedOfficials.map((official) => (
             <option key={official.id} value={official.id}>
               {official.name}
             </option>

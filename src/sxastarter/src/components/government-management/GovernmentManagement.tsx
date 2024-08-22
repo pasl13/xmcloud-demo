@@ -36,6 +36,8 @@ interface GovernmentManagementProps {
 }
 
 export const Default = (props: GovernmentManagementProps): JSX.Element => {
+  console.log('GovernmentManagementProps', props);
+  
   const id = props.params.RenderingIdentifier;
   const parent = `{${props.rendering.dataSource?.toUpperCase()}}`;
   const templateId = formatUUID(props.fields.data.datasource.children.results[0].template.id);
@@ -53,7 +55,6 @@ export const Default = (props: GovernmentManagementProps): JSX.Element => {
   const [selectedOfficialId, setSelectedOfficialId] = useState('');
   const [officials, setOfficials] = useState(officialsList);
   console.log(selectedOfficialId);
-  console.log('GovernmentManagementProps', props);
 
   // Handle official selection from OfficialsDropdown
   const handleOfficialSelect = (officialId: string) => {
@@ -62,15 +63,14 @@ export const Default = (props: GovernmentManagementProps): JSX.Element => {
   };
 
   // Handle adding a new official
-  const handleAddOfficial = (officialName: string) => {
+  const handleAddOfficial = (officialId: string, officialName: string) => {
     const newOfficial = {
-      id: `${Date.now()}`, // Temporary ID (could be replaced by a backend call)
+      id: officialId,
       name: officialName,
     };
 
     // Update the officials list with the new official
     setOfficials([...officials, newOfficial]);
-    console.log(`New official added: ${officialName}`);
   };
 
   return (
@@ -83,7 +83,7 @@ export const Default = (props: GovernmentManagementProps): JSX.Element => {
           <h1 className="font-bold text-gray-800">Government Management</h1>
 
           {/* Render the OfficialsDropdown component */}
-          <OfficialsDropdown officials={officialsList} onSelect={handleOfficialSelect} />
+          <OfficialsDropdown officials={officials} onSelect={handleOfficialSelect} />
 
           {/* Render the AddOfficialForm component */}
           <AddOfficialForm
