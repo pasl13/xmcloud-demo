@@ -58,11 +58,11 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
   };
 
   // console.log('CookiesSettings Component', props);
-  Items.map((item, index) => {
-    console.log('item', item);
-    console.log('---');
-    console.log('index', index);
-  });
+  // Items.map((item, index) => {
+  //   console.log('item', item);
+  //   console.log('---');
+  //   console.log('index', index);
+  // });
   // console.log('Items', Items);
   return (
     <div
