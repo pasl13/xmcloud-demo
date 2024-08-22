@@ -16,6 +16,11 @@ type ResultsFieldText = {
   };
 };
 
+type ResultsSexItems = {
+  id: string;
+  displayName: string;
+};
+
 interface Fields {
   data: {
     datasource: {
@@ -24,6 +29,11 @@ interface Fields {
       };
       children: {
         results: ResultsFieldText[];
+      };
+    };
+    sexItems: {
+      children: {
+        results: ResultsSexItems[];
       };
     };
   };
@@ -40,8 +50,9 @@ export const Default = (props: GovernmentManagementProps): JSX.Element => {
 
   const id = props.params.RenderingIdentifier;
   const parent = `{${props.rendering.dataSource?.toUpperCase()}}`;
-  const templateId = formatUUID(props.fields.data.datasource.children.results[0].template.id);
+  const templateId = formatUUID(props.fields.data.datasource.children.results[0]?.template.id);
   const language = props.fields.data.datasource.language.name;
+  const sexItems = props.fields.data.sexItems.children.results;
 
   // Extract official results or default to an empty array if not available
   const officialResults = props?.fields?.data?.datasource?.children?.results ?? [];
@@ -91,6 +102,7 @@ export const Default = (props: GovernmentManagementProps): JSX.Element => {
             parent={parent}
             templateId={templateId}
             language={language}
+            sexItems={sexItems}
           />
         </div>
       </div>

@@ -4,6 +4,10 @@
  * @returns The formatted UUID.
  */
 export function formatUUID(uuid: string): string {
+  if (uuid?.length !== 32) {
+    return '';
+  }
+
   const formattedUUID = `${uuid.slice(0, 8)}-${uuid.slice(8, 12)}-${uuid.slice(
     12,
     16
