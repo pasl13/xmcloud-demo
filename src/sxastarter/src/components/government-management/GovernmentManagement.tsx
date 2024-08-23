@@ -4,13 +4,9 @@ import { ApolloProvider } from '@apollo/client';
 import client from 'src/config/apolloClient';
 import Dropdown from 'src/atoms/Shared Components/Dropdown';
 import AddOfficialForm from './AddOfficialForm';
-import { formatUUID } from 'src/utils/formatUUID';
 
 type ResultsFieldText = {
   id: string;
-  template: {
-    id: string;
-  };
   field: {
     jsonValue: TextField;
   };
@@ -48,11 +44,10 @@ interface GovernmentManagementProps {
 export const Default = (props: GovernmentManagementProps): JSX.Element => {
   console.log('GovernmentManagementProps', props);
 
-  const id = props.params.RenderingIdentifier;
-  const parent = `{${props.rendering.dataSource?.toUpperCase()}}`;
-  const templateId = formatUUID(props.fields.data.datasource.children.results[0]?.template.id);
-  const language = props.fields.data.datasource.language.name;
-  const sexItems = props.fields.data.sexItems.children.results;
+  const id = props?.params?.RenderingIdentifier;
+  const parent = `{${props?.rendering?.dataSource?.toUpperCase()}}`;
+  const language = props?.fields?.data?.datasource?.language?.name;
+  const sexItems = props?.fields?.data?.sexItems?.children?.results;
 
   // Extract official results or default to an empty array if not available
   const officialResults = props?.fields?.data?.datasource?.children?.results ?? [];
@@ -108,7 +103,6 @@ export const Default = (props: GovernmentManagementProps): JSX.Element => {
           <AddOfficialForm
             onAddOfficial={handleAddOfficial}
             parent={parent}
-            templateId={templateId}
             language={language}
             sexItems={sexItems}
           />

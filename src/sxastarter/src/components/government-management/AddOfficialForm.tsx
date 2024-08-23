@@ -9,7 +9,6 @@ import 'react-quill/dist/quill.snow.css';
 
 interface AddOfficialFormProps {
   onAddOfficial: (officialId: string, officialName: string) => void;
-  templateId: string | undefined;
   parent: string | undefined;
   language: string | undefined;
   sexItems: { id: string; displayName: string }[];
@@ -50,7 +49,6 @@ const CREATE_GOVERNMENT_OFFICIAL = gql`
 const AddOfficialForm = ({
   onAddOfficial,
   parent,
-  templateId,
   language,
   sexItems,
 }: AddOfficialFormProps): JSX.Element => {
@@ -74,7 +72,7 @@ const AddOfficialForm = ({
     e.preventDefault();
 
     // TODO: Refactor
-    templateId = '{3F331F63-E5A3-4B22-B4E5-1AA7F42C5C48}';
+    const templateId = '{3F331F63-E5A3-4B22-B4E5-1AA7F42C5C48}';
     const sexId = formatUUID(selectedSex);
     const itemName = removeAccents(fullName);
 
