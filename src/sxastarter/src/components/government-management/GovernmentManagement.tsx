@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ComponentParams, ComponentRendering, TextField } from '@sitecore-jss/sitecore-jss-nextjs';
 import { ApolloProvider } from '@apollo/client';
 import client from 'src/config/apolloClient';
-import OfficialsDropdown from './OfficialsDropdown';
+import Dropdown from 'src/atoms/Shared Components/Dropdown';
 import AddOfficialForm from './AddOfficialForm';
 import { formatUUID } from 'src/utils/formatUUID';
 
@@ -59,15 +59,14 @@ export const Default = (props: GovernmentManagementProps): JSX.Element => {
 
   const officialsList = officialResults.map(({ id, field }) => ({
     id,
-    name: field.jsonValue?.value?.toString() ?? '',
+    label: field.jsonValue?.value?.toString() ?? '',
   }));
 
   // State to store selected official ID and the list of officials
   const [selectedOfficialId, setSelectedOfficialId] = useState('');
   const [officials, setOfficials] = useState(officialsList);
-  console.log(selectedOfficialId);
 
-  // Handle official selection from OfficialsDropdown
+  // Handle official selection from Dropdown
   const handleOfficialSelect = (officialId: string) => {
     setSelectedOfficialId(officialId);
     console.log(`Selected Official ID: ${officialId}`);
@@ -77,7 +76,7 @@ export const Default = (props: GovernmentManagementProps): JSX.Element => {
   const handleAddOfficial = (officialId: string, officialName: string) => {
     const newOfficial = {
       id: officialId,
-      name: officialName,
+      label: officialName,
     };
 
     // Update the officials list with the new official
@@ -93,8 +92,17 @@ export const Default = (props: GovernmentManagementProps): JSX.Element => {
         <div className="component-content space-y-4">
           <h1 className="font-bold text-gray-800">Government Management</h1>
 
-          {/* Render the OfficialsDropdown component */}
-          <OfficialsDropdown officials={officials} onSelect={handleOfficialSelect} />
+          {/* Render the Dropdown component */}
+          <Dropdown
+            id="officials-dropdown"
+            value={selectedOfficialId}
+            options={officialsList}
+            placeholder="-- Select an Official --"
+            onSelect={handleOfficialSelect}
+            selectClass="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            required={true}
+            sort={true}
+          />
 
           {/* Render the AddOfficialForm component */}
           <AddOfficialForm

@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/client';
 import gql from 'graphql-tag';
 import dynamic from 'next/dynamic';
 import { formatUUID } from 'src/utils/formatUUID';
+import Dropdown from 'src/atoms/Shared Components/Dropdown';
 import removeAccents from 'remove-accents';
 import 'react-quill/dist/quill.snow.css';
 
@@ -12,16 +13,6 @@ interface AddOfficialFormProps {
   parent: string | undefined;
   language: string | undefined;
   sexItems: { id: string; displayName: string }[];
-}
-
-interface GovernmentOfficialResponse {
-  createItem: {
-    item: {
-      itemId: string;
-      name: string;
-      path: string;
-    };
-  };
 }
 
 const CREATE_GOVERNMENT_OFFICIAL = gql`
@@ -67,11 +58,14 @@ const AddOfficialForm = ({
   const [selectedSex, setSelectedSex] = useState<string>('');
   const [bio, setBio] = useState<string>('');
   const ReactQuill = useMemo(() => dynamic(() => import('react-quill'), { ssr: false }), []);
-
-  const [response, setResponse] = useState<GovernmentOfficialResponse | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  console.log(response, setResponse);
+  //const [response, setResponse] = useState<GovernmentOfficialResponse | null>(null);
+
+  const mappedSexItems = sexItems.map((item) => ({
+    id: item.id,
+    label: item.displayName,
+  }));
 
   // Apollo's useMutation hook for handling the mutation
   const [createGovernmentOfficial] = useMutation(CREATE_GOVERNMENT_OFFICIAL);
@@ -132,28 +126,22 @@ const AddOfficialForm = ({
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
           className="mt-2 block w-full p-3 text-lg border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          required
         />
       </div>
 
       {/* Dropdown to select sex */}
-      <div>
-        <label htmlFor="sex" className="block text-lg font-medium text-gray-700">
-          Select Sex:
-        </label>
-        <select
-          id="sex"
-          value={selectedSex}
-          onChange={(e) => setSelectedSex(e.target.value)}
-          className="mt-2 block w-full p-3 text-lg border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-        >
-          <option value="">-- Select --</option>
-          {sexItems.map((item) => (
-            <option key={item.id} value={item.id}>
-              {item.displayName}
-            </option>
-          ))}
-        </select>
-      </div>
+      <Dropdown
+        id="sex"
+        label="Select Sex:"
+        value={selectedSex}
+        options={mappedSexItems}
+        placeholder="-- Select --"
+        onSelect={(selectedValue) => setSelectedSex(selectedValue)}
+        labelClass="block text-lg font-medium text-gray-700"
+        selectClass="mt-2 block w-full p-3 text-lg border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+        required={true}
+      />
 
       {/* Rich Text Editor for Bio */}
       <div>
