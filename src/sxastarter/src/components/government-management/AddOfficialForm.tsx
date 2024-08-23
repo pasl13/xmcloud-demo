@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/client';
 import gql from 'graphql-tag';
 import dynamic from 'next/dynamic';
 import { formatUUID } from 'src/utils/formatUUID';
+import removeAccents from 'remove-accents';
 import 'react-quill/dist/quill.snow.css';
 
 interface AddOfficialFormProps {
@@ -25,6 +26,7 @@ interface GovernmentOfficialResponse {
 
 const CREATE_GOVERNMENT_OFFICIAL = gql`
   mutation CreateGovernmentOfficial(
+    $itemName: String!
     $fullName: String!
     $sexId: String!
     $bio: String!
@@ -34,8 +36,12 @@ const CREATE_GOVERNMENT_OFFICIAL = gql`
   ) {
     createItem(
       input: {
-        name: $fullName
-        fields: [{ name: "Sex", value: $sexId }, { name: "Bio", value: $bio }]
+        name: $itemName
+        fields: [
+          { name: "FullName", value: $fullName }
+          { name: "Sex", value: $sexId }
+          { name: "Bio", value: $bio }
+        ]
         templateId: $templateId
         parent: $parent
         language: $language
@@ -65,9 +71,6 @@ const AddOfficialForm = ({
   const [response, setResponse] = useState<GovernmentOfficialResponse | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // TODO: Refactor
-  templateId = '{3F331F63-E5A3-4B22-B4E5-1AA7F42C5C48}';
-
   console.log(response, setResponse);
 
   // Apollo's useMutation hook for handling the mutation
@@ -75,10 +78,16 @@ const AddOfficialForm = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // TODO: Refactor
+    templateId = '{3F331F63-E5A3-4B22-B4E5-1AA7F42C5C48}';
     const sexId = formatUUID(selectedSex);
+    const itemName = removeAccents(fullName);
+
     try {
       const result = await createGovernmentOfficial({
         variables: {
+          itemName,
           fullName,
           sexId,
           bio,
@@ -97,7 +106,9 @@ const AddOfficialForm = ({
 
         // Reset fields after submit
         setFullName('');
+        setSelectedSex('');
         setBio('');
+        setErrorMessage('');
       }
     } catch (error: unknown) {
       if (error instanceof Error && error.message.includes('The item name')) {
