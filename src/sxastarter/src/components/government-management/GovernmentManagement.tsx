@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ComponentParams, ComponentRendering, TextField } from '@sitecore-jss/sitecore-jss-nextjs';
 import { ApolloProvider } from '@apollo/client';
 import client from 'src/config/apolloClient';
@@ -52,7 +52,6 @@ export const Default = (props: GovernmentManagementProps): JSX.Element => {
   // Extract official results or default to an empty array if not available
   const officialResults = props?.fields?.data?.datasource?.children?.results ?? [];
 
-  // Map officialsList for the Dropdown
   const officialsList = officialResults.map(({ id, field }) => ({
     id,
     label: field.jsonValue?.value?.toString() ?? '',
@@ -61,11 +60,6 @@ export const Default = (props: GovernmentManagementProps): JSX.Element => {
   // State to store selected official ID and the list of officials
   const [selectedOfficialId, setSelectedOfficialId] = useState('');
   const [officials, setOfficials] = useState(officialsList);
-
-  // Update the officials list when officialResults changes
-  useEffect(() => {
-    setOfficials(officialsList);
-  }, [officialResults]);
 
   // Handle official selection from Dropdown
   const handleOfficialSelect = (officialId: string) => {
@@ -81,7 +75,7 @@ export const Default = (props: GovernmentManagementProps): JSX.Element => {
     };
 
     // Update the officials list with the new official
-    setOfficials((prevOfficials) => [...prevOfficials, newOfficial]);
+    setOfficials([...officials, newOfficial]);
   };
 
   return (
@@ -97,7 +91,7 @@ export const Default = (props: GovernmentManagementProps): JSX.Element => {
           <Dropdown
             id="officials-dropdown"
             value={selectedOfficialId}
-            options={officials}
+            options={officialsList}
             placeholder="-- Select an Official --"
             onSelect={handleOfficialSelect}
             selectClass="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
