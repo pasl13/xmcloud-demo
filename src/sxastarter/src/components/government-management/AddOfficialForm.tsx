@@ -61,7 +61,9 @@ const AddOfficialForm = ({
   const [selectedSex, setSelectedSex] = useState<string>('');
   const [bio, setBio] = useState<string>('');
   const ReactQuill = useMemo(() => dynamic(() => import('react-quill'), { ssr: false }), []);
+
   const [response, setResponse] = useState<GovernmentOfficialResponse | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // TODO: Refactor
   templateId = '{3F331F63-E5A3-4B22-B4E5-1AA7F42C5C48}';
@@ -74,28 +76,34 @@ const AddOfficialForm = ({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const sexId = formatUUID(selectedSex);
+    try {
+      const result = await createGovernmentOfficial({
+        variables: {
+          fullName,
+          sexId,
+          bio,
+          templateId,
+          parent,
+          language,
+        },
+      });
 
-    const result = await createGovernmentOfficial({
-      variables: {
-        fullName,
-        sexId,
-        bio,
-        templateId,
-        parent,
-        language,
-      },
-    });
+      // Extract the new official's ID and name from the mutation response
+      const newOfficial = result.data?.createItem?.item;
 
-    // Extract the new official's ID and name from the mutation response
-    const newOfficial = result.data?.createItem?.item;
+      // Call the callback to notify the parent component about the new official
+      if (newOfficial) {
+        onAddOfficial(newOfficial.itemId, newOfficial.name);
 
-    // Call the callback to notify the parent component about the new official
-    if (newOfficial) {
-      onAddOfficial(newOfficial.itemId, newOfficial.name);
+        // Reset fields after submit
+        setFullName('');
+        setBio('');
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error && error.message.includes('The item name')) {
+        setErrorMessage('The name already exists, please choose another.');
+      }
     }
-
-    // Reset fields after submit
-    setFullName('');
   };
 
   return (
@@ -150,6 +158,9 @@ const AddOfficialForm = ({
       >
         Add Official
       </button>
+
+      {/* Display the error message if it exists */}
+      {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
     </form>
   );
 };
