@@ -1,7 +1,9 @@
+import React, { useMemo, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import gql from 'graphql-tag';
-import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { formatUUID } from 'src/utils/formatUUID';
+import 'react-quill/dist/quill.snow.css';
 
 interface AddOfficialFormProps {
   onAddOfficial: (officialId: string, officialName: string) => void;
@@ -25,6 +27,7 @@ const CREATE_GOVERNMENT_OFFICIAL = gql`
   mutation CreateGovernmentOfficial(
     $fullName: String!
     $sexId: String!
+    $bio: String!
     $templateId: ID!
     $parent: ID!
     $language: String!
@@ -32,7 +35,7 @@ const CREATE_GOVERNMENT_OFFICIAL = gql`
     createItem(
       input: {
         name: $fullName
-        fields: [{ name: "Sex", value: $sexId }]
+        fields: [{ name: "Sex", value: $sexId }, { name: "Bio", value: $bio }]
         templateId: $templateId
         parent: $parent
         language: $language
@@ -56,13 +59,14 @@ const AddOfficialForm = ({
 }: AddOfficialFormProps): JSX.Element => {
   const [fullName, setFullName] = useState<string>('');
   const [selectedSex, setSelectedSex] = useState<string>('');
+  const [bio, setBio] = useState<string>('');
+  const ReactQuill = useMemo(() => dynamic(() => import('react-quill'), { ssr: false }), []);
   const [response, setResponse] = useState<GovernmentOfficialResponse | null>(null);
 
   // TODO: Refactor
   templateId = '{3F331F63-E5A3-4B22-B4E5-1AA7F42C5C48}';
 
   console.log(response, setResponse);
-  console.log('selectedSex', formatUUID(selectedSex));
 
   // Apollo's useMutation hook for handling the mutation
   const [createGovernmentOfficial] = useMutation(CREATE_GOVERNMENT_OFFICIAL);
@@ -75,6 +79,7 @@ const AddOfficialForm = ({
       variables: {
         fullName,
         sexId,
+        bio,
         templateId,
         parent,
         language,
@@ -129,6 +134,14 @@ const AddOfficialForm = ({
             </option>
           ))}
         </select>
+      </div>
+
+      {/* Rich Text Editor for Bio */}
+      <div>
+        <label htmlFor="bio" className="block text-lg font-medium text-gray-700">
+          Bio:
+        </label>
+        <ReactQuill theme="snow" value={bio} onChange={setBio} />
       </div>
 
       <button
