@@ -65,13 +65,13 @@ const CREATE_MEDIA_FOLDER = gql`
   }
 `;
 
-// const UPLOAD_MEDIA_MUTATION = gql`
-//   mutation UploadMedia($itemPath: String!) {
-//     uploadMedia(input: { itemPath: $itemPath }) {
-//       presignedUploadUrl
-//     }
-//   }
-// `;
+const PRESIGNED_UPLOAD_URL = gql`
+  mutation UploadMedia($itemPath: String!) {
+    uploadMedia(input: { itemPath: $itemPath }) {
+      presignedUploadUrl
+    }
+  }
+`;
 
 const AddOfficialForm = ({
   onAddOfficial,
@@ -94,17 +94,16 @@ const AddOfficialForm = ({
 
   // Apollo's useMutation hook for handling the mutation
   const [createMediaFolder] = useMutation(CREATE_MEDIA_FOLDER);
-  //const [uploadMedia] = useMutation(UPLOAD_MEDIA_MUTATION);
+  const [presignedUploadUrl] = useMutation(PRESIGNED_UPLOAD_URL);
   const [createGovernmentOfficial] = useMutation(CREATE_GOVERNMENT_OFFICIAL);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // TODO: Refactor
-    const sexId = formatUUID(selectedSex);
     const itemName = removeAccents(fullName);
 
     try {
+      // Create a media folder in Sitecore
       const mediaFolderResponse = await createMediaFolder({
         variables: {
           itemName,
@@ -114,13 +113,25 @@ const AddOfficialForm = ({
         },
       });
 
-      console.log('mediaFolderResponse', mediaFolderResponse);
+      // Extract the relative media path from the response, removing the obsolete '/sitecore/media library/' part
+      const relativeMediaPath = mediaFolderResponse?.data?.createItem?.item?.path?.replace(
+        '/sitecore/media library/',
+        ''
+      );
+
+      // Generate a presigned URL for uploading media to the newly created folder using the relative path
+      const presignedUploadUrlResponse = await presignedUploadUrl({
+        variables: { itemPath: relativeMediaPath },
+      });
+
+      const presignedUrl = presignedUploadUrlResponse?.data?.uploadMedia?.presignedUploadUrl;
+      console.log('presignedUrl', presignedUrl);
 
       const result = await createGovernmentOfficial({
         variables: {
           itemName,
           fullName,
-          sexId,
+          sexId: formatUUID(selectedSex),
           bio,
           templateId: '{3F331F63-E5A3-4B22-B4E5-1AA7F42C5C48}',
           parent,
