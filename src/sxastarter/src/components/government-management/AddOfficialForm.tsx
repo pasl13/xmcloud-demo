@@ -46,6 +46,33 @@ const CREATE_GOVERNMENT_OFFICIAL = gql`
   }
 `;
 
+const CREATE_MEDIA_FOLDER = gql`
+  mutation CreateMediaFolder(
+    $itemName: String!
+    $templateId: ID!
+    $parent: ID!
+    $language: String!
+  ) {
+    createItem(
+      input: { name: $itemName, templateId: $templateId, parent: $parent, language: $language }
+    ) {
+      item {
+        itemId
+        name
+        path
+      }
+    }
+  }
+`;
+
+// const UPLOAD_MEDIA_MUTATION = gql`
+//   mutation UploadMedia($itemPath: String!) {
+//     uploadMedia(input: { itemPath: $itemPath }) {
+//       presignedUploadUrl
+//     }
+//   }
+// `;
+
 const AddOfficialForm = ({
   onAddOfficial,
   parent,
@@ -66,24 +93,36 @@ const AddOfficialForm = ({
   }));
 
   // Apollo's useMutation hook for handling the mutation
+  const [createMediaFolder] = useMutation(CREATE_MEDIA_FOLDER);
+  //const [uploadMedia] = useMutation(UPLOAD_MEDIA_MUTATION);
   const [createGovernmentOfficial] = useMutation(CREATE_GOVERNMENT_OFFICIAL);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // TODO: Refactor
-    const templateId = '{3F331F63-E5A3-4B22-B4E5-1AA7F42C5C48}';
     const sexId = formatUUID(selectedSex);
     const itemName = removeAccents(fullName);
 
     try {
+      const mediaFolderResponse = await createMediaFolder({
+        variables: {
+          itemName,
+          templateId: '{FE5DD826-48C6-436D-B87A-7C4210C7413B}',
+          parent: '{75FDD89B-A990-4604-BB4C-4DCF6B878EEA}',
+          language,
+        },
+      });
+
+      console.log('mediaFolderResponse', mediaFolderResponse);
+
       const result = await createGovernmentOfficial({
         variables: {
           itemName,
           fullName,
           sexId,
           bio,
-          templateId,
+          templateId: '{3F331F63-E5A3-4B22-B4E5-1AA7F42C5C48}',
           parent,
           language,
         },
@@ -147,6 +186,31 @@ const AddOfficialForm = ({
           Bio:
         </label>
         <ReactQuill theme="snow" value={bio} onChange={setBio} />
+      </div>
+
+      {/* File Upload for Images */}
+      <div>
+        <label htmlFor="bioPhoto" className="block text-lg font-medium text-gray-700">
+          Profile Image:
+        </label>
+        <input
+          type="file"
+          id="bioPhoto"
+          accept="image/*"
+          onChange={(e) => {
+            const files = e.target.files;
+            if (!files || files.length === 0) {
+              return;
+            }
+            const file = files[0];
+            if (!file.type.startsWith('image/')) {
+              alert('Please upload a valid image file.');
+              e.target.value = ''; // Reset the input
+            }
+          }}
+          className="mt-2 block w-full p-3 text-lg border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          required
+        />
       </div>
 
       <button
