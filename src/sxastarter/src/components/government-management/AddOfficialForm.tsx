@@ -46,25 +46,6 @@ const CREATE_GOVERNMENT_OFFICIAL = gql`
   }
 `;
 
-const CREATE_MEDIA_FOLDER = gql`
-  mutation CreateMediaFolder(
-    $itemName: String!
-    $templateId: ID!
-    $parent: ID!
-    $language: String!
-  ) {
-    createItem(
-      input: { name: $itemName, templateId: $templateId, parent: $parent, language: $language }
-    ) {
-      item {
-        itemId
-        name
-        path
-      }
-    }
-  }
-`;
-
 const PRESIGNED_UPLOAD_URL = gql`
   mutation UploadMedia($itemPath: String!) {
     uploadMedia(input: { itemPath: $itemPath }) {
@@ -94,7 +75,6 @@ const AddOfficialForm = ({
   }));
 
   // Apollo's useMutation hook for handling the mutation
-  const [createMediaFolder] = useMutation(CREATE_MEDIA_FOLDER);
   const [presignedUploadUrl] = useMutation(PRESIGNED_UPLOAD_URL);
   const [createGovernmentOfficial] = useMutation(CREATE_GOVERNMENT_OFFICIAL);
 
@@ -104,23 +84,7 @@ const AddOfficialForm = ({
     const itemName = removeAccents(fullName);
 
     try {
-      // Create a media folder in Sitecore
-      const mediaFolderResponse = await createMediaFolder({
-        variables: {
-          itemName,
-          templateId: '{FE5DD826-48C6-436D-B87A-7C4210C7413B}',
-          parent: '{75FDD89B-A990-4604-BB4C-4DCF6B878EEA}',
-          language,
-        },
-      });
-
-      // Extract the relative media path from the response, removing the obsolete '/sitecore/media library/' part
-      const relativeMediaPath = mediaFolderResponse?.data?.createItem?.item?.path?.replace(
-        '/sitecore/media library/',
-        ''
-      );
-
-      const bioPhotoPath = `${relativeMediaPath}/bio-photo-${itemName}`;
+      const bioPhotoPath = `Project/Demo/Government Management/Teste/${itemName}`;
 
       // Generate a presigned URL for uploading media to the newly created folder using the relative path
       const presignedUploadUrlResponse = await presignedUploadUrl({
@@ -147,10 +111,7 @@ const AddOfficialForm = ({
 
         const responseUploadMedia = await requestUploadMedia.json();
 
-        const message = responseUploadMedia.Message;
-
         console.log('responseUploadMedia', responseUploadMedia);
-        console.log('message', message);
       } catch (error) {
         console.error('Failed to upload media:', error);
       }
