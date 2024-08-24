@@ -2,12 +2,18 @@ import React, { useMemo, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import gql from 'graphql-tag';
 import dynamic from 'next/dynamic';
-import { formatUUID } from 'src/utils/formatUUID';
-import Dropdown from 'src/atoms/Shared Components/Dropdown';
-import FileUpload from 'src/atoms/Shared Components/FileUpload';
-import { generatePresignedUrlAndUpload } from 'src/utils/uploadMedia';
+
+// Third-party utilities
 import removeAccents from 'remove-accents';
 import 'react-quill/dist/quill.snow.css';
+
+// Custom components
+import Dropdown from 'src/atoms/Shared Components/Dropdown';
+import FileUpload from 'src/atoms/Shared Components/FileUpload';
+
+// Custom utilities
+import { generatePresignedUrlAndUpload } from 'src/utils/uploadMedia';
+import SitecoreGuidUtils from 'src/utils/sitecoreGuid';
 
 interface AddOfficialFormProps {
   onAddOfficial: (officialId: string, officialName: string) => void;
@@ -99,8 +105,6 @@ const AddOfficialForm = ({
         bioPhoto
       );
 
-      const bioPhotoId = `{${getBioPhoto?.Id?.toUpperCase()}}`;
-
       const getCardPhoto = await generatePresignedUrlAndUpload(
         presignedUploadUrl,
         'Project/Demo/Government Management/Card Photo',
@@ -108,16 +112,18 @@ const AddOfficialForm = ({
         cardPhoto
       );
 
-      const cardPhotoId = `{${getCardPhoto?.Id?.toUpperCase()}}`;
-
       const result = await createGovernmentOfficial({
         variables: {
           itemName,
           fullName,
-          sexId: formatUUID(selectedSex),
+          sexId: SitecoreGuidUtils.convertRawToGuid(selectedSex),
           bio,
-          bioPhoto: `<image mediaid="${bioPhotoId}" />`,
-          cardPhoto: `<image mediaid="${cardPhotoId}" />`,
+          bioPhoto: `<image mediaid="${SitecoreGuidUtils.convertRawHyphenatedToGuid(
+            getBioPhoto?.Id
+          )}" />`,
+          cardPhoto: `<image mediaid="${SitecoreGuidUtils.convertRawHyphenatedToGuid(
+            getCardPhoto?.Id
+          )}" />`,
           templateId: '{3F331F63-E5A3-4B22-B4E5-1AA7F42C5C48}',
           parent,
           language,

@@ -25,7 +25,6 @@ const FileUpload: React.FC<FileUploadProps> = ({
 }: FileUploadProps): JSX.Element => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
-    console.log(file); // Optional: Logging for debugging purposes
     onFileSelect(file);
   };
 
