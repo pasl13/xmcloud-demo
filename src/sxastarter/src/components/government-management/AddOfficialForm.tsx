@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { formatUUID } from 'src/utils/formatUUID';
 import Dropdown from 'src/atoms/Shared Components/Dropdown';
 import removeAccents from 'remove-accents';
+import { uploadMedia } from 'src/config/uploadMedia';
 import 'react-quill/dist/quill.snow.css';
 
 interface AddOfficialFormProps {
@@ -83,6 +84,7 @@ const AddOfficialForm = ({
   const [selectedSex, setSelectedSex] = useState<string>('');
   const [bio, setBio] = useState<string>('');
   const ReactQuill = useMemo(() => dynamic(() => import('react-quill'), { ssr: false }), []);
+  const [bioPhoto, setBioPhoto] = useState<File | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   //const [response, setResponse] = useState<GovernmentOfficialResponse | null>(null);
@@ -126,6 +128,18 @@ const AddOfficialForm = ({
 
       const presignedUrl = presignedUploadUrlResponse?.data?.uploadMedia?.presignedUploadUrl;
       console.log('presignedUrl', presignedUrl);
+
+      const formData = new FormData();
+      if (bioPhoto) {
+        formData.append('file', bioPhoto);
+      }
+
+      try {
+        const response = await uploadMedia(presignedUrl, formData);
+        console.log('Media uploaded successfully:', response);
+      } catch (error) {
+        console.error('Failed to upload media:', error);
+      }
 
       const result = await createGovernmentOfficial({
         variables: {
@@ -208,17 +222,7 @@ const AddOfficialForm = ({
           type="file"
           id="bioPhoto"
           accept="image/*"
-          onChange={(e) => {
-            const files = e.target.files;
-            if (!files || files.length === 0) {
-              return;
-            }
-            const file = files[0];
-            if (!file.type.startsWith('image/')) {
-              alert('Please upload a valid image file.');
-              e.target.value = ''; // Reset the input
-            }
-          }}
+          onChange={(e) => setBioPhoto(e.target.files?.[0] || null)}
           className="mt-2 block w-full p-3 text-lg border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
           required
         />
