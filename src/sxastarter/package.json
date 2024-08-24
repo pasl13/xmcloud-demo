@@ -45,6 +45,8 @@
     "next-localization": "^0.12.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-quill": "^2.0.0",
+    "remove-accents": "^0.5.0",
     "sass": "^1.52.3",
     "sass-alias": "^1.0.5"
   },
@@ -103,4 +105,3 @@
     "start:watch-components": "ts-node --project tsconfig.scripts.json scripts/generate-component-builder/index.ts --watch"
   }
 }
-
