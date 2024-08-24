@@ -120,9 +120,11 @@ const AddOfficialForm = ({
         ''
       );
 
+      const bioPhotoPath = `${relativeMediaPath}/bio-photo-${itemName}`;
+
       // Generate a presigned URL for uploading media to the newly created folder using the relative path
       const presignedUploadUrlResponse = await presignedUploadUrl({
-        variables: { itemPath: relativeMediaPath },
+        variables: { itemPath: bioPhotoPath },
       });
 
       const presignedUrl = presignedUploadUrlResponse?.data?.uploadMedia?.presignedUploadUrl;
@@ -143,8 +145,12 @@ const AddOfficialForm = ({
           body: formData,
         });
 
-        const responseUploadMedia = requestUploadMedia.json();
+        const responseUploadMedia = await requestUploadMedia.json();
+
+        const message = responseUploadMedia.Message;
+
         console.log('responseUploadMedia', responseUploadMedia);
+        console.log('message', message);
       } catch (error) {
         console.error('Failed to upload media:', error);
       }
