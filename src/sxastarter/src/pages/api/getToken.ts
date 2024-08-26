@@ -14,6 +14,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(200).json({ access_token: cachedToken });
     }
 
+    let clientId = process.env.CLIENT_ID;
+    let clientSecret = process.env.CLIENT_SECRET;
+
+    if (!clientId) {
+      throw new Error('ClientId not found.');
+    }
+
+    if (!clientSecret) {
+      throw new Error('ClientSecret not found.');
+    }
+
     // Fetch a new token if necessary
     const response = await fetch('https://auth.sitecorecloud.io/oauth/token', {
       method: 'POST',
@@ -23,8 +34,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       body: new URLSearchParams({
         audience: 'https://api.sitecorecloud.io',
         grant_type: 'client_credentials',
-        client_id: 'g86AvchdargPs6JKG8a4ozUO2o7Lehm8',
-        client_secret: 're9C6_TNPotTYF8wNVw9SvniPfoLvNu8NynXPDR8-Xky3uPIlCvSIEN8xdieanAH',
+        client_id: process.env.CLIENT_ID || '',
+        client_secret: process.env.CLIENT_SECRET || '',
       }),
     });
 
