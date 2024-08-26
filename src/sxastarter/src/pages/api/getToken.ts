@@ -23,8 +23,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       body: new URLSearchParams({
         audience: 'https://api.sitecorecloud.io',
         grant_type: 'client_credentials',
-        client_id: process.env.CLIENT_ID || '',
-        client_secret: process.env.CLIENT_SECRET || '',
+        client_id: 'g86AvchdargPs6JKG8a4ozUO2o7Lehm8',
+        client_secret: 're9C6_TNPotTYF8wNVw9SvniPfoLvNu8NynXPDR8-Xky3uPIlCvSIEN8xdieanAH',
       }),
     });
 
