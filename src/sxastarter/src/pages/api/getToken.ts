@@ -14,8 +14,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(200).json({ access_token: cachedToken });
     }
 
-    let clientId = process.env.CLIENT_ID;
-    let clientSecret = process.env.CLIENT_SECRET;
+    const clientId = process.env.CLIENT_ID;
+    const clientSecret = process.env.CLIENT_SECRET;
 
     if (!clientId) {
       throw new Error('ClientId not found.');
