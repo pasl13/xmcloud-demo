@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
+
+// Third-party libraries
 import { ComponentParams, ComponentRendering, TextField } from '@sitecore-jss/sitecore-jss-nextjs';
 import { ApolloProvider } from '@apollo/client';
+
+// Configuration
 import client from 'src/config/apolloClient';
+
+// Custom components
 import Dropdown from 'src/atoms/Shared Components/Dropdown';
 import AddOfficialForm from './AddOfficialForm';
 
@@ -70,7 +76,6 @@ export const Default = (props: GovernmentManagementProps): JSX.Element => {
   // Handle official selection from Dropdown
   const handleOfficialSelect = (officialId: string) => {
     setSelectedOfficialId(officialId);
-    console.log(`Selected Official ID: ${officialId}`);
   };
 
   // Handle adding a new official

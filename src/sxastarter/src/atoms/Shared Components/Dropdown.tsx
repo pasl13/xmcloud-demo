@@ -29,7 +29,6 @@ const Dropdown = ({
 }: DropdownProps): JSX.Element => {
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedId = event.target.value;
-    console.log(selectedId);
     onSelect(selectedId);
   };
 
