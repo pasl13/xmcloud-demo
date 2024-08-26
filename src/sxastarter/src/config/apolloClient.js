@@ -1,12 +1,12 @@
-import { ApolloClient, InMemoryCache, HttpLink, ApolloProvider } from '@apollo/client';
+import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
+// Function to fetch the token securely from the server-side API route
 const getToken = async () => {
   try {
-    const response = await fetch('http://localhost:3000/api/getToken', {
+    const response = await fetch('/api/getToken', {
       method: 'POST',
     });
-
     const data = await response.json();
 
     if (response.ok) {
@@ -20,13 +20,13 @@ const getToken = async () => {
   }
 };
 
+// Set up Apollo Client
 const httpLink = new HttpLink({
   uri: 'https://xmc-noesis136a1-demob96b-devteamd85c.sitecorecloud.io/sitecore/api/authoring/graphql/v1',
 });
 
 const authLink = setContext(async (_, { headers }) => {
   const token = await getToken();
-
   return {
     headers: {
       ...headers,

@@ -1,5 +1,4 @@
 import { MutationFunction } from '@apollo/client';
-import { getTokenFromApi } from './getTokenClient';
 
 interface PresignedUploadUrlResponse {
   uploadMedia: {
@@ -27,11 +26,6 @@ export const generatePresignedUrlAndUpload = async (
     return null;
   }
 
-  const token = await getTokenFromApi();
-  if (!token) {
-    throw new Error('Failed to fetch token');
-  }
-
   // Construct the path for the file upload
   const itemPath = `${path}/${itemName}`;
 
@@ -52,11 +46,23 @@ export const generatePresignedUrlAndUpload = async (
   const formData = new FormData();
   formData.append('file', file);
 
+  // Fetch the token from the internal API
+  const response = await fetch('/api/getToken', {
+    method: 'POST',
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch token');
+  }
+
+  // Extract token from the response
+  const { access_token: token } = await response.json();
+
   // Upload the file using the presigned URL
   const requestUploadMedia = await fetch(presignedUrl, {
     method: 'POST',
     headers: {
-      Authorization: 'Bearer ',
+      Authorization: `Bearer ${token}`,
     },
     body: formData,
   });

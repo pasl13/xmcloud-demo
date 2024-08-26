@@ -1,11 +1,20 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
+let cachedToken: string | null = null;
+let tokenExpiry: number | null = null;
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed.' });
   }
 
   try {
+    // Check if the token is cached and still valid
+    if (cachedToken && tokenExpiry && Date.now() < tokenExpiry) {
+      return res.status(200).json({ access_token: cachedToken });
+    }
+
+    // Fetch a new token if necessary
     const response = await fetch('https://auth.sitecorecloud.io/oauth/token', {
       method: 'POST',
       headers: {
@@ -25,12 +34,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       throw new Error(data.error || 'Failed to fetch token');
     }
 
-    return res.status(200).json(data);
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      return res.status(500).json({ error: error.message });
-    } else {
-      return res.status(500).json({ error: 'An unknown error occurred' });
-    }
+    // Cache the token and its expiry time
+    cachedToken = data.access_token;
+    tokenExpiry = Date.now() + data.expires_in * 1000; // Convert expires_in (seconds) to milliseconds
+
+    return res.status(200).json({ access_token: cachedToken });
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to fetch token' });
   }
 }
