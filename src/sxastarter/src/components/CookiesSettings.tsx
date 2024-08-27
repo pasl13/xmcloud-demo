@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { ComponentParams, ComponentRendering, Field } from '@sitecore-jss/sitecore-jss-nextjs';
+import ListCookieTypes from 'src/atoms/Cookies Management/ListCookieTypes';
 // import CookieModal from 'src/atoms/Shared Components/CookieModal';
 import {
   Avatar,
@@ -117,9 +118,8 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
         </div>
       )}
 
-
-
-        {/* <Modal
+      {modalOpen && (
+        <Modal
           placement="center"
           backdrop="opaque"
           isOpen={modalOpen}
@@ -129,17 +129,9 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
           <ModalContent>
             {() => (
               <>
-                <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
+                <ModalHeader className="flex flex-col gap-1">Cookies Managemen</ModalHeader>
                 <ModalBody>
-                  <p>
-                    Lorem 
-                  </p>
-                  <p>
-                    Lorem 
-                  </p>
-                  <p>
-                    Magna 
-                  </p>
+                  <ListCookieTypes {...subItemsData} />
                 </ModalBody>
                 <ModalFooter>
                   <Button color="danger" variant="light" onPress={() => setModalOpen(false)}>
@@ -152,45 +144,14 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
               </>
             )}
           </ModalContent>
-        </Modal> */}
+        </Modal>
+      )}
     </div>
   );
 };
 
 // <div className="component-content container mx-auto p-4">
-//         <div className="grid grid-cols-2 gap-8">
-//           <div className="container">
-//             {Title && <h3 className="text-white py-2">{Title.value}</h3>}
-//             {Description && <p className="text-white py-2">{Description.value}</p>}
-//           </div>
-//           <div className="flex flex-col gap-4 justify-center items-center">
-//             {AcceptAllButtonLabel && (
-//               <button
-//                 className="mt-2 py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
-//                 onClick={() => setModalOpen(true)}
-//               >
-//                 {AcceptAllButtonLabel.value}
-//               </button>
-//             )}
-//             {OnlyRequiredButtonLabel && (
-//               <button
-//                 className="mt-2 py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
-//                 onClick={() => setModalOpen(true)}
-//               >
-//                 {OnlyRequiredButtonLabel.value}
-//               </button>
-//             )}
-//             {SubmitChangesButtonLabel && (
-//               <button
-//                 className="mt-2 py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
-//                 onClick={() => setModalOpen(true)}
-//               >
-//                 {SubmitChangesButtonLabel.value}
-//               </button>
-//             )}
-//           </div>
-//         </div>
-//       </div>
+//        
 //       {modalOpen && (
 //         <CookieModal isOpen={modalOpen} handleClose={handleClose}>
 //           <div className="flex flex-col h-full w-full bg-white rounded-lg shadow-lg">
