@@ -51,13 +51,8 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isFooterVisible, setFooterVisible] = useState(false);
   console.log('Title:', title);
-  // const [selectedItem, setSelectedItem] = useState<Item | null>(Items[0]);
-  // const handleClose = () => {
-  //   setModalOpen(false);
-  // };
-
-  // console.log('CookiesSettings Component', props);
-
+  const [selectedItem, setSelectedItem] = useState(null);
+  
   return (
     <div
       className={`
@@ -129,9 +124,23 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
           <ModalContent>
             {() => (
               <>
-                <ModalHeader className="flex flex-col gap-1">Cookies Managemen</ModalHeader>
+                <ModalHeader className="flex flex-col gap-1">Cookies Management</ModalHeader>
                 <ModalBody>
-                  <ListCookieTypes {...subItemsData} />
+                <div className="flex flex-1 p-4 gap-4">
+                  <div className="w-1/3 space-y-4">
+                  <ListCookieTypes onSelect={setSelectedItem} {...subItemsData} />
+                </div>
+               <div className="w-2/3">
+                 {/* <p>Right Column Content</p> */}
+                 {/* {selectedItem && ( */}
+                   <div className="container bg-gray-700 rounded text-white">
+                    {/* <h4>{selectedItem.fields.Title.value}</h4>
+                     <p>{selectedItem.fields.Description.value}</p> */}
+                     <p>Right content table</p>
+                   </div>
+                 {/* )} */}
+               </div>
+             </div>
                 </ModalBody>
                 <ModalFooter>
                   <Button color="danger" variant="light" onPress={() => setModalOpen(false)}>
