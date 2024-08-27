@@ -47,13 +47,13 @@ export const generatePresignedUrlAndUpload = async (
   formData.append('file', file);
 
   // Fetch the token from the internal API
-  const response = await fetch('/api/getToken', {
-    method: 'POST',
-  });
+  // const response = await fetch('/api/getToken', {
+  //   method: 'POST',
+  // });
 
-  if (!response.ok) {
-    throw new Error('Failed to fetch token');
-  }
+  // if (!response.ok) {
+  //   throw new Error('Failed to fetch token');
+  // }
 
   // Extract token from the response
   // const { access_token: token } = await response.json();
