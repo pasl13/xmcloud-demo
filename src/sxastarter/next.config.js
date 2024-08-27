@@ -57,8 +57,8 @@ const nextConfig = {
         destination: `${jssConfig.sitecoreApiHost}/sitecore/api/:path*`,
       },
       {
-        source: '/api/:path*',
-        destination: '/api/:path*',
+        source: '/sitecore/api/getToken',
+        destination: `https://xmc-noesis136a1-demob96b-devteamd85c.sitecorecloud.io/api/getToken`,
       },
       // media items
       {
