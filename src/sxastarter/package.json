@@ -31,6 +31,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
+    "@nextui-org/react": "^2.4.6",
     "@sitecore-cloudsdk/events": "^0.3.0",
     "@sitecore-feaas/clientside": "^0.5.17",
     "@sitecore-jss/sitecore-jss-nextjs": "~22.0.0",
@@ -38,6 +39,7 @@
     "bootstrap-icons": "^1.11.3",
     "eslint-plugin-graphql": "^4.0.0",
     "font-awesome": "^4.7.0",
+    "framer-motion": "^11.3.30",
     "graphql": "~15.8.0",
     "graphql-tag": "^2.12.6",
     "graphql-tools": "^9.0.1",
@@ -103,4 +105,3 @@
     "start:watch-components": "ts-node --project tsconfig.scripts.json scripts/generate-component-builder/index.ts --watch"
   }
 }
-

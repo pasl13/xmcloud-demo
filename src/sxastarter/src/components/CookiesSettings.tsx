@@ -2,6 +2,11 @@
 import React, { useState } from 'react';
 import { ComponentParams, ComponentRendering, Field } from '@sitecore-jss/sitecore-jss-nextjs';
 import CookieModal from 'src/atoms/Shared Components/CookieModal';
+import {
+  Avatar,
+  Modal,
+  Button
+} from '@nextui-org/react';
 
 interface FieldsTypes {
   OnlyRequiredButtonLabel: Field<string>;
@@ -40,6 +45,8 @@ interface CookiesSettingsProps {
 
 export const Default = (props: CookiesSettingsProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
+  const [modalOpen, setModalOpen] = useState(false);
+
   // const { fields, ...restProps } = props;
   // const { fields } = props;
   // const {
@@ -64,14 +71,34 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
   //   console.log('index', index);
   // });
   // console.log('Items', Items);
-  
+
   return (
     <div
       className={`
       fixed bottom-0 w-full bg-gray-800 text-white  ${props.params.styles}`}
       id={id ? id : undefined}
     >
-      teste
+      <div>
+        <Avatar
+          src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+          size="lg"
+          onClick={() => setModalOpen(true)}
+          style={{ cursor: 'pointer' }}
+        />
+        <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
+          <Modal.Header>
+            <h3>Configurações de Cookies</h3>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Conteúdo do modal aqui...</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button auto flat color="error" onClick={() => setModalOpen(false)}>
+              Fechar
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
     </div>
   );
 };
