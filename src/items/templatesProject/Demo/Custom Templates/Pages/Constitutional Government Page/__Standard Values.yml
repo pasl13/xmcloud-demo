@@ -1,0 +1,40 @@
+﻿---
+ID: "57d37c2a-7d40-4581-bb94-b679887b3694"
+Parent: "06500b0c-cff1-48e2-92b0-369995a77c14"
+Template: "06500b0c-cff1-48e2-92b0-369995a77c14"
+Path: /sitecore/templates/Project/Demo/Custom Templates/Pages/Constitutional Government Page/__Standard Values
+SharedFields:
+- ID: "1172f251-dad4-4efb-a329-0c63500e4f1e"
+  Hint: __Masters
+  Value: |
+    {3CD243FA-EB14-44BE-B7A2-1A1DD1E07115}
+    {C14B6289-8AC2-439C-9E5B-40DE9F820C3F}
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 400
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20240806T131602Z
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\williker.c.carmo@noesis.pt
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\williker.c.carmo@noesis.pt
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "2b77edee-0faa-4896-9c30-119c23220e2c"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\williker.c.carmo@noesis.pt
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20240806T181943Z

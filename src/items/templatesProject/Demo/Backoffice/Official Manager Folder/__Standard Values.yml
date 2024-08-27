@@ -1,0 +1,33 @@
+﻿---
+ID: "f5a31593-4172-41f1-ae4a-111cdee377aa"
+Parent: "62652f79-0a64-4483-85b5-5edd4ade9bc4"
+Template: "62652f79-0a64-4483-85b5-5edd4ade9bc4"
+Path: /sitecore/templates/Project/Demo/Backoffice/Official Manager Folder/__Standard Values
+SharedFields:
+- ID: "1172f251-dad4-4efb-a329-0c63500e4f1e"
+  Hint: __Masters
+  Value: |
+    {6AB14DC6-9EDB-4D43-8257-3C0C1A7D2340}
+    {62652F79-0A64-4483-85B5-5EDD4ADE9BC4}
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20120621T071605Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "58c2cff1-bb3c-4779-9001-6c60abb8c6a6"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\williker.c.carmo@noesis.pt
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20240812T150600Z
