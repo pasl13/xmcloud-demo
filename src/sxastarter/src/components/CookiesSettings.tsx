@@ -1,46 +1,24 @@
 'use client';
 import React, { useState } from 'react';
 import { ComponentParams, ComponentRendering, Field } from '@sitecore-jss/sitecore-jss-nextjs';
-import CookieModal from 'src/atoms/Shared Components/CookieModal';
+// import CookieModal from 'src/atoms/Shared Components/CookieModal';
 import {
   Avatar,
   Modal,
-  Button
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
 } from '@nextui-org/react';
-
-interface FieldsTypes {
-  OnlyRequiredButtonLabel: Field<string>;
-  Title: Field<string>;
-  Description: Field<string>;
-  Icon: Field<string>;
-  SubmitChangesButtonLabel: Field<string>;
-  AcceptAllButtonLabel: Field<string>;
-  Items: Item[];
-}
-
-interface Item {
-  id: Field<string>;
-  url: Field<string>;
-  name: Field<string>;
-  displayName: Field<string>;
-  fields: Fields;
-}
-
-interface Fields {
-  Title: Field<string>;
-  Description: Field<string>;
-  'Is Selected': Field<string>;
-  Enabled: Field<string>;
-}
-
-// interface ItemFields extends Fields{
-
-// }
+import { DataProps } from 'src/types';
 
 interface CookiesSettingsProps {
   rendering: ComponentRendering & { params: ComponentParams };
   params: ComponentParams;
-  fields: FieldsTypes;
+  fields: {
+    data: DataProps;
+  };
 }
 
 export const Default = (props: CookiesSettingsProps): JSX.Element => {
@@ -85,18 +63,47 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
           onClick={() => setModalOpen(true)}
           style={{ cursor: 'pointer' }}
         />
-        <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
-          <Modal.Header>
-            <h3>Configurações de Cookies</h3>
-          </Modal.Header>
-          <Modal.Body>
-            <p>Conteúdo do modal aqui...</p>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button auto flat color="error" onClick={() => setModalOpen(false)}>
-              Fechar
-            </Button>
-          </Modal.Footer>
+        <Modal
+          placement="center"
+          backdrop="opaque"
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+          size="5xl"
+        >
+          <ModalContent>
+            {() => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
+                <ModalBody>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Nullam pulvinar risus non risus hendrerit venenatis.
+                    Pellentesque sit amet hendrerit risus, sed porttitor quam.
+                  </p>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Nullam pulvinar risus non risus hendrerit venenatis.
+                    Pellentesque sit amet hendrerit risus, sed porttitor quam.
+                  </p>
+                  <p>
+                    Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit
+                    dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis. 
+                    Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. 
+                    Et mollit incididunt nisi consectetur esse laborum eiusmod pariatur 
+                    proident Lorem eiusmod et. Culpa deserunt nostrud ad veniam.
+                  </p>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={() => setModalOpen(false)}>
+                    Close
+                  </Button>
+                  <Button color="primary" onPress={() => setModalOpen(false)}>
+                    Action
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
         </Modal>
       </div>
     </div>
