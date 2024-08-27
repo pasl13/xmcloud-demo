@@ -4,7 +4,7 @@ import { setContext } from '@apollo/client/link/context';
 // Function to fetch the token securely from the server-side API route
 const getToken = async () => {
   try {
-    const response = await fetch('/api/getToken', {
+    const response = await fetch('https://xmc-noesis136a1-demob96b-devteamd85c.sitecorecloud.io/api/getToken', {
       method: 'POST',
     });
     const data = await response.json();
