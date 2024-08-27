@@ -23,32 +23,39 @@ interface CookiesSettingsProps {
 
 export const Default = (props: CookiesSettingsProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
-  const [modalOpen, setModalOpen] = useState(false);
+  const { cookiesSetingsData, subItemsData } = props.fields?.data;
+  console.log('cookiesSetingsData:', cookiesSetingsData);
+  console.log('subItemsData:', subItemsData);
 
-  // const { fields, ...restProps } = props;
-  // const { fields } = props;
-  // const {
-  //   Items,
-  //   Title,
-  //   Description,
-  //   // Icon,
-  //   OnlyRequiredButtonLabel,
-  //   SubmitChangesButtonLabel,
-  //   AcceptAllButtonLabel,
-  // } = fields;
-  // const [modalOpen, setModalOpen] = useState(false);
+  const title = cookiesSetingsData.fields.find(
+    (field) => field.name === 'CookieSettingsTitle'
+  )?.value;
+  const description = cookiesSetingsData.fields.find(
+    (field) => field.name === 'CookieSettingsDescription'
+  )?.value;
+  const submitButtonLabel = cookiesSetingsData.fields.find(
+    (field) => field.name === 'CookieSettingsSubmitChangesButtonLabel'
+  )?.value;
+  const acceptAllButtonLabel = cookiesSetingsData.fields.find(
+    (field) => field.name === 'CookieSettingsAcceptAllButtonLabel'
+  )?.value;
+  const onlyRequiredButtonLabel = cookiesSetingsData.fields.find(
+    (field) => field.name === 'CookieSettingsOnlyRequiredButtonLabel'
+  )?.value;
+  // const description = data.fields.find(field => field.name === 'CookieSettingsDescription')?.value;
+  // const icon = data.fields.find(field => field.name === 'CookieSettingsIcon')?.value;
+  // const submitButtonLabel = data.fields.find(field => field.name === 'CookieSettingsSubmitChangesButtonLabel')?.value;
+  // const acceptAllButtonLabel = data.fields.find(field => field.name === 'CookieSettingsAcceptAllButtonLabel')?.value;
+  // const onlyRequiredButtonLabel = data.fields.find(field => field.name === 'CookieSettingsOnlyRequiredButtonLabel')?.value;
+  const [modalOpen, setModalOpen] = useState(false);
+  const [isFooterVisible, setFooterVisible] = useState(false);
+  console.log('Title:', title);
   // const [selectedItem, setSelectedItem] = useState<Item | null>(Items[0]);
   // const handleClose = () => {
   //   setModalOpen(false);
   // };
 
-  console.log('CookiesSettings Component', props);
-  // Items.map((item, index) => {
-  //   console.log('item', item);
-  //   console.log('---');
-  //   console.log('index', index);
-  // });
-  // console.log('Items', Items);
+  // console.log('CookiesSettings Component', props);
 
   return (
     <div
@@ -56,14 +63,63 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
       fixed bottom-0 w-full bg-gray-800 text-white  ${props.params.styles}`}
       id={id ? id : undefined}
     >
-      <div>
+      <div
+        style={{
+          position: 'fixed',
+          bottom: '10px',
+          left: '10px',
+          cursor: 'pointer',
+        }}
+        onClick={() => setFooterVisible(true)}
+      >
         <Avatar
           src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
           size="lg"
-          onClick={() => setModalOpen(true)}
+          // onClick={() => setModalOpen(true)}
           style={{ cursor: 'pointer' }}
         />
-        <Modal
+      </div>
+
+      {isFooterVisible && (
+        <div className="component-content container mx-auto p-4">
+          <div className="grid grid-cols-2 gap-8">
+            <div className="container">
+              {title && <h3 className="text-white py-2">{title}</h3>}
+              {description && <p className="text-white py-2">{description}</p>}
+            </div>
+            <div className="flex flex-col gap-4 justify-center items-center">
+              {acceptAllButtonLabel && (
+                <button
+                  className="mt-2 py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
+                  onClick={() => setModalOpen(true)}
+                >
+                  {acceptAllButtonLabel}
+                </button>
+              )}
+              {onlyRequiredButtonLabel && (
+                <button
+                  className="mt-2 py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
+                  onClick={() => setModalOpen(true)}
+                >
+                  {onlyRequiredButtonLabel}
+                </button>
+              )}
+              {submitButtonLabel && (
+                <button
+                  className="mt-2 py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
+                  onClick={() => setModalOpen(true)}
+                >
+                  {submitButtonLabel}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+
+
+        {/* <Modal
           placement="center"
           backdrop="opaque"
           isOpen={modalOpen}
@@ -76,21 +132,13 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
                 <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
                 <ModalBody>
                   <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Nullam pulvinar risus non risus hendrerit venenatis.
-                    Pellentesque sit amet hendrerit risus, sed porttitor quam.
+                    Lorem 
                   </p>
                   <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Nullam pulvinar risus non risus hendrerit venenatis.
-                    Pellentesque sit amet hendrerit risus, sed porttitor quam.
+                    Lorem 
                   </p>
                   <p>
-                    Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit
-                    dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis. 
-                    Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. 
-                    Et mollit incididunt nisi consectetur esse laborum eiusmod pariatur 
-                    proident Lorem eiusmod et. Culpa deserunt nostrud ad veniam.
+                    Magna 
                   </p>
                 </ModalBody>
                 <ModalFooter>
@@ -104,8 +152,7 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
               </>
             )}
           </ModalContent>
-        </Modal>
-      </div>
+        </Modal> */}
     </div>
   );
 };
