@@ -47,9 +47,12 @@ export const generatePresignedUrlAndUpload = async (
   formData.append('file', file);
 
   // Fetch the token from the internal API
-  const response = await fetch('https://xmc-noesis136a1-demob96b-devteamd85c.sitecorecloud.io/api/getToken', {
-    method: 'POST',
-  });
+  const response = await fetch(
+    'https://xmc-noesis136a1-demob96b-devteamd85c.sitecorecloud.io/api/getToken',
+    {
+      method: 'POST',
+    }
+  );
 
   if (!response.ok) {
     throw new Error('Failed to fetch token');
