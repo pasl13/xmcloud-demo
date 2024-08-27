@@ -1,0 +1,35 @@
+﻿---
+ID: "a1a7d815-a4ba-4a86-9883-68a64a99346e"
+Parent: "b3809824-c882-47a7-b65b-e94b6ed5aa82"
+Template: "b3809824-c882-47a7-b65b-e94b6ed5aa82"
+Path: /sitecore/templates/Project/Demo/Custom Templates/Collection/Collection Folder/__Standard Values
+SharedFields:
+- ID: "1172f251-dad4-4efb-a329-0c63500e4f1e"
+  Hint: __Masters
+  Value: "{95B283F3-F3CE-44CF-82B4-5D3C531B5488}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20240807T124546Z
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\williker.c.carmo@noesis.pt
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\williker.c.carmo@noesis.pt
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "c2f699a1-7de1-4a41-a941-2532ea50e844"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\williker.c.carmo@noesis.pt
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20240807T124840Z

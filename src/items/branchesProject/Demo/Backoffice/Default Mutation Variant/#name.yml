@@ -1,0 +1,23 @@
+﻿---
+ID: "f89b37ce-aaa8-4d55-aaf9-24936664ee9e"
+Parent: "ecd02042-5526-4a8a-9a36-6d360a7b05f8"
+Template: "49c111d0-6867-4798-a724-1f103166e6e9"
+Path: /sitecore/templates/Branches/Project/Demo/Backoffice/Default Mutation Variant/$name
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20211020T135004Z
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "15c6af21-63fe-4f04-9e02-deabfb400d9e"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\williker.c.carmo@noesis.pt
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20240812T150601Z
