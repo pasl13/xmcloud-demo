@@ -53,10 +53,6 @@ const nextConfig = {
     return [
       // API endpoints
       {
-        source: '/api/:path*',
-        destination: '/api/:path*',
-      },
-      {
         source: '/sitecore/api/:path*',
         destination: `${jssConfig.sitecoreApiHost}/sitecore/api/:path*`,
       },
