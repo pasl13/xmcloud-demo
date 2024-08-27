@@ -4,9 +4,8 @@ import { setContext } from '@apollo/client/link/context';
 // Function to fetch the token securely from the server-side API route
 const getToken = async () => {
   try {
-    const response = await fetch('/api/getToken', {
-      method: 'POST',
-    });
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
+    const response = await fetch(`${baseUrl}/api/getToken`, { method: 'POST' });
     const data = await response.json();
 
     if (response.ok) {
