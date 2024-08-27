@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { ComponentParams, ComponentRendering, Field } from '@sitecore-jss/sitecore-jss-nextjs';
 import ListCookieTypes from 'src/atoms/Cookies Management/ListCookieTypes';
+import Cookies from 'js-cookie';
 // import CookieModal from 'src/atoms/Shared Components/CookieModal';
 import {
   Avatar,
@@ -43,6 +44,12 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
   const onlyRequiredButtonLabel = cookiesSetingsData.fields.find(
     (field) => field.name === 'CookieSettingsOnlyRequiredButtonLabel'
   )?.value;
+
+  const setCookieHandler = () => {
+    console.log('Setting cookies');
+    Cookies.set('username', 'John Doe', { expires: 7 });
+    // Cookies.set('padrão', 'true', { expires: 7 });
+  };
   // const description = data.fields.find(field => field.name === 'CookieSettingsDescription')?.value;
   // const icon = data.fields.find(field => field.name === 'CookieSettingsIcon')?.value;
   // const submitButtonLabel = data.fields.find(field => field.name === 'CookieSettingsSubmitChangesButtonLabel')?.value;
@@ -51,7 +58,7 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isFooterVisible, setFooterVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState({ title: '', description: '' });
-  console.log('selectedItem:', selectedItem);
+  // console.log('selectedItem:', selectedItem);
   return (
     <div
       className={`
@@ -102,9 +109,11 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
               {submitButtonLabel && (
                 <button
                   className="mt-2 py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
-                  onClick={() => setModalOpen(true)}
+                  // onClick={() => setModalOpen(true)}
+                  onClick={setCookieHandler}
                 >
-                  {submitButtonLabel}
+                  {/* {submitButtonLabel} */}
+                  Testing set cookies Button!
                 </button>
               )}
             </div>
