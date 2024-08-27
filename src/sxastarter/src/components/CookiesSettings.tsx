@@ -25,8 +25,8 @@ interface CookiesSettingsProps {
 export const Default = (props: CookiesSettingsProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
   const { cookiesSetingsData, subItemsData } = props.fields?.data;
-  console.log('cookiesSetingsData:', cookiesSetingsData);
-  console.log('subItemsData:', subItemsData);
+  // console.log('cookiesSetingsData:', cookiesSetingsData);
+  // console.log('subItemsData:', subItemsData);
 
   const title = cookiesSetingsData.fields.find(
     (field) => field.name === 'CookieSettingsTitle'
@@ -50,9 +50,8 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
   // const onlyRequiredButtonLabel = data.fields.find(field => field.name === 'CookieSettingsOnlyRequiredButtonLabel')?.value;
   const [modalOpen, setModalOpen] = useState(false);
   const [isFooterVisible, setFooterVisible] = useState(false);
-  console.log('Title:', title);
-  const [selectedItem, setSelectedItem] = useState(null);
-  
+  const [selectedItem, setSelectedItem] = useState({ title: '', description: '' });
+  console.log('selectedItem:', selectedItem);
   return (
     <div
       className={`
@@ -131,13 +130,15 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
                   <ListCookieTypes onSelect={setSelectedItem} {...subItemsData} />
                 </div>
                <div className="w-2/3">
-                 {/* <p>Right Column Content</p> */}
-                 {/* {selectedItem && ( */}
-                   <div className="container bg-gray-700 rounded text-white">
-                    {/* <h4>{selectedItem.fields.Title.value}</h4>
-                     <p>{selectedItem.fields.Description.value}</p> */}
-                     <p>Right content table</p>
-                   </div>
+                <div className="container rounded text-black">
+                  {selectedItem && (
+                    <div>
+                      <h4>{selectedItem.title}</h4>
+                      <p>{selectedItem.description}</p>
+                    </div>
+                  )
+                }
+                </div>
                  {/* )} */}
                </div>
              </div>

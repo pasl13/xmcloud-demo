@@ -14,9 +14,9 @@ export default function CookieItem({ fields, key, onSelect }: CookieTypeProps) {
   return (
     <div
       key={key}
-      className="py-2 px-4 bg-gray-500 hover:bg-gray-700 text-white font-bold rounded justify-center"
+      className="py-2 px-4 hover:bg-gray-700 text-black font-bold rounded justify-center"
     >
-      <Button onClick={() => onSelect(key)}>
+      <Button onClick={() => onSelect({title: title, description: description})}>
         {title}
       </Button>
       {/* <h3>{title}</h3>

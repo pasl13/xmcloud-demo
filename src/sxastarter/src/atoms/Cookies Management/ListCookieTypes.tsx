@@ -4,10 +4,10 @@ interface ListCookieTypesProps extends SubItemsData {
   onSelect: any;
 }
 export default function ListCookieTypes({ onSelect, children }: ListCookieTypesProps) {
-  console.log('ListCookieTypes:', children);
-  console.log('onSelect:', onSelect);
+  // console.log('ListCookieTypes:', children);
+  // console.log('onSelect:', onSelect);
   const cookieTypes = children.results;
-  console.log('cookieTypes:', cookieTypes);
+  // console.log('cookieTypes:', cookieTypes);
   return (
     <div className="cookie-types-list">
       {cookieTypes.map((cookieType, index) => (
