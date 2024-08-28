@@ -51,6 +51,10 @@ const nextConfig = {
   async rewrites() {
     // When in connected mode we want to proxy Sitecore paths off to Sitecore
     return [
+      {
+        source: '/api/:path*',
+        destination: `${jssConfig.sitecoreApiHost}/api/:path*`,
+      },
       // API endpoints
       {
         source: '/sitecore/api/:path*',

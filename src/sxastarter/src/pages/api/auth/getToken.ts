@@ -47,7 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Cache the token and its expiry time
     cachedToken = data.access_token;
-    tokenExpiry = Date.now() + data.expires_in * 1000; // Convert expires_in (seconds) to milliseconds
+    tokenExpiry = Date.now() + data.expires_in * 1000;
 
     return res.status(200).json({ access_token: cachedToken });
   } catch (error) {
