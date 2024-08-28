@@ -55,11 +55,11 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
   // console.log('subItemsData:', subItemsData);
   // console.log('props:', props);
   // console.log("cookieItems:", cookieItems)
-  console.log("selectedItem gETRAL:", selectedItem)
+  // console.log("selectedItem gETRAL:", selectedItem)
 
   useEffect(() => {
     // Inicializa o estado cookieItems com os dados recebidos via props
-    console.log("USE EFFECT AQUI", selectedItem, cookieItems)
+    // console.log("USE EFFECT AQUI", selectedItem, cookieItems)
     const items : CookieItemType[] = [];
     subItemsData.children.results.forEach((item, index) => {
       const title = item.fields.find((field) => field.name === 'CookieTypeTitle')?.jsonValue.value;
@@ -85,6 +85,22 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
     setSelectedItem(items[0]);
   }, [subItemsData]);
 
+  useEffect(() => {
+    const hasAcceptedCookies = Cookies.get('hasAcceptedCookies');
+    if (!hasAcceptedCookies) {
+      setFooterVisible(true);
+    }else {
+      const updatedCookieState = cookieItems.map(item => {
+        const cookieValue = Cookies.get(item.name);
+        return {
+          ...item,
+          isSelected: cookieValue === 'true' ? true : item.isSelected,
+        };
+      });
+      setCookieItems(updatedCookieState);
+    }
+  }, [cookieItems]);
+
   const title = cookiesSetingsData.fields.find((field) => field.name === 'CookieSettingsTitle')
     ?.jsonValue.value;
 
@@ -102,12 +118,6 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
     (field) => field.name === 'CookieSettingsOnlyRequiredButtonLabel'
   )?.jsonValue.value;
 
-  const setCookieHandler = (cookieName: string) => {
-    console.log('Setting cookies');
-    Cookies.set('username', 'John Doe', { expires: 7 });
-    // Cookies.set('padrão', 'true', { expires: 7 });
-  };
-
   const handleSwitchChange = (value: boolean) => {
     if (selectedItem) {
       const updatedItems = cookieItems.map((item) => {
@@ -117,7 +127,38 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
       setSelectedItem({ ...selectedItem, isSelected: value });
     }
   };
-  // console.log('selectedItem:', selectedItem);
+
+  const handleAcceptRequiredCookies = () => {
+    const requiredCookies = cookieItems.filter(item => item.isEnabled);
+    requiredCookies.forEach(cookie => {
+      Cookies.set(cookie.name, 'true');
+    });
+    Cookies.set('hasAcceptedCookies', 'true');
+
+    setModalOpen(false);
+    setFooterVisible(false);
+  };
+
+  const handleUpdateCookiesPreferences = () => {
+    cookieItems.forEach((cookie) => {
+      Cookies.set(cookie.name, cookie.isSelected.toString());
+    });
+    Cookies.set('hasAcceptedCookies', 'true');
+    setModalOpen(false);
+    setFooterVisible(false);
+  };
+
+  const handleAcceptAllCookies = () => {
+    const updatedItems = cookieItems.map(item => ({ ...item, isSelected: true }));
+    setCookieItems(updatedItems);
+    updatedItems.forEach(cookie => {
+      Cookies.set(cookie.name, 'true');
+    });
+    Cookies.set('hasAcceptedCookies', 'true');
+    setModalOpen(false);
+    setFooterVisible(false);
+  };
+
   return (
     <div
       className={`
@@ -154,13 +195,14 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
                   className="mt-2 py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
                   onClick={() => setModalOpen(true)}
                 >
-                  {acceptAllButtonLabel}
+                  {/* {acceptAllButtonLabel} */}
+                  Adjust preferences
                 </button>
               )}
               {onlyRequiredButtonLabel && (
                 <button
                   className="mt-2 py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
-                  onClick={() => setModalOpen(true)}
+                  onClick={handleAcceptRequiredCookies}
                 >
                   {onlyRequiredButtonLabel}
                 </button>
@@ -168,10 +210,10 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
               {submitButtonLabel && (
                 <button
                   className="mt-2 py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
-                  onClick={setCookieHandler}
+                  onClick={handleAcceptAllCookies}
                 >
                   {/* {submitButtonLabel} */}
-                  Testing set cookies Button!
+                  Accept All cookies
                 </button>
               )}
             </div>
@@ -224,11 +266,14 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
                   </div>
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="danger" variant="light" onPress={() => setModalOpen(false)}>
-                    Close with only necessary cookies action
+                  <Button color="danger" variant="light" onPress={handleAcceptRequiredCookies}>
+                    Accept only required
                   </Button>
-                  <Button color="primary" onPress={() => setModalOpen(false)}>
-                    Update cookies preferences action
+                  <Button color="primary" onPress={handleUpdateCookiesPreferences}>
+                    Confirm my choices
+                  </Button>
+                  <Button color="primary" onPress={handleAcceptAllCookies}>
+                    Accept all cookies
                   </Button>
                 </ModalFooter>
               </>
