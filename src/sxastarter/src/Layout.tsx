@@ -27,6 +27,8 @@ const Layout = ({ layoutData, headLinks }: LayoutProps): JSX.Element => {
   const isPageEditing = layoutData.sitecore.context.pageEditing;
   const mainClassPageEditing = isPageEditing ? 'editing-mode' : 'prod-mode';
   const isGovernmentManagementPage = route?.templateName === 'Government Management Page';
+  console.log("layoutData", layoutData);
+  console.log("headLinks", headLinks);
 
   return (
     <>
