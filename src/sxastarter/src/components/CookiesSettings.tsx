@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { ComponentParams, ComponentRendering, Field } from '@sitecore-jss/sitecore-jss-nextjs';
+import { ComponentParams, ComponentRendering } from '@sitecore-jss/sitecore-jss-nextjs';
 import ListCookieTypes from 'src/atoms/Cookies Management/ListCookieTypes';
 import Cookies from 'js-cookie';
 // import CookieModal from 'src/atoms/Shared Components/CookieModal';
@@ -131,23 +131,21 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
               <>
                 <ModalHeader className="flex flex-col gap-1">Cookies Management</ModalHeader>
                 <ModalBody>
-                <div className="flex flex-1 p-4 gap-4">
-                  <div className="w-1/3 space-y-4">
-                  <ListCookieTypes onSelect={setSelectedItem} {...subItemsData} />
-                </div>
-               <div className="w-2/3">
-                <div className="container rounded text-black">
-                  {selectedItem && (
-                    <div>
-                      <h4>{selectedItem.title}</h4>
-                      <p>{selectedItem.description}</p>
+                  <div className="flex flex-1 p-4 gap-4">
+                    <div className="w-1/3 space-y-4">
+                      <ListCookieTypes onSelect={setSelectedItem} {...subItemsData} />
                     </div>
-                  )
-                }
-                </div>
-                 {/* )} */}
-               </div>
-             </div>
+                    <div className="w-2/3">
+                      <div className="container rounded text-black">
+                        {selectedItem && (
+                          <div>
+                            <h4>{selectedItem.title}</h4>
+                            <p>{selectedItem.description}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </ModalBody>
                 <ModalFooter>
                   <Button color="danger" variant="light" onPress={() => setModalOpen(false)}>
@@ -165,62 +163,3 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
     </div>
   );
 };
-
-// <div className="component-content container mx-auto p-4">
-//        
-//       {modalOpen && (
-//         <CookieModal isOpen={modalOpen} handleClose={handleClose}>
-//           <div className="flex flex-col h-full w-full bg-white rounded-lg shadow-lg">
-//             {/* Header Section */}
-//             <div className="w-full bg-gray-800 text-white p-4 rounded-t-lg flex flex-row">
-//               <h2 className="text-xl font-bold">Cookies Management</h2>
-//               <h3 className="text-xl font-bold ml-10">Centro de Preferências</h3>
-//             </div>
-//             {/* Content Section */}
-//             <div className="flex flex-1 p-4 gap-4">
-//               <div className="w-1/3 space-y-4">
-//                 {/* <p>Left Column Content</p> */}
-//                 {Items.map((item, index) => (
-//                   <div
-//                     key={index}
-//                     className="
-//                     py-2 px-4 bg-gray-500 hover:bg-gray-700 text-white font-bold rounded justify-center"
-//                   >
-//                     <button onClick={() => setSelectedItem(item)}>
-//                       <h4>{item.fields.Title.value}</h4>
-//                     </button>
-//                     {/* <p>{item.fields.Description.value}</p> */}
-//                   </div>
-//                 ))}
-//               </div>
-//               <div className="w-2/3">
-//                 {/* <p>Right Column Content</p> */}
-//                 {selectedItem && (
-//                   <div className="container bg-gray-700 rounded text-white">
-//                     <h4>{selectedItem.fields.Title.value}</h4>
-//                     <p>{selectedItem.fields.Description.value}</p>
-//                   </div>
-//                 )}
-//               </div>
-//             </div>
-//             {/* Footer Section */}
-//             <div className="w-full bg-gray-200 p-4 rounded-b-lg flex justify-end gap-4">
-//               <button
-//                 type="button"
-//                 className="
-//                   py-2 px-4 bg-gray-500 hover:bg-gray-700 text-white font-bold rounded"
-//                 onClick={handleClose}
-//               >
-//                 Cancelar
-//               </button>
-//               <button
-//                 type="button"
-//                 className="py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
-//                 onClick={handleClose}
-//               >
-//                 Gravar Preferências
-//               </button>
-//             </div>
-//           </div>
-//         </CookieModal>
-//       )}
