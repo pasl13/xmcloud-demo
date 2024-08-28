@@ -4,19 +4,9 @@ import { setContext } from '@apollo/client/link/context';
 // Function to fetch the token securely from the server-side API route
 const getToken = async () => {
   try {
-    const response = await fetch('https://auth.sitecorecloud.io/oauth/token', {
+    const response = await fetch('/api/auth/getToken', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        audience: 'https://api.sitecorecloud.io',
-        grant_type: 'client_credentials',
-        client_id: 'g86AvchdargPs6JKG8a4ozUO2o7Lehm8',
-        client_secret: 're9C6_TNPotTYF8wNVw9SvniPfoLvNu8NynXPDR8-Xky3uPIlCvSIEN8xdieanAH',
-      }),
     });
-
     const data = await response.json();
 
     if (response.ok) {
