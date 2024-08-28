@@ -3,7 +3,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { ComponentParams, ComponentRendering } from '@sitecore-jss/sitecore-jss-nextjs';
 import ListCookieTypes from 'src/atoms/Cookies Management/ListCookieTypes';
 import Cookies from 'js-cookie';
-// import CookieModal from 'src/atoms/Shared Components/CookieModal';
 import {
   Avatar,
   Modal,
@@ -29,70 +28,44 @@ interface CookieItemType {
   name: string | undefined | boolean;
   title: string | undefined | boolean;
   description: string | undefined | boolean;
-  isRequired: string | undefined | boolean;
   isSelected: string | undefined | boolean;
   isEnabled: string | undefined | boolean;
 }
-
-const initialState = {
-  id: null,
-  title: '',
-  description: '',
-  isEnabled: false,
-  isSelected: false,
-  name: '',
-};
 
 export const Default = (props: CookiesSettingsProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
   const { cookiesSetingsData, subItemsData } = props.fields?.data;
   const [modalOpen, setModalOpen] = useState(false);
   const [isFooterVisible, setFooterVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(initialState);
 
-  // useEffect(() => {
-  //   // Inicializa o estado cookieItems com os dados recebidos via props
-  //   // console.log("USE EFFECT AQUI", selectedItem, cookieItems)
-  //   const items : CookieItemType[] = [];
-  //   subItemsData.children.results.forEach((item, index) => {
-  //     const title = item.fields.find((field) => field.name === 'CookieTypeTitle')?.jsonValue.value;
-  //     const description = item.fields.find((field) => field.name === 'CookieTypeDescription')
-  //       ?.jsonValue.value;
-  //     const isEnabled = item.fields.find((field) => field.name === 'CookieTypeEnabled')?.jsonValue
-  //       .value;
-  //     const isSelected = item.fields.find((field) => field.name === 'CookieTypeIsSelected')
-  //       ?.jsonValue.value;
-  //     const name = item.fields.find((field) => field.name === 'CookieTypeName')?.jsonValue.value;
+  const cookieItems: CookieItemType[] = useMemo(() => {
+    return subItemsData.children.results.map((item, index) => {
+      const title = item.fields.find((field) => field.name === 'CookieTypeTitle')?.jsonValue.value;
+      const description = item.fields.find((field) => field.name === 'CookieTypeDescription')?.jsonValue.value;
+      const isEnabled = item.fields.find((field) => field.name === 'CookieTypeEnabled')?.jsonValue.value;
+      const isSelected = item.fields.find((field) => field.name === 'CookieTypeIsSelected')?.jsonValue.value;
+      const name = item.fields.find((field) => field.name === 'CookieTypeName')?.jsonValue.value;
 
-  //     items.push({
-  //       id: index,
-  //       title: title,
-  //       description: description,
-  //       isEnabled: isEnabled,
-  //       isSelected: isSelected,
-  //       name: name,
-  //     });
-  //   });
-
-  //   setCookieItems(items);
-  //   setSelectedItem(items[0]);
-  // }, [subItemsData]);
-
-  const cookieItems = useMemo(() => {
-    return subItemsData.map(item => ({
-      ...item,
-      isSelected: item.isRequired ? true : item.isSelected,
-    }));
+      return {
+        id: index,
+        title: title,
+        description: description,
+        isEnabled: isEnabled,
+        isSelected: isSelected ? true : false,
+        name: name,
+      };
+    });
   }, [subItemsData]);
 
-  const [cookieState, setCookieState] = useState<CookieItem[]>(cookieItems);
+  const [cookieState, setCookieState] = useState<CookieItemType[]>(cookieItems);
+  const [selectedItem, setSelectedItem] = useState(cookieItems[0]);
 
   useEffect(() => {
     const hasAcceptedCookies = Cookies.get('hasAcceptedCookies');
     if (!hasAcceptedCookies) {
       setFooterVisible(true);
-    }else {
-      const updatedCookieState = cookieItems.map(item => {
+    } else {
+      const updatedCookieState = cookieItems.map((item) => {
         const cookieValue = Cookies.get(item.name);
         return {
           ...item,
@@ -122,7 +95,7 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
 
   const handleSwitchChange = (value: boolean) => {
     if (selectedItem) {
-      const updatedItems = cookieItems.map((item) => {
+      const updatedItems = cookieState.map((item) => {
         return item.id == selectedItem.id ? { ...item, isSelected: value } : item;
       });
       setCookieState(updatedItems);
@@ -131,18 +104,23 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
   };
 
   const handleAcceptRequiredCookies = () => {
-    const requiredCookies = cookieItems.filter(item => item.isEnabled);
-    requiredCookies.forEach(cookie => {
-      Cookies.set(cookie.name, 'true');
+    const updatedItems = cookieState.map((item) => {
+      if (item.isEnabled) {
+        Cookies.set(item.name, 'true');
+        return { ...item, isSelected: true };
+      } else {
+        Cookies.set(item.name, 'false');
+        return { ...item, isSelected: false };
+      }
     });
+    setCookieState(updatedItems);
     Cookies.set('hasAcceptedCookies', 'true');
-
     setModalOpen(false);
     setFooterVisible(false);
   };
 
   const handleUpdateCookiesPreferences = () => {
-    cookieItems.forEach((cookie) => {
+    cookieState.forEach((cookie) => {
       Cookies.set(cookie.name, cookie.isSelected.toString());
     });
     Cookies.set('hasAcceptedCookies', 'true');
@@ -151,9 +129,9 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
   };
 
   const handleAcceptAllCookies = () => {
-    const updatedItems = cookieItems.map(item => ({ ...item, isSelected: true }));
+    const updatedItems = cookieState.map((item) => ({ ...item, isSelected: true }));
     setCookieState(updatedItems);
-    updatedItems.forEach(cookie => {
+    updatedItems.forEach((cookie) => {
       Cookies.set(cookie.name, 'true');
     });
     Cookies.set('hasAcceptedCookies', 'true');
@@ -179,7 +157,6 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
         <Avatar
           src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
           size="lg"
-          // onClick={() => setModalOpen(true)}
           style={{ cursor: 'pointer' }}
         />
       </div>
@@ -234,11 +211,13 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
           <ModalContent>
             {() => (
               <>
-                <ModalHeader className="flex flex-col gap-1">Cookies Management</ModalHeader>
+                <ModalHeader className="flex flex-col gap-1">
+                  <h1>Cookies Management</h1>
+                </ModalHeader>
                 <ModalBody>
                   <div className="flex flex-1 p-4 gap-4">
                     <div className="w-1/3 space-y-4">
-                      <ListCookieTypes onSelect={setSelectedItem} cookieItems={cookieItems} />
+                      <ListCookieTypes onSelect={setSelectedItem} cookieItems={cookieState} />
                     </div>
                     <div className="w-2/3">
                       <div className="container rounded text-black">
@@ -256,7 +235,7 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
                                   <Switch
                                     isSelected={selectedItem.isSelected}
                                     onChange={(e) => handleSwitchChange(e.target.checked)}
-                                    // disabled={selectedItem.isEnabled}
+                                    size="lg"
                                   />
                                 </div>
                               )}
