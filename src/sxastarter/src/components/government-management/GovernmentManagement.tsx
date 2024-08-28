@@ -51,7 +51,7 @@ export const Default = (props: GovernmentManagementProps): JSX.Element => {
   console.log('GovernmentManagementProps', props);
 
   const id = props?.params?.RenderingIdentifier;
-  const parent = `{${props?.rendering?.dataSource?.toUpperCase()}}`;
+  const parent = props?.rendering?.dataSource;
   const language = props?.fields?.data?.datasource?.language?.name;
   const sexItems = props?.fields?.data?.sexItems?.children?.results;
 

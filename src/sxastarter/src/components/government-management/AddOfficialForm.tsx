@@ -32,7 +32,6 @@ const CREATE_GOVERNMENT_OFFICIAL = gql`
     $cardPhoto: String!
     $templateId: ID!
     $parent: ID!
-    $language: String!
   ) {
     createItem(
       input: {
@@ -46,7 +45,7 @@ const CREATE_GOVERNMENT_OFFICIAL = gql`
         ]
         templateId: $templateId
         parent: $parent
-        language: $language
+        language: "pt"
       }
     ) {
       item {
@@ -58,9 +57,29 @@ const CREATE_GOVERNMENT_OFFICIAL = gql`
   }
 `;
 
+const ADD_ITEM_VERSION_EN = gql`
+  mutation AddItemVersionEn($itemId: ID!) {
+    addItemVersion(input: { itemId: $itemId, language: "en" }) {
+      item {
+        itemId
+      }
+    }
+  }
+`;
+
+const UPDATE_ITEM_EN = gql`
+  mutation UpdateItemEn($itemId: ID!, $bio: String!) {
+    updateItem(input: { itemId: $itemId, fields: [{ name: "Bio", value: $bio }], language: "en" }) {
+      item {
+        itemId
+      }
+    }
+  }
+`;
+
 const PRESIGNED_UPLOAD_URL = gql`
-  mutation UploadMedia($itemPath: String!) {
-    uploadMedia(input: { itemPath: $itemPath, alt: "The alternative text" }) {
+  mutation UploadMedia($itemPath: String!, $alt: String!) {
+    uploadMedia(input: { itemPath: $itemPath, alt: $alt }) {
       presignedUploadUrl
     }
   }
@@ -69,18 +88,16 @@ const PRESIGNED_UPLOAD_URL = gql`
 const AddOfficialForm = ({
   onAddOfficial,
   parent,
-  language,
   sexItems,
 }: AddOfficialFormProps): JSX.Element => {
   const [fullName, setFullName] = useState<string>('');
   const [selectedSex, setSelectedSex] = useState<string>('');
   const [bio, setBio] = useState<string>('');
+  const [bioEn, setBioEn] = useState<string>('');
   const ReactQuill = useMemo(() => dynamic(() => import('react-quill'), { ssr: false }), []);
   const [bioPhoto, setBioPhoto] = useState<File | null>(null);
   const [cardPhoto, setCardPhoto] = useState<File | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  //const [response, setResponse] = useState<GovernmentOfficialResponse | null>(null);
 
   const mappedSexItems = sexItems.map((item) => ({
     id: item.id,
@@ -90,6 +107,8 @@ const AddOfficialForm = ({
   // Apollo's useMutation hook for handling the mutation
   const [presignedUploadUrl] = useMutation(PRESIGNED_UPLOAD_URL);
   const [createGovernmentOfficial] = useMutation(CREATE_GOVERNMENT_OFFICIAL);
+  const [AddItemVersionEn] = useMutation(ADD_ITEM_VERSION_EN);
+  const [updateItemEn] = useMutation(UPDATE_ITEM_EN);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -112,7 +131,8 @@ const AddOfficialForm = ({
         cardPhoto
       );
 
-      const result = await createGovernmentOfficial({
+      // Create a new government official item with associated data and media
+      const responseCreateGovernmentOfficial = await createGovernmentOfficial({
         variables: {
           itemName,
           fullName,
@@ -126,12 +146,26 @@ const AddOfficialForm = ({
           )}" />`,
           templateId: '{3F331F63-E5A3-4B22-B4E5-1AA7F42C5C48}',
           parent,
-          language,
         },
       });
 
       // Extract the new official's ID and name from the mutation response
-      const newOfficial = result.data?.createItem?.item;
+      const newOfficial = responseCreateGovernmentOfficial.data?.createItem?.item;
+
+      // Add a new language version (English) for the newly created official
+      await AddItemVersionEn({
+        variables: {
+          itemId: newOfficial.itemId,
+        },
+      });
+
+      // Update the official's English bio in the newly added language version
+      await updateItemEn({
+        variables: {
+          itemId: newOfficial.itemId,
+          bio: bioEn,
+        },
+      });
 
       // Call the callback to notify the parent component about the new official
       if (newOfficial) {
@@ -182,12 +216,20 @@ const AddOfficialForm = ({
         required={true}
       />
 
-      {/* Rich Text Editor for Bio */}
+      {/* Rich Text Editor for Bio PT*/}
       <div>
         <label htmlFor="bio" className="block text-lg font-medium text-gray-700">
-          Bio:
+          Bio PT:
         </label>
         <ReactQuill theme="snow" value={bio} onChange={setBio} />
+      </div>
+
+      {/* Rich Text Editor for Bio EN*/}
+      <div>
+        <label htmlFor="bioEn" className="block text-lg font-medium text-gray-700">
+          Bio EN:
+        </label>
+        <ReactQuill theme="snow" value={bioEn} onChange={setBioEn} />
       </div>
 
       {/* File Upload for Bio Photo */}
