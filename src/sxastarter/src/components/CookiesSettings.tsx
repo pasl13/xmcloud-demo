@@ -59,6 +59,7 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
 
   useEffect(() => {
     // Inicializa o estado cookieItems com os dados recebidos via props
+    console.log("USE EFFECT AQUI", selectedItem, cookieItems)
     const items : CookieItemType[] = [];
     subItemsData.children.results.forEach((item, index) => {
       const title = item.fields.find((field) => field.name === 'CookieTypeTitle')?.jsonValue.value;
@@ -82,7 +83,6 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
 
     setCookieItems(items);
     setSelectedItem(items[0]);
-    console.log("selectedItem:", selectedItem)
   }, [subItemsData]);
 
   const title = cookiesSetingsData.fields.find((field) => field.name === 'CookieSettingsTitle')
@@ -109,12 +109,9 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
   };
 
   const handleSwitchChange = (value: boolean) => {
-    console.log("handleSwitchChange:", value)
     if (selectedItem) {
       const updatedItems = cookieItems.map((item) => {
-        console.log()
-        console.log("selectedItem",selectedItem, item)
-        item.id == selectedItem.id ? { ...item, isSelected: value } : item
+        return item.id == selectedItem.id ? { ...item, isSelected: value } : item;
       });
       setCookieItems(updatedItems);
       setSelectedItem({ ...selectedItem, isSelected: value });
@@ -171,7 +168,6 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
               {submitButtonLabel && (
                 <button
                   className="mt-2 py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
-                  // onClick={() => setModalOpen(true)}
                   onClick={setCookieHandler}
                 >
                   {/* {submitButtonLabel} */}
@@ -212,11 +208,13 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
                               {selectedItem.isEnabled ? (
                                 <h3>Required Cookie</h3>
                               ) : (
-                                <Switch
-                                  checked={selectedItem.isSelected}
-                                  onChange={(e) => handleSwitchChange(e.target.checked)}
-                                  disabled={selectedItem.isEnabled}
-                                />
+                                <div>
+                                  <Switch
+                                    isSelected={selectedItem.isSelected}
+                                    onChange={(e) => handleSwitchChange(e.target.checked)}
+                                    // disabled={selectedItem.isEnabled}
+                                  />
+                                </div>
                               )}
                             </div>
                           </div>
