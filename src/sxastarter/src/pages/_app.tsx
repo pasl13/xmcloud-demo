@@ -17,8 +17,8 @@ function App({ Component, pageProps }: AppProps<SitecorePageProps>): JSX.Element
       console.log('Stored username:', storedUsername);
       setUsername(storedUsername);
     }
-  }, []);
-  
+  }, [Cookies.get('username')]);
+
   const { dictionary, ...rest } = pageProps;
 
   return (

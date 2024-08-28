@@ -7,9 +7,11 @@ interface CookieTypeProps {
 }
 
 export default function CookieItem({ fields, key, onSelect }: CookieTypeProps) {
-  const title = fields.find((field) => field.name === 'CookieTypeTitle')?.value;
-  const description = fields.find((field) => field.name === 'CookieTypeDescription')?.value;
-  const isEnabled = fields.find((field) => field.name === 'CookieTypeEnabled')?.value;
+  const title = fields.find((field) => field.name === 'CookieTypeTitle')?.jsonValue.value;
+  const description = fields.find((field) => field.name === 'CookieTypeDescription')?.jsonValue.value;
+  const isEnabled = fields.find((field) => field.name === 'CookieTypeEnabled')?.jsonValue.value;
+  const isSelected = fields.find((field) => field.name === 'CookieTypeIsSelected')?.jsonValue.value;
+  const name = fields.find((field) => field.name === 'CookieTypeName')?.jsonValue.value;
 
   return (
     <div
@@ -19,9 +21,6 @@ export default function CookieItem({ fields, key, onSelect }: CookieTypeProps) {
       <Button onClick={() => onSelect({title: title, description: description})}>
         {title}
       </Button>
-      {/* <h3>{title}</h3>
-      <p>{description}</p>
-      <input type="checkbox" checked={!!isEnabled} readOnly /> */}
     </div>
   );
 }

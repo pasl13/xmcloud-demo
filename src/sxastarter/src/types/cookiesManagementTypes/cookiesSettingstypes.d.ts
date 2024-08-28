@@ -1,6 +1,8 @@
 export interface Field {
   name: string;
-  value: string;
+  jsonValue:{
+    value: string | boolean;
+  }
 }
 
 export interface CookiesSettingsData {
@@ -8,7 +10,10 @@ export interface CookiesSettingsData {
 }
 
 export interface SubItemFields extends Field {
-  name: "CookieTypeTitle" | "CookieTypeDescription" | "CookieTypeIsSelected" | "CookieTypeEnabled";
+  name: "CookieTypeTitle" | "CookieTypeDescription" | "CookieTypeIsSelected" | "CookieTypeEnabled" | "CookieTypeName";
+  jsonValue: {
+    value: string | boolean;
+  };
 }
 
 export interface SubItem {

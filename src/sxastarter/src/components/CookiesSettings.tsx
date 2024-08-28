@@ -28,33 +28,30 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
   const { cookiesSetingsData, subItemsData } = props.fields?.data;
   // console.log('cookiesSetingsData:', cookiesSetingsData);
   // console.log('subItemsData:', subItemsData);
+  console.log('props:', props);
 
-  const title = cookiesSetingsData.fields.find(
-    (field) => field.name === 'CookieSettingsTitle'
-  )?.value;
+  const title = cookiesSetingsData.fields.find((field) => field.name === 'CookieSettingsTitle')
+    ?.jsonValue.value;
+
   const description = cookiesSetingsData.fields.find(
     (field) => field.name === 'CookieSettingsDescription'
-  )?.value;
+  )?.jsonValue.value;
+
   const submitButtonLabel = cookiesSetingsData.fields.find(
     (field) => field.name === 'CookieSettingsSubmitChangesButtonLabel'
-  )?.value;
+  )?.jsonValue.value;
   const acceptAllButtonLabel = cookiesSetingsData.fields.find(
     (field) => field.name === 'CookieSettingsAcceptAllButtonLabel'
-  )?.value;
+  )?.jsonValue.value;
   const onlyRequiredButtonLabel = cookiesSetingsData.fields.find(
     (field) => field.name === 'CookieSettingsOnlyRequiredButtonLabel'
-  )?.value;
+  )?.jsonValue.value;
 
-  const setCookieHandler = () => {
+  const setCookieHandler = (cookieName: string) => {
     console.log('Setting cookies');
     Cookies.set('username', 'John Doe', { expires: 7 });
     // Cookies.set('padrão', 'true', { expires: 7 });
   };
-  // const description = data.fields.find(field => field.name === 'CookieSettingsDescription')?.value;
-  // const icon = data.fields.find(field => field.name === 'CookieSettingsIcon')?.value;
-  // const submitButtonLabel = data.fields.find(field => field.name === 'CookieSettingsSubmitChangesButtonLabel')?.value;
-  // const acceptAllButtonLabel = data.fields.find(field => field.name === 'CookieSettingsAcceptAllButtonLabel')?.value;
-  // const onlyRequiredButtonLabel = data.fields.find(field => field.name === 'CookieSettingsOnlyRequiredButtonLabel')?.value;
   const [modalOpen, setModalOpen] = useState(false);
   const [isFooterVisible, setFooterVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState({ title: '', description: '' });
@@ -72,7 +69,7 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
           left: '10px',
           cursor: 'pointer',
         }}
-        onClick={() => setFooterVisible(true)}
+        onClick={() => setFooterVisible(!isFooterVisible)}
       >
         <Avatar
           src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
