@@ -12,8 +12,10 @@ import {
   ModalBody,
   ModalFooter,
   Button,
+  Switch,
 } from '@nextui-org/react';
 import { DataProps } from 'src/types';
+import { title } from 'process';
 
 interface CookiesSettingsProps {
   rendering: ComponentRendering & { params: ComponentParams };
@@ -22,6 +24,14 @@ interface CookiesSettingsProps {
     data: DataProps;
   };
 }
+
+let initialState = {
+  title: '',
+  description: '',
+  isEnabled: false,
+  isSelected: false,
+  name: '',
+};
 
 export const Default = (props: CookiesSettingsProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
@@ -52,9 +62,15 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
     Cookies.set('username', 'John Doe', { expires: 7 });
     // Cookies.set('padrão', 'true', { expires: 7 });
   };
+
+  const handleSwitchChange = (value: boolean) => {
+    if (selectedItem) {
+      setSelectedItem({ ...selectedItem, isSelected: value });
+    }
+  };
   const [modalOpen, setModalOpen] = useState(false);
   const [isFooterVisible, setFooterVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState({ title: '', description: '' });
+  const [selectedItem, setSelectedItem] = useState(initialState);
   // console.log('selectedItem:', selectedItem);
   return (
     <div
@@ -138,9 +154,20 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
                     <div className="w-2/3">
                       <div className="container rounded text-black">
                         {selectedItem && (
-                          <div>
+                          <div className="grid grid-cols-2 ">
                             <h4>{selectedItem.title}</h4>
                             <p>{selectedItem.description}</p>
+                            <div>
+                              {selectedItem.isEnabled ? (
+                                <h3>Required Cookie</h3>
+                              ) : (
+                                <Switch
+                                  checked={selectedItem.isSelected}
+                                  onChange={(e) => handleSwitchChange(e.target.checked)}
+                                  disabled={selectedItem.isEnabled}
+                                />
+                              )}
+                            </div>
                           </div>
                         )}
                       </div>
