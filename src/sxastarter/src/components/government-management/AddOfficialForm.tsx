@@ -131,6 +131,11 @@ const AddOfficialForm = ({
         cardPhoto
       );
 
+      console.log('getBioPhoto', getBioPhoto);
+      console.log('getCardPhoto', getCardPhoto);
+      console.log('getBioPhoto?.Id', SitecoreGuidUtils.convertRawHyphenatedToGuid(getBioPhoto?.Id));
+      console.log('getCardPhoto?.Id', SitecoreGuidUtils.convertRawHyphenatedToGuid(getCardPhoto?.Id));
+
       // Create a new government official item with associated data and media
       const responseCreateGovernmentOfficial = await createGovernmentOfficial({
         variables: {
