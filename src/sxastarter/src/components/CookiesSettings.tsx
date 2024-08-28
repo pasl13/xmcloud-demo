@@ -140,7 +140,7 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
           backdrop="opaque"
           isOpen={modalOpen}
           onClose={() => setModalOpen(false)}
-          size="5xl"
+          size="full"
         >
           <ModalContent>
             {() => (
@@ -155,9 +155,11 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
                       <div className="container rounded text-black">
                         {selectedItem && (
                           <div className="grid grid-cols-2 ">
-                            <h4>{selectedItem.title}</h4>
-                            <p>{selectedItem.description}</p>
                             <div>
+                              <h4>{selectedItem.title}</h4>
+                              <p>{selectedItem.description}</p>
+                            </div>
+                            <div className="flex items-center justify-center">
                               {selectedItem.isEnabled ? (
                                 <h3>Required Cookie</h3>
                               ) : (
