@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { ComponentParams, ComponentRendering } from '@sitecore-jss/sitecore-jss-nextjs';
 import ListCookieTypes from 'src/atoms/Cookies Management/ListCookieTypes';
+import { CookieItemType } from 'src/types';
 import Cookies from 'js-cookie';
 import {
   Avatar,
@@ -22,16 +23,6 @@ interface CookiesSettingsProps {
     data: DataProps;
   };
 }
-
-interface CookieItemType {
-  id: number;
-  name: string | undefined | boolean;
-  title: string | undefined | boolean;
-  description: string | undefined | boolean;
-  isSelected: string | undefined | boolean;
-  isEnabled: string | undefined | boolean;
-}
-
 export const Default = (props: CookiesSettingsProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
   const { cookiesSetingsData, subItemsData } = props.fields?.data;
@@ -39,11 +30,17 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
   const [isFooterVisible, setFooterVisible] = useState(false);
 
   const cookieItems: CookieItemType[] = useMemo(() => {
-    return subItemsData.children.results.map((item, index) => {
+    if (!subItemsData?.children?.results) {
+      return []; // Early return with an empty array if data is undefined
+    }
+    return subItemsData?.children?.results.map((item, index) => {
       const title = item.fields.find((field) => field.name === 'CookieTypeTitle')?.jsonValue.value;
-      const description = item.fields.find((field) => field.name === 'CookieTypeDescription')?.jsonValue.value;
-      const isEnabled = item.fields.find((field) => field.name === 'CookieTypeEnabled')?.jsonValue.value;
-      const isSelected = item.fields.find((field) => field.name === 'CookieTypeIsSelected')?.jsonValue.value;
+      const description = item.fields.find((field) => field.name === 'CookieTypeDescription')
+        ?.jsonValue.value;
+      const isEnabled = item.fields.find((field) => field.name === 'CookieTypeEnabled')?.jsonValue
+        .value;
+      const isSelected = item.fields.find((field) => field.name === 'CookieTypeIsSelected')
+        ?.jsonValue.value;
       const name = item.fields.find((field) => field.name === 'CookieTypeName')?.jsonValue.value;
 
       return {
@@ -66,7 +63,7 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
       setFooterVisible(true);
     } else {
       const updatedCookieState = cookieItems.map((item) => {
-        const cookieValue = Cookies.get(item.name);
+        const cookieValue = Cookies.get(String(item.name));
         return {
           ...item,
           isSelected: cookieValue === 'true' ? true : item.isSelected,
@@ -106,10 +103,10 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
   const handleAcceptRequiredCookies = () => {
     const updatedItems = cookieState.map((item) => {
       if (item.isEnabled) {
-        Cookies.set(item.name, 'true');
+        Cookies.set(String(item.name), 'true');
         return { ...item, isSelected: true };
       } else {
-        Cookies.set(item.name, 'false');
+        Cookies.set(String(item.name), 'false');
         return { ...item, isSelected: false };
       }
     });
@@ -121,7 +118,7 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
 
   const handleUpdateCookiesPreferences = () => {
     cookieState.forEach((cookie) => {
-      Cookies.set(cookie.name, cookie.isSelected.toString());
+      Cookies.set(String(cookie.name), cookie.isSelected?.toString() ?? 'false');
     });
     Cookies.set('hasAcceptedCookies', 'true');
     setModalOpen(false);
@@ -132,7 +129,7 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
     const updatedItems = cookieState.map((item) => ({ ...item, isSelected: true }));
     setCookieState(updatedItems);
     updatedItems.forEach((cookie) => {
-      Cookies.set(cookie.name, 'true');
+      Cookies.set(String(cookie.name), 'true');
     });
     Cookies.set('hasAcceptedCookies', 'true');
     setModalOpen(false);
@@ -169,13 +166,12 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
               {description && <p className="text-white py-2">{description}</p>}
             </div>
             <div className="flex flex-col gap-4 justify-center items-center">
-              {acceptAllButtonLabel && (
+              {submitButtonLabel && (
                 <button
                   className="mt-2 py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
                   onClick={() => setModalOpen(true)}
                 >
-                  {/* {acceptAllButtonLabel} */}
-                  Adjust preferences
+                  {submitButtonLabel}
                 </button>
               )}
               {onlyRequiredButtonLabel && (
@@ -186,13 +182,12 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
                   {onlyRequiredButtonLabel}
                 </button>
               )}
-              {submitButtonLabel && (
+              {acceptAllButtonLabel && (
                 <button
                   className="mt-2 py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
                   onClick={handleAcceptAllCookies}
                 >
-                  {/* {submitButtonLabel} */}
-                  Accept All cookies
+                  {acceptAllButtonLabel}
                 </button>
               )}
             </div>

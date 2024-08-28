@@ -21,7 +21,7 @@ export interface SubItem {
 }
 
 export interface SubItemsData {
-  children: {
+  children?: {
     results: SubItem[];
   };
 }
@@ -33,9 +33,9 @@ export interface DataProps {
 
 export interface CookieItemType {
   id: number;
-  name: string | undefined ;
-  title: string | undefined ;
-  description: string | undefined ;
-  isSelected: string | undefined | boolean;
-  isEnabled: string | undefined | boolean;
+  title?: string | boolean | undefined;
+  description?: string | boolean | undefined;
+  isEnabled?: string | boolean | undefined;
+  isSelected:  boolean | undefined;
+  name?: string | boolean | undefined;
 }
