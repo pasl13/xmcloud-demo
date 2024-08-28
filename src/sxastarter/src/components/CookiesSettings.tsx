@@ -35,6 +35,7 @@ interface CookieItemType {
 }
 
 const initialState = {
+  id: null,
   title: '',
   description: '',
   isEnabled: false,
@@ -54,11 +55,12 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
   // console.log('subItemsData:', subItemsData);
   // console.log('props:', props);
   // console.log("cookieItems:", cookieItems)
+  console.log("selectedItem gETRAL:", selectedItem)
 
   useEffect(() => {
     // Inicializa o estado cookieItems com os dados recebidos via props
     const items : CookieItemType[] = [];
-    subItemsData.children.results.forEach((item) => {
+    subItemsData.children.results.forEach((item, index) => {
       const title = item.fields.find((field) => field.name === 'CookieTypeTitle')?.jsonValue.value;
       const description = item.fields.find((field) => field.name === 'CookieTypeDescription')
         ?.jsonValue.value;
@@ -69,6 +71,7 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
       const name = item.fields.find((field) => field.name === 'CookieTypeName')?.jsonValue.value;
 
       items.push({
+        id: index,
         title: title,
         description: description,
         isEnabled: isEnabled,
@@ -78,6 +81,8 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
     });
 
     setCookieItems(items);
+    setSelectedItem(items[0]);
+    console.log("selectedItem:", selectedItem)
   }, [subItemsData]);
 
   const title = cookiesSetingsData.fields.find((field) => field.name === 'CookieSettingsTitle')
@@ -104,10 +109,13 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
   };
 
   const handleSwitchChange = (value: boolean) => {
+    console.log("handleSwitchChange:", value)
     if (selectedItem) {
-      const updatedItems = cookieItems.map((item) =>
-        item.id === selectedItem.id ? { ...item, isSelected: value } : item
-      );
+      const updatedItems = cookieItems.map((item) => {
+        console.log()
+        console.log("selectedItem",selectedItem, item)
+        item.id == selectedItem.id ? { ...item, isSelected: value } : item
+      });
       setCookieItems(updatedItems);
       setSelectedItem({ ...selectedItem, isSelected: value });
     }
