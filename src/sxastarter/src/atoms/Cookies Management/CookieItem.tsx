@@ -1,18 +1,8 @@
 import { Button } from '@nextui-org/react';
+import { CookieItemType } from 'src/types';
 interface CookieTypeProps {
   fields: CookieItemType;
-  key: number;
-  onSelect: any;
-}
-
-interface CookieItemType {
-  id: number;
-  name: string;
-  title: string;
-  description: string;
-  isRequired: boolean;
-  isSelected: boolean;
-  isEnabled: boolean;
+  onSelect: React.Dispatch<React.SetStateAction<CookieItemType | null>>;
 }
 
 export default function CookieItem({ fields, onSelect }: CookieTypeProps) {

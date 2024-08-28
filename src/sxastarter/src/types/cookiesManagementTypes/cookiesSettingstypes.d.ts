@@ -30,3 +30,12 @@ export interface DataProps {
   cookiesSetingsData: CookiesSettingsData;
   subItemsData: SubItemsData;
 }
+
+export interface CookieItemType {
+  id: number;
+  name: string | undefined ;
+  title: string | undefined ;
+  description: string | undefined ;
+  isSelected: string | undefined | boolean;
+  isEnabled: string | undefined | boolean;
+}
