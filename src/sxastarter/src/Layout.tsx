@@ -28,8 +28,8 @@ const Layout = ({ layoutData, headLinks }: LayoutProps): JSX.Element => {
   const mainClassPageEditing = isPageEditing ? 'editing-mode' : 'prod-mode';
   const isGovernmentManagementPage = route?.templateName === 'Government Management Page';
 
-  console.log("layoutData", layoutData);
-  console.log("headLinks", headLinks);
+  console.log('layoutData', layoutData);
+  console.log('headLinks', headLinks);
 
   return (
     <>
