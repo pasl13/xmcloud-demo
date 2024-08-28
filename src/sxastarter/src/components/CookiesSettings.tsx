@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { ComponentParams, ComponentRendering } from '@sitecore-jss/sitecore-jss-nextjs';
 import ListCookieTypes from 'src/atoms/Cookies Management/ListCookieTypes';
 import Cookies from 'js-cookie';
@@ -46,44 +46,46 @@ const initialState = {
 export const Default = (props: CookiesSettingsProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
   const { cookiesSetingsData, subItemsData } = props.fields?.data;
-  const [cookieItems, setCookieItems] = useState<CookieItemType[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [isFooterVisible, setFooterVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(initialState);
 
-  // console.log('cookiesSetingsData:', cookiesSetingsData);
-  // console.log('subItemsData:', subItemsData);
-  // console.log('props:', props);
-  // console.log("cookieItems:", cookieItems)
-  // console.log("selectedItem gETRAL:", selectedItem)
+  // useEffect(() => {
+  //   // Inicializa o estado cookieItems com os dados recebidos via props
+  //   // console.log("USE EFFECT AQUI", selectedItem, cookieItems)
+  //   const items : CookieItemType[] = [];
+  //   subItemsData.children.results.forEach((item, index) => {
+  //     const title = item.fields.find((field) => field.name === 'CookieTypeTitle')?.jsonValue.value;
+  //     const description = item.fields.find((field) => field.name === 'CookieTypeDescription')
+  //       ?.jsonValue.value;
+  //     const isEnabled = item.fields.find((field) => field.name === 'CookieTypeEnabled')?.jsonValue
+  //       .value;
+  //     const isSelected = item.fields.find((field) => field.name === 'CookieTypeIsSelected')
+  //       ?.jsonValue.value;
+  //     const name = item.fields.find((field) => field.name === 'CookieTypeName')?.jsonValue.value;
 
-  useEffect(() => {
-    // Inicializa o estado cookieItems com os dados recebidos via props
-    // console.log("USE EFFECT AQUI", selectedItem, cookieItems)
-    const items : CookieItemType[] = [];
-    subItemsData.children.results.forEach((item, index) => {
-      const title = item.fields.find((field) => field.name === 'CookieTypeTitle')?.jsonValue.value;
-      const description = item.fields.find((field) => field.name === 'CookieTypeDescription')
-        ?.jsonValue.value;
-      const isEnabled = item.fields.find((field) => field.name === 'CookieTypeEnabled')?.jsonValue
-        .value;
-      const isSelected = item.fields.find((field) => field.name === 'CookieTypeIsSelected')
-        ?.jsonValue.value;
-      const name = item.fields.find((field) => field.name === 'CookieTypeName')?.jsonValue.value;
+  //     items.push({
+  //       id: index,
+  //       title: title,
+  //       description: description,
+  //       isEnabled: isEnabled,
+  //       isSelected: isSelected,
+  //       name: name,
+  //     });
+  //   });
 
-      items.push({
-        id: index,
-        title: title,
-        description: description,
-        isEnabled: isEnabled,
-        isSelected: isSelected,
-        name: name,
-      });
-    });
+  //   setCookieItems(items);
+  //   setSelectedItem(items[0]);
+  // }, [subItemsData]);
 
-    setCookieItems(items);
-    setSelectedItem(items[0]);
+  const cookieItems = useMemo(() => {
+    return subItemsData.map(item => ({
+      ...item,
+      isSelected: item.isRequired ? true : item.isSelected,
+    }));
   }, [subItemsData]);
+
+  const [cookieState, setCookieState] = useState<CookieItem[]>(cookieItems);
 
   useEffect(() => {
     const hasAcceptedCookies = Cookies.get('hasAcceptedCookies');
@@ -97,7 +99,7 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
           isSelected: cookieValue === 'true' ? true : item.isSelected,
         };
       });
-      setCookieItems(updatedCookieState);
+      setCookieState(updatedCookieState);
     }
   }, [cookieItems]);
 
@@ -123,7 +125,7 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
       const updatedItems = cookieItems.map((item) => {
         return item.id == selectedItem.id ? { ...item, isSelected: value } : item;
       });
-      setCookieItems(updatedItems);
+      setCookieState(updatedItems);
       setSelectedItem({ ...selectedItem, isSelected: value });
     }
   };
@@ -150,7 +152,7 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
 
   const handleAcceptAllCookies = () => {
     const updatedItems = cookieItems.map(item => ({ ...item, isSelected: true }));
-    setCookieItems(updatedItems);
+    setCookieState(updatedItems);
     updatedItems.forEach(cookie => {
       Cookies.set(cookie.name, 'true');
     });
