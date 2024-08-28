@@ -2,16 +2,16 @@ import { SubItemsData } from '../../types/cookiesManagementTypes/cookiesSettings
 import CookieItem from './CookieItem';
 interface ListCookieTypesProps extends SubItemsData {
   onSelect: any;
+  cookieItems: any;
 }
-export default function ListCookieTypes({ onSelect, children }: ListCookieTypesProps) {
+export default function ListCookieTypes({ onSelect, cookieItems }: ListCookieTypesProps) {
   // console.log('ListCookieTypes:', children);
   // console.log('onSelect:', onSelect);
-  const cookieTypes = children.results;
   // console.log('cookieTypes:', cookieTypes);
   return (
     <div className="cookie-types-list">
-      {cookieTypes.map((cookieType, index) => (
-        <CookieItem key={index} fields={cookieType.fields} onSelect={onSelect} />
+      {cookieItems.map((cookieType, index) => (
+        <CookieItem key={index} fields={cookieType} onSelect={onSelect} />
       ))}
     </div>
   );

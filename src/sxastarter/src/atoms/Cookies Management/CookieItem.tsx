@@ -1,18 +1,26 @@
-import { SubItemFields } from 'src/types';
 import { Button } from '@nextui-org/react';
 interface CookieTypeProps {
-  fields: SubItemFields[];
+  fields: CookieItemType;
   key: number;
   onSelect: any;
 }
 
+interface CookieItemType {
+  id: number;
+  name: string;
+  title: string;
+  description: string;
+  isRequired: boolean;
+  isSelected: boolean;
+  isEnabled: boolean;
+}
+
 export default function CookieItem({ fields, key, onSelect }: CookieTypeProps) {
-  const title = fields.find((field) => field.name === 'CookieTypeTitle')?.jsonValue.value;
-  const description = fields.find((field) => field.name === 'CookieTypeDescription')?.jsonValue
-    .value;
-  const isEnabled = fields.find((field) => field.name === 'CookieTypeEnabled')?.jsonValue.value;
-  const isSelected = fields.find((field) => field.name === 'CookieTypeIsSelected')?.jsonValue.value;
-  const name = fields.find((field) => field.name === 'CookieTypeName')?.jsonValue.value;
+  const title = fields.title;
+  const description = fields.description;
+  const isEnabled = fields.isEnabled;
+  const isSelected = fields.isSelected;
+  const name = fields.name;
 
   return (
     <div

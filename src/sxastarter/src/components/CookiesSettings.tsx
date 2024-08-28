@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ComponentParams, ComponentRendering } from '@sitecore-jss/sitecore-jss-nextjs';
 import ListCookieTypes from 'src/atoms/Cookies Management/ListCookieTypes';
 import Cookies from 'js-cookie';
@@ -15,7 +15,6 @@ import {
   Switch,
 } from '@nextui-org/react';
 import { DataProps } from 'src/types';
-import { title } from 'process';
 
 interface CookiesSettingsProps {
   rendering: ComponentRendering & { params: ComponentParams };
@@ -25,7 +24,17 @@ interface CookiesSettingsProps {
   };
 }
 
-let initialState = {
+interface CookieItemType {
+  id: number;
+  name: string | undefined | boolean;
+  title: string | undefined | boolean;
+  description: string | undefined | boolean;
+  isRequired: string | undefined | boolean;
+  isSelected: string | undefined | boolean;
+  isEnabled: string | undefined | boolean;
+}
+
+const initialState = {
   title: '',
   description: '',
   isEnabled: false,
@@ -36,9 +45,40 @@ let initialState = {
 export const Default = (props: CookiesSettingsProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
   const { cookiesSetingsData, subItemsData } = props.fields?.data;
+  const [cookieItems, setCookieItems] = useState<CookieItemType[]>([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [isFooterVisible, setFooterVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(initialState);
+
   // console.log('cookiesSetingsData:', cookiesSetingsData);
   // console.log('subItemsData:', subItemsData);
-  console.log('props:', props);
+  // console.log('props:', props);
+  // console.log("cookieItems:", cookieItems)
+
+  useEffect(() => {
+    // Inicializa o estado cookieItems com os dados recebidos via props
+    const items : CookieItemType[] = [];
+    subItemsData.children.results.forEach((item) => {
+      const title = item.fields.find((field) => field.name === 'CookieTypeTitle')?.jsonValue.value;
+      const description = item.fields.find((field) => field.name === 'CookieTypeDescription')
+        ?.jsonValue.value;
+      const isEnabled = item.fields.find((field) => field.name === 'CookieTypeEnabled')?.jsonValue
+        .value;
+      const isSelected = item.fields.find((field) => field.name === 'CookieTypeIsSelected')
+        ?.jsonValue.value;
+      const name = item.fields.find((field) => field.name === 'CookieTypeName')?.jsonValue.value;
+
+      items.push({
+        title: title,
+        description: description,
+        isEnabled: isEnabled,
+        isSelected: isSelected,
+        name: name,
+      });
+    });
+
+    setCookieItems(items);
+  }, [subItemsData]);
 
   const title = cookiesSetingsData.fields.find((field) => field.name === 'CookieSettingsTitle')
     ?.jsonValue.value;
@@ -65,12 +105,13 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
 
   const handleSwitchChange = (value: boolean) => {
     if (selectedItem) {
+      const updatedItems = cookieItems.map((item) =>
+        item.id === selectedItem.id ? { ...item, isSelected: value } : item
+      );
+      setCookieItems(updatedItems);
       setSelectedItem({ ...selectedItem, isSelected: value });
     }
   };
-  const [modalOpen, setModalOpen] = useState(false);
-  const [isFooterVisible, setFooterVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(initialState);
   // console.log('selectedItem:', selectedItem);
   return (
     <div
@@ -149,7 +190,7 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
                 <ModalBody>
                   <div className="flex flex-1 p-4 gap-4">
                     <div className="w-1/3 space-y-4">
-                      <ListCookieTypes onSelect={setSelectedItem} {...subItemsData} />
+                      <ListCookieTypes onSelect={setSelectedItem} cookieItems={cookieItems} />
                     </div>
                     <div className="w-2/3">
                       <div className="container rounded text-black">
@@ -178,10 +219,10 @@ export const Default = (props: CookiesSettingsProps): JSX.Element => {
                 </ModalBody>
                 <ModalFooter>
                   <Button color="danger" variant="light" onPress={() => setModalOpen(false)}>
-                    Close
+                    Close with only necessary cookies action
                   </Button>
                   <Button color="primary" onPress={() => setModalOpen(false)}>
-                    Action
+                    Update cookies preferences action
                   </Button>
                 </ModalFooter>
               </>
