@@ -26,10 +26,7 @@ const Layout = ({ layoutData, headLinks }: LayoutProps): JSX.Element => {
   const fields = route?.fields as RouteFields;
   const isPageEditing = layoutData.sitecore.context.pageEditing;
   const mainClassPageEditing = isPageEditing ? 'editing-mode' : 'prod-mode';
-  const isGovernmentManagementPage = route?.templateName === 'Government Management Page';
-
-  console.log('layoutData', layoutData);
-  console.log('headLinks', headLinks);
+  const isGovernmentManagementLayout = route?.layoutId === '9acf546e-2302-4996-8848-115306dd99f9';
 
   return (
     <>
@@ -44,7 +41,7 @@ const Layout = ({ layoutData, headLinks }: LayoutProps): JSX.Element => {
 
       {/* root placeholder for the app, which we add components to using route data */}
       <div className={mainClassPageEditing}>
-        {!isGovernmentManagementPage && (
+        {!isGovernmentManagementLayout && (
           <header>
             <div id="header">
               {route && <Placeholder name="headless-header" rendering={route} />}
@@ -57,7 +54,7 @@ const Layout = ({ layoutData, headLinks }: LayoutProps): JSX.Element => {
             {route && (
               <Placeholder
                 name={
-                  isGovernmentManagementPage
+                  isGovernmentManagementLayout
                     ? 'government-management-headless-main'
                     : 'headless-main'
                 }
@@ -67,7 +64,7 @@ const Layout = ({ layoutData, headLinks }: LayoutProps): JSX.Element => {
           </div>
         </main>
 
-        {!isGovernmentManagementPage && (
+        {!isGovernmentManagementLayout && (
           <footer>
             <div id="footer">
               {route && <Placeholder name="headless-footer" rendering={route} />}
