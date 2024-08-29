@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
-
-// Third-party libraries
-import { ComponentParams, ComponentRendering, TextField } from '@sitecore-jss/sitecore-jss-nextjs';
+import React, { useState, useEffect, useMemo } from 'react';
 import { ApolloProvider } from '@apollo/client';
+import {
+  Tabs,
+  Tab,
+  Dropdown,
+  DropdownTrigger,
+  Button,
+  DropdownMenu,
+  DropdownItem,
+} from '@nextui-org/react';
 import moment from 'moment';
-import { Tabs, Tab } from '@nextui-org/react';
 
-// Configuration
+import { ComponentParams, ComponentRendering, TextField } from '@sitecore-jss/sitecore-jss-nextjs';
 import client from 'src/config/apolloClient';
-
-// Custom components
-import Dropdown from 'src/atoms/Shared Components/Dropdown';
 import AddOfficialForm from './AddOfficialForm';
 
 type ResultsFieldText = {
@@ -62,87 +64,76 @@ interface GovernmentManagementProps {
   fields: Fields;
 }
 
-export const Default = (props: GovernmentManagementProps): JSX.Element => {
-  console.log('GovernmentManagementProps', props);
+export const Default = ({ rendering, params, fields }: GovernmentManagementProps): JSX.Element => {
+  const { RenderingIdentifier: id } = params;
+  const { dataSource: parent } = rendering;
+  const { name: language } = fields.data.datasource.language;
+  const sexItems = fields.data.sexItems.children.results;
 
-  const id = props?.params?.RenderingIdentifier;
-  const parent = props?.rendering?.dataSource;
-  const language = props?.fields?.data?.datasource?.language?.name;
-  const sexItems = props?.fields?.data?.sexItems?.children?.results;
+  const constitutionalGovernments = useMemo(
+    () =>
+      fields.data.getConstitutionalGovernments.children.results.sort((a, b) => {
+        const dateA = a.field.value
+          ? moment(a.field.value, 'YYYYMMDDTHHmmssZ').toDate().getTime()
+          : Infinity;
+        const dateB = b.field.value
+          ? moment(b.field.value, 'YYYYMMDDTHHmmssZ').toDate().getTime()
+          : Infinity;
+        return dateB - dateA;
+      }),
+    [fields]
+  );
 
-  const constitutionalGovernments =
-    props?.fields?.data?.getConstitutionalGovernments?.children?.results.sort((a, b) => {
-      const dateA = a?.field?.value
-        ? moment(a.field.value, 'YYYYMMDDTHHmmssZ').toDate().getTime()
-        : Infinity;
-      const dateB = b?.field?.value
-        ? moment(b.field.value, 'YYYYMMDDTHHmmssZ').toDate().getTime()
-        : Infinity;
-
-      return dateB - dateA;
-    }) ?? [];
-
-  console.log('constitutionalGovernments', constitutionalGovernments);
-
-  // Extract official results or default to an empty array if not available
-  const officialResults = props?.fields?.data?.datasource?.children?.results ?? [];
-
-  // Map officialsList for the Dropdown
+  const officialResults = fields.data.datasource.children.results || [];
   const officialsList = officialResults.map(({ id, field }) => ({
-    id,
-    label: field.jsonValue?.value?.toString() ?? '',
+    key: id,
+    name: field.jsonValue?.value?.toString() || '',
   }));
 
-  // State to store selected official ID and the list of officials
-  const [selectedOfficialId, setSelectedOfficialId] = useState('');
-  const [selectedGovernmentId, setSelectedGovernmentId] = useState(
+  const [selectedOfficialId, setSelectedOfficialId] = useState<string>('');
+  const [selectedGovernmentId, setSelectedGovernmentId] = useState<string>(
     constitutionalGovernments[0]?.id || ''
   );
   const [officials, setOfficials] = useState(officialsList);
 
-  // Update the officials list when officialResults changes
   useEffect(() => {
     setOfficials(officialsList);
   }, [officialResults]);
 
-  // Handle official selection from Dropdown
   const handleOfficialSelect = (officialId: string) => {
     setSelectedOfficialId(officialId);
   };
 
-  // Handle adding a new official
   const handleAddOfficial = (officialId: string, officialName: string) => {
-    const newOfficial = {
-      id: officialId,
-      label: officialName,
-    };
-
-    // Update the officials list with the new official
-    setOfficials((prevOfficials) => [...prevOfficials, newOfficial]);
+    setOfficials((prevOfficials) => [...prevOfficials, { key: officialId, name: officialName }]);
   };
 
   return (
     <ApolloProvider client={client}>
-      <div
-        className={`component government-management ${props.params.styles}`}
-        id={id ? id : undefined}
-      >
+      <div className={`component government-management ${params.styles}`} id={id}>
         <div className="component-content space-y-4">
           <h1 className="font-bold text-gray-800">Government Management</h1>
 
-          {/* Render the Dropdown component */}
-          <Dropdown
-            id="officials-dropdown"
-            value={selectedOfficialId}
-            options={officials}
-            placeholder="-- Select an Official --"
-            onSelect={handleOfficialSelect}
-            selectClass="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
-            required={true}
-            sort={true}
-          />
+          <Dropdown>
+            <DropdownTrigger>
+              <Button>
+                {selectedOfficialId
+                  ? officials.find((official) => official.key === selectedOfficialId)?.name
+                  : '-- Select an official --'}
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              aria-label="Select an official"
+              selectionMode="single"
+              selectedKeys={selectedOfficialId ? new Set([selectedOfficialId]) : new Set()}
+              onSelectionChange={(keys) => handleOfficialSelect(Array.from(keys).join(''))}
+            >
+              {officials.map((official) => (
+                <DropdownItem key={official.key}>{official.name}</DropdownItem>
+              ))}
+            </DropdownMenu>
+          </Dropdown>
 
-          {/* Render the AddOfficialForm component */}
           <AddOfficialForm
             onAddOfficial={handleAddOfficial}
             parent={parent}
@@ -150,7 +141,6 @@ export const Default = (props: GovernmentManagementProps): JSX.Element => {
             sexItems={sexItems}
           />
 
-          {/* NextUI Tabs */}
           <Tabs
             aria-label="Government Tabs"
             selectedKey={selectedGovernmentId}
@@ -158,13 +148,13 @@ export const Default = (props: GovernmentManagementProps): JSX.Element => {
             className="flex justify-start space-x-4 border-b-2 border-gray-200 mb-4"
           >
             {constitutionalGovernments.map((gov) => (
-              <Tab
-                key={gov.id}
-                title={gov.name}
-              >
+              <Tab key={gov.id} title={gov.name}>
                 <div>{`Content for ${gov.name}`}</div>
               </Tab>
             ))}
+            <Tab key="add-new" title="+ Add New">
+              <div className="p-4"></div>
+            </Tab>
           </Tabs>
         </div>
       </div>
