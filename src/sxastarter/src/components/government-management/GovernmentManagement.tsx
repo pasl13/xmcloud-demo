@@ -42,10 +42,10 @@ type ResultsConstitutionalGovernment = {
 };
 
 interface Government {
+  governmentName: string;
   logo: File | null;
   description: string;
   startDate: string;
-  endDate: string; 
 }
 
 interface Fields {
@@ -191,10 +191,12 @@ export const Default = ({ rendering, params, fields }: GovernmentManagementProps
             ))}
             <Tab key="add-new" title="+ Add New">
               <div className="p-4">
-              <AddConstitutionalGovernment onAddGovernment={handleAddGovernment} />
               </div>
             </Tab>
           </Tabs>
+          
+          <AddConstitutionalGovernment onAddGovernment={handleAddGovernment} />
+
         </div>
       </div>
     </ApolloProvider>
