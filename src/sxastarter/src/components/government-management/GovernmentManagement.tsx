@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 // Third-party libraries
 import { ComponentParams, ComponentRendering, TextField } from '@sitecore-jss/sitecore-jss-nextjs';
 import { ApolloProvider } from '@apollo/client';
+import moment from 'moment';
+import { Tabs, Tab } from '@nextui-org/react';
 
 // Configuration
 import client from 'src/config/apolloClient';
@@ -23,6 +25,14 @@ type ResultsSexItems = {
   displayName: string;
 };
 
+type ResultsConstitutionalGovernment = {
+  id: string;
+  name: string;
+  field: {
+    value: string;
+  };
+};
+
 interface Fields {
   data: {
     datasource: {
@@ -36,6 +46,11 @@ interface Fields {
     sexItems: {
       children: {
         results: ResultsSexItems[];
+      };
+    };
+    getConstitutionalGovernments: {
+      children: {
+        results: ResultsConstitutionalGovernment[];
       };
     };
   };
@@ -55,6 +70,20 @@ export const Default = (props: GovernmentManagementProps): JSX.Element => {
   const language = props?.fields?.data?.datasource?.language?.name;
   const sexItems = props?.fields?.data?.sexItems?.children?.results;
 
+  const constitutionalGovernments =
+    props?.fields?.data?.getConstitutionalGovernments?.children?.results.sort((a, b) => {
+      const dateA = a?.field?.value
+        ? moment(a.field.value, 'YYYYMMDDTHHmmssZ').toDate().getTime()
+        : Infinity;
+      const dateB = b?.field?.value
+        ? moment(b.field.value, 'YYYYMMDDTHHmmssZ').toDate().getTime()
+        : Infinity;
+
+      return dateB - dateA;
+    }) ?? [];
+
+  console.log('constitutionalGovernments', constitutionalGovernments);
+
   // Extract official results or default to an empty array if not available
   const officialResults = props?.fields?.data?.datasource?.children?.results ?? [];
 
@@ -66,6 +95,9 @@ export const Default = (props: GovernmentManagementProps): JSX.Element => {
 
   // State to store selected official ID and the list of officials
   const [selectedOfficialId, setSelectedOfficialId] = useState('');
+  const [selectedGovernmentId, setSelectedGovernmentId] = useState(
+    constitutionalGovernments[0]?.id || ''
+  );
   const [officials, setOfficials] = useState(officialsList);
 
   // Update the officials list when officialResults changes
@@ -117,6 +149,23 @@ export const Default = (props: GovernmentManagementProps): JSX.Element => {
             language={language}
             sexItems={sexItems}
           />
+
+          {/* NextUI Tabs */}
+          <Tabs
+            aria-label="Government Tabs"
+            selectedKey={selectedGovernmentId}
+            onSelectionChange={(key) => setSelectedGovernmentId(key as string)}
+            className="flex justify-start space-x-4 border-b-2 border-gray-200 mb-4"
+          >
+            {constitutionalGovernments.map((gov) => (
+              <Tab
+                key={gov.id}
+                title={gov.name}
+              >
+                <div>{`Content for ${gov.name}`}</div>
+              </Tab>
+            ))}
+          </Tabs>
         </div>
       </div>
     </ApolloProvider>
