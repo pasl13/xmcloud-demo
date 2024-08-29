@@ -14,10 +14,12 @@ import {
   ModalBody,
 } from '@nextui-org/react';
 import moment from 'moment';
+import { FaChevronDown, FaPlus } from 'react-icons/fa';
 
 import { ComponentParams, ComponentRendering, TextField } from '@sitecore-jss/sitecore-jss-nextjs';
 import client from 'src/config/apolloClient';
 import AddOfficialForm from './AddOfficialForm';
+import AddConstitutionalGovernment from './AddConstitutionalGovernment';
 
 type ResultsFieldText = {
   id: string;
@@ -38,6 +40,13 @@ type ResultsConstitutionalGovernment = {
     value: string;
   };
 };
+
+interface Government {
+  logo: File | null;
+  description: string;
+  startDate: string;
+  endDate: string; 
+}
 
 interface Fields {
   data: {
@@ -114,6 +123,11 @@ export const Default = ({ rendering, params, fields }: GovernmentManagementProps
     onOpenChange();
   };
 
+  const handleAddGovernment = (newGovernment: Government) => {
+    console.log('New Government:', newGovernment);
+    // You can now send this data to your server or handle it within the app
+  };
+
   return (
     <ApolloProvider client={client}>
       <div className={`component government-management ${params.styles}`} id={id}>
@@ -126,6 +140,7 @@ export const Default = ({ rendering, params, fields }: GovernmentManagementProps
                   {selectedOfficialId
                     ? officials.find((official) => official.key === selectedOfficialId)?.name
                     : '-- Select an official --'}
+                  <FaChevronDown className="ml-2" />
                 </Button>
               </DropdownTrigger>
               <DropdownMenu
@@ -144,7 +159,8 @@ export const Default = ({ rendering, params, fields }: GovernmentManagementProps
               onPress={onOpen}
               className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out"
             >
-              + Add Official
+              <FaPlus className="mr-2" />
+              Add Official
             </Button>
           </div>
           <Modal isOpen={isOpen} onOpenChange={onOpenChange} className="w-full max-w-3xl">
@@ -174,7 +190,9 @@ export const Default = ({ rendering, params, fields }: GovernmentManagementProps
               </Tab>
             ))}
             <Tab key="add-new" title="+ Add New">
-              <div className="p-4"></div>
+              <div className="p-4">
+              <AddConstitutionalGovernment onAddGovernment={handleAddGovernment} />
+              </div>
             </Tab>
           </Tabs>
         </div>
