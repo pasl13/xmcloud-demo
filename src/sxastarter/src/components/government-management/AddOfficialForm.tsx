@@ -4,6 +4,7 @@ import gql from 'graphql-tag';
 import dynamic from 'next/dynamic';
 
 // Third-party utilities
+import { Tab, Tabs } from '@nextui-org/react';
 import removeAccents from 'remove-accents';
 import 'react-quill/dist/quill.snow.css';
 
@@ -17,8 +18,8 @@ import SitecoreGuidUtils from 'src/utils/sitecoreGuid';
 
 interface AddOfficialFormProps {
   onAddOfficial: (officialId: string, officialName: string) => void;
-  parent: string | undefined;
-  language: string | undefined;
+  parent?: string;
+  language?: string;
   sexItems: { id: string; displayName: string }[];
 }
 
@@ -94,20 +95,16 @@ const AddOfficialForm = ({
   const [selectedSex, setSelectedSex] = useState<string>('');
   const [bio, setBio] = useState<string>('');
   const [bioEn, setBioEn] = useState<string>('');
-  const ReactQuill = useMemo(() => dynamic(() => import('react-quill'), { ssr: false }), []);
   const [bioPhoto, setBioPhoto] = useState<File | null>(null);
   const [cardPhoto, setCardPhoto] = useState<File | null>(null);
+  const [selectedBioKey, setSelectedBioKey] = useState<string>('bio-pt');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const mappedSexItems = sexItems.map((item) => ({
-    id: item.id,
-    label: item.displayName,
-  }));
+  const ReactQuill = useMemo(() => dynamic(() => import('react-quill'), { ssr: false }), []);
 
-  // Apollo's useMutation hook for handling the mutation
   const [presignedUploadUrl] = useMutation(PRESIGNED_UPLOAD_URL);
   const [createGovernmentOfficial] = useMutation(CREATE_GOVERNMENT_OFFICIAL);
-  const [AddItemVersionEn] = useMutation(ADD_ITEM_VERSION_EN);
+  const [addItemVersionEn] = useMutation(ADD_ITEM_VERSION_EN);
   const [updateItemEn] = useMutation(UPDATE_ITEM_EN);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -116,78 +113,68 @@ const AddOfficialForm = ({
     const itemName = removeAccents(fullName);
 
     try {
-      // Use the helper function to handle bio and card photo uploads
-      const getBioPhoto = await generatePresignedUrlAndUpload(
+      const bioPhotoUrl = await generatePresignedUrlAndUpload(
         presignedUploadUrl,
         'Project/Demo/Government Management/Bio Photo',
         itemName,
         bioPhoto
       );
 
-      const getCardPhoto = await generatePresignedUrlAndUpload(
+      const cardPhotoUrl = await generatePresignedUrlAndUpload(
         presignedUploadUrl,
         'Project/Demo/Government Management/Card Photo',
         itemName,
         cardPhoto
       );
 
-      console.log('getBioPhoto', getBioPhoto);
-      console.log('getCardPhoto', getCardPhoto);
-      console.log('getBioPhoto?.Id', SitecoreGuidUtils.convertRawHyphenatedToGuid(getBioPhoto?.Id));
-      console.log(
-        'getCardPhoto?.Id',
-        SitecoreGuidUtils.convertRawHyphenatedToGuid(getCardPhoto?.Id)
-      );
-
-      // Create a new government official item with associated data and media
-      const responseCreateGovernmentOfficial = await createGovernmentOfficial({
+      const response = await createGovernmentOfficial({
         variables: {
           itemName,
           fullName,
           sexId: SitecoreGuidUtils.convertRawToGuid(selectedSex),
           bio,
           bioPhoto: `<image mediaid="${SitecoreGuidUtils.convertRawHyphenatedToGuid(
-            getBioPhoto?.Id
+            bioPhotoUrl?.Id
           )}" />`,
           cardPhoto: `<image mediaid="${SitecoreGuidUtils.convertRawHyphenatedToGuid(
-            getCardPhoto?.Id
+            cardPhotoUrl?.Id
           )}" />`,
           templateId: '{3F331F63-E5A3-4B22-B4E5-1AA7F42C5C48}',
           parent,
         },
       });
 
-      // Extract the new official's ID and name from the mutation response
-      const newOfficial = responseCreateGovernmentOfficial.data?.createItem?.item;
+      const newOfficial = response.data?.createItem?.item;
 
-      // Add a new language version (English) for the newly created official
-      await AddItemVersionEn({
-        variables: {
-          itemId: newOfficial.itemId,
-        },
-      });
-
-      // Update the official's English bio in the newly added language version
-      await updateItemEn({
-        variables: {
-          itemId: newOfficial.itemId,
-          bio: bioEn,
-        },
-      });
-
-      // Call the callback to notify the parent component about the new official
       if (newOfficial) {
+        await addItemVersionEn({
+          variables: {
+            itemId: newOfficial.itemId,
+          },
+        });
+
+        await updateItemEn({
+          variables: {
+            itemId: newOfficial.itemId,
+            bio: bioEn,
+          },
+        });
+
         onAddOfficial(newOfficial.itemId, newOfficial.name);
 
-        // Reset fields after submit
         setFullName('');
         setSelectedSex('');
         setBio('');
-        setErrorMessage('');
+        setBioEn('');
+        setBioPhoto(null);
+        setCardPhoto(null);
+        setErrorMessage(null);
       }
     } catch (error: unknown) {
       if (error instanceof Error && error.message.includes('The item name')) {
         setErrorMessage('The name already exists, please choose another.');
+      } else {
+        setErrorMessage('An error occurred while adding the official. Please try again.');
       }
     }
   };
@@ -196,7 +183,6 @@ const AddOfficialForm = ({
     <form onSubmit={handleSubmit} className="space-y-6 p-6 border rounded-lg shadow-md bg-white">
       <h2 className="text-2xl font-semibold">Add New Official</h2>
 
-      {/* Full Name */}
       <div>
         <label htmlFor="fullName" className="block text-lg font-medium text-gray-700">
           Full Name:
@@ -211,36 +197,33 @@ const AddOfficialForm = ({
         />
       </div>
 
-      {/* Dropdown to select sex */}
       <Dropdown
         id="sex"
         label="Select Sex:"
         value={selectedSex}
-        options={mappedSexItems}
+        options={sexItems.map(({ id, displayName }) => ({ id, label: displayName }))}
         placeholder="-- Select --"
-        onSelect={(selectedValue) => setSelectedSex(selectedValue)}
+        onSelect={setSelectedSex}
         labelClass="block text-lg font-medium text-gray-700"
         selectClass="mt-2 block w-full p-3 text-lg border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-        required={true}
+        required
       />
 
-      {/* Rich Text Editor for Bio PT*/}
       <div>
-        <label htmlFor="bio" className="block text-lg font-medium text-gray-700">
-          Bio PT:
-        </label>
-        <ReactQuill theme="snow" value={bio} onChange={setBio} />
+        <Tabs
+          aria-label="Official Bio Tabs"
+          selectedKey={selectedBioKey}
+          onSelectionChange={(key) => setSelectedBioKey(key as string)}
+        >
+          <Tab key="bio-pt" title="Bio [PT]">
+            <ReactQuill theme="snow" value={bio} onChange={setBio} />
+          </Tab>
+          <Tab key="bio-en" title="Bio [EN]">
+            <ReactQuill theme="snow" value={bioEn} onChange={setBioEn} />
+          </Tab>
+        </Tabs>
       </div>
 
-      {/* Rich Text Editor for Bio EN*/}
-      <div>
-        <label htmlFor="bioEn" className="block text-lg font-medium text-gray-700">
-          Bio EN:
-        </label>
-        <ReactQuill theme="snow" value={bioEn} onChange={setBioEn} />
-      </div>
-
-      {/* File Upload for Bio Photo */}
       <FileUpload
         id="bioPhoto"
         accept="image/*"
@@ -248,10 +231,9 @@ const AddOfficialForm = ({
         labelClass="block text-lg font-medium text-gray-700"
         inputClass="mt-2 block w-full p-3 text-lg border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
         onFileSelect={setBioPhoto}
-        required={true}
+        required
       />
 
-      {/* File Upload for Card Photo */}
       <FileUpload
         id="cardPhoto"
         accept="image/*"
@@ -259,7 +241,7 @@ const AddOfficialForm = ({
         labelClass="block text-lg font-medium text-gray-700"
         inputClass="mt-2 block w-full p-3 text-lg border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
         onFileSelect={setCardPhoto}
-        required={true}
+        required
       />
 
       <button
@@ -269,7 +251,6 @@ const AddOfficialForm = ({
         Add Official
       </button>
 
-      {/* Display the error message if it exists */}
       {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
     </form>
   );
