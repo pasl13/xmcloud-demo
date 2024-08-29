@@ -8,6 +8,10 @@ import {
   Button,
   DropdownMenu,
   DropdownItem,
+  useDisclosure,
+  Modal,
+  ModalContent,
+  ModalBody,
 } from '@nextui-org/react';
 import moment from 'moment';
 
@@ -95,6 +99,7 @@ export const Default = ({ rendering, params, fields }: GovernmentManagementProps
     constitutionalGovernments[0]?.id || ''
   );
   const [officials, setOfficials] = useState(officialsList);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   useEffect(() => {
     setOfficials(officialsList);
@@ -106,6 +111,7 @@ export const Default = ({ rendering, params, fields }: GovernmentManagementProps
 
   const handleAddOfficial = (officialId: string, officialName: string) => {
     setOfficials((prevOfficials) => [...prevOfficials, { key: officialId, name: officialName }]);
+    onOpenChange();
   };
 
   return (
@@ -113,33 +119,48 @@ export const Default = ({ rendering, params, fields }: GovernmentManagementProps
       <div className={`component government-management ${params.styles}`} id={id}>
         <div className="component-content space-y-4">
           <h1 className="font-bold text-gray-800">Government Management</h1>
+          <div className="flex items-center space-x-4">
+            <Dropdown>
+              <DropdownTrigger>
+                <Button className="bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 transition duration-300 ease-in-out">
+                  {selectedOfficialId
+                    ? officials.find((official) => official.key === selectedOfficialId)?.name
+                    : '-- Select an official --'}
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu
+                aria-label="Select an official"
+                selectionMode="single"
+                selectedKeys={selectedOfficialId ? new Set([selectedOfficialId]) : new Set()}
+                onSelectionChange={(keys) => handleOfficialSelect(Array.from(keys).join(''))}
+              >
+                {officials.map((official) => (
+                  <DropdownItem key={official.key}>{official.name}</DropdownItem>
+                ))}
+              </DropdownMenu>
+            </Dropdown>
 
-          <Dropdown>
-            <DropdownTrigger>
-              <Button>
-                {selectedOfficialId
-                  ? officials.find((official) => official.key === selectedOfficialId)?.name
-                  : '-- Select an official --'}
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu
-              aria-label="Select an official"
-              selectionMode="single"
-              selectedKeys={selectedOfficialId ? new Set([selectedOfficialId]) : new Set()}
-              onSelectionChange={(keys) => handleOfficialSelect(Array.from(keys).join(''))}
+            <Button
+              onPress={onOpen}
+              className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out"
             >
-              {officials.map((official) => (
-                <DropdownItem key={official.key}>{official.name}</DropdownItem>
-              ))}
-            </DropdownMenu>
-          </Dropdown>
-
-          <AddOfficialForm
-            onAddOfficial={handleAddOfficial}
-            parent={parent}
-            language={language}
-            sexItems={sexItems}
-          />
+              + Add Official
+            </Button>
+          </div>
+          <Modal isOpen={isOpen} onOpenChange={onOpenChange} className="w-full max-w-3xl">
+            <ModalContent>
+              <>
+                <ModalBody>
+                  <AddOfficialForm
+                    onAddOfficial={handleAddOfficial}
+                    parent={parent}
+                    language={language}
+                    sexItems={sexItems}
+                  />
+                </ModalBody>
+              </>
+            </ModalContent>
+          </Modal>
 
           <Tabs
             aria-label="Government Tabs"
