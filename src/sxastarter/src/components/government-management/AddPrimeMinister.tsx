@@ -15,16 +15,17 @@ interface AddPrimeMinisterProps {
   title: string;
   titleEn: string;
   startDate: string;
-  endDate: string;
 }
 
 const GET_OFFICIALS = gql`
-  query getOfficials {
+  query GetOfficials {
     item(where: { path: "/sitecore/content/Demo/Demo/Data/Government Officials" }) {
       children {
         nodes {
-          name
           itemId
+          field(name: "FullName") {
+            value
+          }
         }
       }
     }
@@ -36,7 +37,6 @@ const CREATE_PM_RECORD = gql`
     $title: String!
     $official: String!
     $startDate: String!
-    $endDate: String!
     $templateId: ID!
     $parent: ID!
   ) {
@@ -47,7 +47,6 @@ const CREATE_PM_RECORD = gql`
           { name: "Title", value: $title }
           { name: "Official", value: $official }
           { name: "StartDate", value: $startDate }
-          { name: "EndDate", value: $endDate }
         ]
         templateId: $templateId
         parent: $parent
@@ -63,12 +62,49 @@ const CREATE_PM_RECORD = gql`
   }
 `;
 
+const UPDATE_ITEM = gql`
+  mutation UpdateItem($itemId: ID!) {
+    updateItem(
+      input: {
+        itemId: $itemId
+        fields: [{ name: "__Display name", value: "primeiro-ministro" }]
+        language: "pt"
+      }
+    ) {
+      item {
+        itemId
+      }
+    }
+  }
+`;
+
+const ADD_ITEM_VERSION_EN = gql`
+  mutation AddItemVersionEn($itemId: ID!) {
+    addItemVersion(input: { itemId: $itemId, language: "en" }) {
+      item {
+        itemId
+      }
+    }
+  }
+`;
+
+const UPDATE_ITEM_EN = gql`
+  mutation UpdateItemEn($itemId: ID!, $title: String!) {
+    updateItem(
+      input: { itemId: $itemId, fields: [{ name: "Title", value: $title }], language: "en" }
+    ) {
+      item {
+        itemId
+      }
+    }
+  }
+`;
+
 const AddPrimeMinister = ({
   itemId,
   title,
   titleEn,
   startDate,
-  endDate,
 }: AddPrimeMinisterProps): JSX.Element => {
   const [selectedOfficials, setSelectedOfficials] = useState<Official[]>([]);
   const [officialList, setOfficialList] = useState<Official[]>([]);
@@ -76,13 +112,48 @@ const AddPrimeMinister = ({
 
   useQuery(GET_OFFICIALS, {
     onCompleted: (data) => {
-      setOfficialList(data?.item?.children?.nodes || []);
+      const officials = data?.item?.children?.nodes || [];
+      const formattedOfficials = officials.map((official: any) => ({
+        name: official.field?.value || '',
+        itemId: official.itemId,
+      }));
+      setOfficialList(formattedOfficials);
     },
   });
 
   const [createPrimeMinister] = useMutation(CREATE_PM_RECORD);
+  const [updateItem] = useMutation(UPDATE_ITEM);
+  const [addItemVersionEn] = useMutation(ADD_ITEM_VERSION_EN);
+  const [updateItemEn] = useMutation(UPDATE_ITEM_EN);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handlePrimeMinisterCreation = async () => {
+    const selectedOfficial = selectedOfficials[0];
+    const primeMinisterTitle = `${selectedOfficial.name} - Primeiro-Ministro - ${title}`;
+
+    const { data } = await createPrimeMinister({
+      variables: {
+        title: primeMinisterTitle,
+        official: SitecoreGuidUtils.convertRawToGuid(selectedOfficial.itemId),
+        startDate,
+        templateId: '{A33A3B59-C0A6-4611-B8C8-48CFD42F112D}',
+        parent: itemId,
+      },
+    });
+
+    const newItemId = SitecoreGuidUtils.convertRawToGuid(data?.createItem?.item?.itemId);
+
+    if (newItemId) {
+      await updateItem({ variables: { itemId: newItemId } });
+      await addItemVersionEn({ variables: { itemId: newItemId } });
+
+      const primeMinisterTitleEn = `${selectedOfficial.name} - Prime Minister - ${titleEn}`;
+      await updateItemEn({
+        variables: { itemId: newItemId, title: primeMinisterTitleEn },
+      });
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
 
     if (selectedOfficials.length === 0) {
@@ -95,19 +166,8 @@ const AddPrimeMinister = ({
     }
 
     try {
-      const { data } = await createPrimeMinister({
-        variables: {
-          title: `${selectedOfficials[0].name} - Primeiro-Ministro - ${title}`,
-          official: SitecoreGuidUtils.convertRawToGuid(selectedOfficials[0].itemId),
-          startDate,
-          endDate,
-          templateId: '{A33A3B59-C0A6-4611-B8C8-48CFD42F112D}',
-          parent: itemId,
-        },
-      });
-
-      console.log(data);
-    } catch (error: unknown) {
+      await handlePrimeMinisterCreation();
+    } catch (error) {
       if (error instanceof Error && error.message.includes('The item name')) {
         setErrorMessage('The name already exists, please choose another.');
       }

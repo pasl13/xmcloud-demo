@@ -7,13 +7,7 @@ import removeAccents from 'remove-accents';
 import { useMutation } from '@apollo/client';
 
 interface AddConstitutionalGovernmentProps {
-  onAddGovernment: (
-    itemId?: string,
-    title?: string,
-    titleEn?: string,
-    startDate?: string,
-    endDate?: string
-  ) => void;
+  onAddGovernment: (itemId?: string, title?: string, titleEn?: string, startDate?: string) => void;
 }
 
 const CREATE_CONSTITUTIONAL_GOVERNMENT = gql`
@@ -23,7 +17,6 @@ const CREATE_CONSTITUTIONAL_GOVERNMENT = gql`
     $logo: String!
     $description: String!
     $startDate: String!
-    $endDate: String!
     $templateId: ID!
     $parent: ID!
   ) {
@@ -35,7 +28,6 @@ const CREATE_CONSTITUTIONAL_GOVERNMENT = gql`
           { name: "Logo", value: $logo }
           { name: "Description", value: $description }
           { name: "StartDate", value: $startDate }
-          { name: "EndDate", value: $endDate }
         ]
         templateId: $templateId
         parent: $parent
@@ -87,7 +79,6 @@ const AddConstitutionalGovernment = ({
   const [description, setDescription] = useState('');
   const [descriptionEn, setDescriptionEn] = useState('');
   const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
   const [selectedDescriptionKey, setSelectedDescriptionKey] = useState('description-pt');
   const [selectedTitleKey, setSelectedTitleKey] = useState('title-pt');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -114,7 +105,6 @@ const AddConstitutionalGovernment = ({
     const itemName = removeAccents(governmentName);
 
     const startDateFormatted = startDate.replace(/-/g, '') + 'T000000Z';
-    const endDateFormatted = endDate.replace(/-/g, '') + 'T000000Z';
 
     try {
       const { data } = await createConstitutionalGovernment({
@@ -124,7 +114,6 @@ const AddConstitutionalGovernment = ({
           logo: '<image mediaid="{66D6B393-C6A1-48B9-A9EF-6EA4F844F932}" />',
           description,
           startDate: startDateFormatted,
-          endDate: endDateFormatted,
           templateId: '{06500B0C-CFF1-48E2-92B0-369995A77C14}',
           parent: '{5B40F5B4-7B72-40A4-931F-E0050864F3D2}',
         },
@@ -142,7 +131,7 @@ const AddConstitutionalGovernment = ({
           },
         });
 
-        onAddGovernment(itemId, title, titleEn, startDateFormatted, endDateFormatted);
+        onAddGovernment(itemId, title, titleEn, startDateFormatted);
       }
     } catch (error: unknown) {
       if (error instanceof Error && error.message.includes('The item name')) {
@@ -228,16 +217,6 @@ const AddConstitutionalGovernment = ({
           type="date"
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">End Date</label>
-        <input
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         />
       </div>

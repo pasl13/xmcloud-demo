@@ -109,7 +109,6 @@ export const Default = ({ rendering, params, fields }: GovernmentManagementProps
   const [title, setTitle] = useState('');
   const [titleEn, setTitleEn] = useState('');
   const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   useEffect(() => {
@@ -129,14 +128,12 @@ export const Default = ({ rendering, params, fields }: GovernmentManagementProps
     itemId: string,
     title: string,
     titleEn: string,
-    startDate: string,
-    endDate: string
+    startDate: string
   ) => {
     setItemId(itemId);
     setTitle(title);
     setTitleEn(titleEn);
     setStartDate(startDate);
-    setEndDate(endDate);
     setSelectedGovernmentTab('prime-minister');
   };
 
@@ -216,7 +213,7 @@ export const Default = ({ rendering, params, fields }: GovernmentManagementProps
               <AddConstitutionalGovernment onAddGovernment={handleAddGovernment} />
             </Tab>
             <Tab key="prime-minister" title="Prime Minister">
-              <AddPrimeMinister itemId={itemId} title={title} titleEn={titleEn} startDate={startDate} endDate={endDate} />
+              <AddPrimeMinister itemId={itemId} title={title} titleEn={titleEn} startDate={startDate} />
             </Tab>
           </Tabs>
         </div>
