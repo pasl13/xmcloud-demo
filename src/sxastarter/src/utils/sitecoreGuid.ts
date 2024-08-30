@@ -5,7 +5,7 @@ class SitecoreGuidUtils {
    * @returns The formatted UUID or an empty string if invalid.
    */
   static convertRawToGuid(uuid: string): string {
-    if (uuid.length !== 32) {
+    if (uuid && uuid.length !== 32) {
       return '';
     }
 

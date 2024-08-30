@@ -1,51 +1,69 @@
 import React, { useState } from 'react';
 import { Button } from '@nextui-org/react';
+import { useQuery } from '@apollo/client';
+import gql from 'graphql-tag';
+import MultilistWithSearch from 'src/atoms/Shared Components/MultilistWithSearch';
+import SitecoreGuidUtils from 'src/utils/sitecoreGuid';
+
+interface Official {
+  name: string;
+  itemId: string;
+}
 
 interface AddPrimeMinisterProps {
   itemId: string;
   title: string;
   titleEn: string;
-  officials: { key: string; name: string }[];
 }
 
-const AddPrimeMinister = ({
-  itemId,
-  title,
-  titleEn,
-  officials,
-}: AddPrimeMinisterProps): JSX.Element => {
-  console.log("officials", officials);
-  const [primeMinister, setPrimeMinister] = useState('');
+const GET_OFFICIALS = gql`
+  query getOfficials {
+    item(where: { path: "/sitecore/content/Demo/Demo/Data/Government Officials" }) {
+      children {
+        nodes {
+          name
+          itemId
+        }
+      }
+    }
+  }
+`;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPrimeMinister(e.target.value);
-  };
+const AddPrimeMinister = ({ itemId, title, titleEn }: AddPrimeMinisterProps): JSX.Element => {
+  const [selectedOfficials, setSelectedOfficials] = useState<Official[]>([]);
+  const [officialList, setOfficialList] = useState<Official[]>([]);
+
+  const { data } = useQuery(GET_OFFICIALS, {
+    onCompleted: (data) => {
+      setOfficialList(data?.item?.children?.nodes || []);
+    },
+  });
 
   const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
-    console.log('Prime Minister:', primeMinister, 'Related Info:', {
+    console.log(
+      'selectedOfficials',
+      SitecoreGuidUtils.convertRawToGuid(selectedOfficials[0].itemId)
+    );
+    console.log('Related Info:', {
       itemId,
       title,
       titleEn,
-      officials,
     });
-    // Further processing logic
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <h2 className="text-lg font-bold text-gray-800">Add Prime Minister</h2>
+      <h2>Add Prime Minister</h2>
       <div>
         <label htmlFor="primeMinister" className="block text-lg font-medium text-gray-700">
           Prime Minister
         </label>
-        <input
-          type="text"
-          id="primeMinister"
-          value={primeMinister}
-          onChange={handleChange}
-          className="mt-2 block w-full p-3 text-lg border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-          required
+        <MultilistWithSearch
+          items={officialList}
+          setItems={setOfficialList}
+          selectedItems={selectedOfficials}
+          setSelectedItems={setSelectedOfficials}
         />
       </div>
       <Button type="submit" color="primary" size="lg">

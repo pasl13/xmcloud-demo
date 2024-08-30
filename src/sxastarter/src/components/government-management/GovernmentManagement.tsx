@@ -72,7 +72,6 @@ interface GovernmentManagementProps {
 }
 
 export const Default = ({ rendering, params, fields }: GovernmentManagementProps): JSX.Element => {
-  console.log('GovernmentManagementProps', rendering, params, fields);
   const { RenderingIdentifier: id } = params;
   const { dataSource: parent } = rendering;
   const { name: language } = fields.data.datasource.language;
@@ -207,7 +206,7 @@ export const Default = ({ rendering, params, fields }: GovernmentManagementProps
               <AddConstitutionalGovernment onAddGovernment={handleAddGovernment} />
             </Tab>
             <Tab key="prime-minister" title="Prime Minister">
-              <AddPrimeMinister itemId={itemId} title={title} titleEn={titleEn} officials={officials}/>
+              <AddPrimeMinister itemId={itemId} title={title} titleEn={titleEn}/>
             </Tab>
           </Tabs>
         </div>
