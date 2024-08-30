@@ -216,7 +216,7 @@ export const Default = ({ rendering, params, fields }: GovernmentManagementProps
               <AddConstitutionalGovernment onAddGovernment={handleAddGovernment} />
             </Tab>
             <Tab key="prime-minister" title="Prime Minister">
-              <AddPrimeMinister itemId={itemId} title={title} titleEn={titleEn} />
+              <AddPrimeMinister itemId={itemId} title={title} titleEn={titleEn} startDate={startDate} endDate={endDate} />
             </Tab>
           </Tabs>
         </div>
