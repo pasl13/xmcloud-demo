@@ -2,17 +2,11 @@ import React, { useMemo, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import gql from 'graphql-tag';
 import dynamic from 'next/dynamic';
-
-// Third-party utilities
 import { Tab, Tabs } from '@nextui-org/react';
 import removeAccents from 'remove-accents';
 import 'react-quill/dist/quill.snow.css';
-
-// Custom components
 import Dropdown from 'src/atoms/Shared Components/Dropdown';
 import FileUpload from 'src/atoms/Shared Components/FileUpload';
-
-// Custom utilities
 import { generatePresignedUrlAndUpload } from 'src/utils/uploadMedia';
 import SitecoreGuidUtils from 'src/utils/sitecoreGuid';
 
@@ -58,6 +52,22 @@ const CREATE_GOVERNMENT_OFFICIAL = gql`
   }
 `;
 
+const UPDATE_ITEM = gql`
+  mutation UpdateItem($itemId: ID!, $displayName: String!) {
+    updateItem(
+      input: {
+        itemId: $itemId
+        fields: [{ name: "__Display name", value: $displayName }]
+        language: "pt"
+      }
+    ) {
+      item {
+        itemId
+      }
+    }
+  }
+`;
+
 const ADD_ITEM_VERSION_EN = gql`
   mutation AddItemVersionEn($itemId: ID!) {
     addItemVersion(input: { itemId: $itemId, language: "en" }) {
@@ -69,8 +79,14 @@ const ADD_ITEM_VERSION_EN = gql`
 `;
 
 const UPDATE_ITEM_EN = gql`
-  mutation UpdateItemEn($itemId: ID!, $bio: String!) {
-    updateItem(input: { itemId: $itemId, fields: [{ name: "Bio", value: $bio }], language: "en" }) {
+  mutation UpdateItemEn($itemId: ID!, $displayName: String!, $bio: String!) {
+    updateItem(
+      input: {
+        itemId: $itemId
+        fields: [{ name: "__Display name", value: $displayName }, { name: "Bio", value: $bio }]
+        language: "en"
+      }
+    ) {
       item {
         itemId
       }
@@ -104,6 +120,7 @@ const AddOfficialForm = ({
 
   const [presignedUploadUrl] = useMutation(PRESIGNED_UPLOAD_URL);
   const [createGovernmentOfficial] = useMutation(CREATE_GOVERNMENT_OFFICIAL);
+  const [updateItem] = useMutation(UPDATE_ITEM);
   const [addItemVersionEn] = useMutation(ADD_ITEM_VERSION_EN);
   const [updateItemEn] = useMutation(UPDATE_ITEM_EN);
 
@@ -115,14 +132,14 @@ const AddOfficialForm = ({
     try {
       const bioPhotoUrl = await generatePresignedUrlAndUpload(
         presignedUploadUrl,
-        'Project/Demo/Government Management/Bio Photo',
+        'Project/Demo/Government Officials/Bio Photo',
         itemName,
         bioPhoto
       );
 
       const cardPhotoUrl = await generatePresignedUrlAndUpload(
         presignedUploadUrl,
-        'Project/Demo/Government Management/Card Photo',
+        'Project/Demo/Government Officials/Card Photo',
         itemName,
         cardPhoto
       );
@@ -147,6 +164,7 @@ const AddOfficialForm = ({
       const newOfficial = response.data?.createItem?.item;
 
       if (newOfficial) {
+        await updateItem({ variables: { itemId: newOfficial.itemId, displayName: fullName } });
         await addItemVersionEn({
           variables: {
             itemId: newOfficial.itemId,
@@ -156,6 +174,7 @@ const AddOfficialForm = ({
         await updateItemEn({
           variables: {
             itemId: newOfficial.itemId,
+            displayName: fullName,
             bio: bioEn,
           },
         });
