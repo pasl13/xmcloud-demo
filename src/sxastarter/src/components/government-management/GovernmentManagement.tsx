@@ -18,7 +18,7 @@ import { FaChevronDown, FaPlus } from 'react-icons/fa';
 
 import { ComponentParams, ComponentRendering, TextField } from '@sitecore-jss/sitecore-jss-nextjs';
 import client from 'src/config/apolloClient';
-import AddOfficialForm from './AddOfficialForm';
+import AddOfficialForm from './AddOfficial';
 import AddConstitutionalGovernment from './AddConstitutionalGovernment';
 import AddPrimeMinister from './AddPrimeMinister';
 

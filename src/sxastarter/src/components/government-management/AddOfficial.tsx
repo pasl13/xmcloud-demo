@@ -10,7 +10,7 @@ import FileUpload from 'src/atoms/Shared Components/FileUpload';
 import { generatePresignedUrlAndUpload } from 'src/utils/uploadMedia';
 import SitecoreGuidUtils from 'src/utils/sitecoreGuid';
 
-interface AddOfficialFormProps {
+interface AddOfficialProps {
   onAddOfficial: (officialId: string, officialName: string) => void;
   parent?: string;
   language?: string;
@@ -102,11 +102,11 @@ const PRESIGNED_UPLOAD_URL = gql`
   }
 `;
 
-const AddOfficialForm = ({
+const AddOfficial = ({
   onAddOfficial,
   parent,
   sexItems,
-}: AddOfficialFormProps): JSX.Element => {
+}: AddOfficialProps): JSX.Element => {
   const [fullName, setFullName] = useState<string>('');
   const [selectedSex, setSelectedSex] = useState<string>('');
   const [bio, setBio] = useState<string>('');
@@ -275,4 +275,4 @@ const AddOfficialForm = ({
   );
 };
 
-export default AddOfficialForm;
+export default AddOfficial;
