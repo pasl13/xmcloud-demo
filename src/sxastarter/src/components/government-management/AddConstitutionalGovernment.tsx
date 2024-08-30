@@ -6,15 +6,8 @@ import gql from 'graphql-tag';
 import removeAccents from 'remove-accents';
 import { useMutation } from '@apollo/client';
 
-interface Government {
-  governmentName: string;
-  logo: File | null;
-  description: string;
-  startDate: string;
-}
-
 interface AddConstitutionalGovernmentProps {
-  onAddGovernment: (newGovernment: Government) => void;
+  onAddGovernment: (itemId?: string, title?: string, titleEn?: string) => void;
 }
 
 const CREATE_CONSTITUTIONAL_GOVERNMENT = gql`
@@ -65,10 +58,7 @@ const UPDATE_ITEM_EN = gql`
     updateItem(
       input: {
         itemId: $itemId
-        fields: [
-          { name: "Title", value: $title },
-          { name: "Description", value: $description }
-        ]
+        fields: [{ name: "Title", value: $title }, { name: "Description", value: $description }]
         language: "en"
       }
     ) {
@@ -107,6 +97,11 @@ const AddConstitutionalGovernment = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!title || !titleEn) {
+      setErrorMessage('Both Title [PT] and Title [EN] are required.');
+      return;
+    }
+
     const itemName = removeAccents(governmentName);
 
     try {
@@ -116,7 +111,7 @@ const AddConstitutionalGovernment = ({
           title,
           logo: '<image mediaid="{66D6B393-C6A1-48B9-A9EF-6EA4F844F932}" />',
           description,
-          startDate: '20240804T000000Z',
+          startDate: startDate.replace(/-/g, '') + 'T000000Z',
           templateId: '{06500B0C-CFF1-48E2-92B0-369995A77C14}',
           parent: '{5B40F5B4-7B72-40A4-931F-E0050864F3D2}',
         },
@@ -134,7 +129,7 @@ const AddConstitutionalGovernment = ({
           },
         });
 
-        onAddGovernment({ governmentName, logo, description, startDate });
+        onAddGovernment(itemId, title, titleEn);
       }
     } catch (error: unknown) {
       if (error instanceof Error && error.message.includes('The item name')) {
@@ -145,6 +140,7 @@ const AddConstitutionalGovernment = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      <h2>Add Constitutional Government</h2>
       <div>
         <label htmlFor="governmentName" className="block text-lg font-medium text-gray-700">
           Government Name
@@ -155,6 +151,7 @@ const AddConstitutionalGovernment = ({
           value={governmentName}
           onChange={(e) => setGovernmentName(e.target.value)}
           className="mt-2 block w-full p-3 text-lg border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          required
         />
       </div>
 
@@ -171,6 +168,7 @@ const AddConstitutionalGovernment = ({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="mt-2 block w-full p-3 text-lg border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              required
             />
           </Tab>
           <Tab key="title-en" title="Title [EN]">
@@ -180,6 +178,7 @@ const AddConstitutionalGovernment = ({
               value={titleEn}
               onChange={(e) => setTitleEn(e.target.value)}
               className="mt-2 block w-full p-3 text-lg border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              required
             />
           </Tab>
         </Tabs>
@@ -224,8 +223,8 @@ const AddConstitutionalGovernment = ({
         <Button type="submit" color="primary" size="lg">
           Add Government
         </Button>
-        {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
       </div>
+      {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
     </form>
   );
 };

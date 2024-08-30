@@ -20,6 +20,7 @@ import { ComponentParams, ComponentRendering, TextField } from '@sitecore-jss/si
 import client from 'src/config/apolloClient';
 import AddOfficialForm from './AddOfficialForm';
 import AddConstitutionalGovernment from './AddConstitutionalGovernment';
+import AddPrimeMinister from './AddPrimeMinister';
 
 type ResultsFieldText = {
   id: string;
@@ -40,13 +41,6 @@ type ResultsConstitutionalGovernment = {
     value: string;
   };
 };
-
-interface Government {
-  governmentName: string;
-  logo: File | null;
-  description: string;
-  startDate: string;
-}
 
 interface Fields {
   data: {
@@ -78,6 +72,7 @@ interface GovernmentManagementProps {
 }
 
 export const Default = ({ rendering, params, fields }: GovernmentManagementProps): JSX.Element => {
+  console.log('GovernmentManagementProps', rendering, params, fields);
   const { RenderingIdentifier: id } = params;
   const { dataSource: parent } = rendering;
   const { name: language } = fields.data.datasource.language;
@@ -107,7 +102,13 @@ export const Default = ({ rendering, params, fields }: GovernmentManagementProps
   const [selectedGovernmentId, setSelectedGovernmentId] = useState<string>(
     constitutionalGovernments[0]?.id || ''
   );
+  const [selectedGovernmentTab, setSelectedGovernmentTab] = useState<string>(
+    'constitutional-management'
+  );
   const [officials, setOfficials] = useState(officialsList);
+  const [itemId, setItemId] = useState('');
+  const [title, setTitle] = useState('');
+  const [titleEn, setTitleEn] = useState('');
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   useEffect(() => {
@@ -123,9 +124,11 @@ export const Default = ({ rendering, params, fields }: GovernmentManagementProps
     onOpenChange();
   };
 
-  const handleAddGovernment = (newGovernment: Government) => {
-    console.log('New Government:', newGovernment);
-    // You can now send this data to your server or handle it within the app
+  const handleAddGovernment = (itemId: string, title: string, titleEn: string) => {
+    setItemId(itemId);
+    setTitle(title);
+    setTitleEn(titleEn);
+    setSelectedGovernmentTab('prime-minister');
   };
 
   return (
@@ -190,13 +193,23 @@ export const Default = ({ rendering, params, fields }: GovernmentManagementProps
               </Tab>
             ))}
             <Tab key="add-new" title="+ Add New">
-              <div className="p-4">
-              </div>
+              <div className="p-4"></div>
             </Tab>
           </Tabs>
-          
-          <AddConstitutionalGovernment onAddGovernment={handleAddGovernment} />
 
+          <Tabs
+            aria-label="Government Management Tabs"
+            selectedKey={selectedGovernmentTab}
+            onSelectionChange={(key) => setSelectedGovernmentTab(key as string)}
+            className="flex justify-start space-x-4 border-b-2 border-gray-200 mb-4"
+          >
+            <Tab key="constitutional-management" title="Constitutional Management">
+              <AddConstitutionalGovernment onAddGovernment={handleAddGovernment} />
+            </Tab>
+            <Tab key="prime-minister" title="Prime Minister">
+              <AddPrimeMinister itemId={itemId} title={title} titleEn={titleEn} officials={officials}/>
+            </Tab>
+          </Tabs>
         </div>
       </div>
     </ApolloProvider>
