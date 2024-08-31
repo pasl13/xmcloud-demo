@@ -113,10 +113,12 @@ const AddPrimeMinister = ({
   useQuery(GET_OFFICIALS, {
     onCompleted: (data) => {
       const officials = data?.item?.children?.nodes || [];
-      const formattedOfficials = officials.map((official: any) => ({
-        name: official.field?.value || '',
-        itemId: official.itemId,
-      }));
+      const formattedOfficials = officials.map(
+        (official: { itemId: string; field: { value: string } }) => ({
+          name: official.field?.value || '',
+          itemId: official.itemId,
+        })
+      );
       setOfficialList(formattedOfficials);
     },
   });

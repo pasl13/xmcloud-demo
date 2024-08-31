@@ -14,10 +14,9 @@ interface MultilistWithSearchProps {
 
 const MultilistWithSearch = ({
   items,
-  setItems, 
+  setItems,
   selectedItems,
   setSelectedItems,
-
 }: MultilistWithSearchProps): JSX.Element => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');

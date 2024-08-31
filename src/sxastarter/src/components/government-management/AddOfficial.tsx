@@ -155,6 +155,8 @@ const AddOfficial = ({ onAddOfficial, parent, sexItems }: AddOfficialProps): JSX
         imageFile: bioPhoto,
         alt: fullName,
         title: fullName,
+        altEn: fullName,
+        titleEn: fullName,
         updateAltAndTitleImage,
         addItemVersionEn,
       });
@@ -166,6 +168,8 @@ const AddOfficial = ({ onAddOfficial, parent, sexItems }: AddOfficialProps): JSX
         imageFile: cardPhoto,
         alt: fullName,
         title: fullName,
+        altEn: fullName,
+        titleEn: fullName,
         updateAltAndTitleImage,
         addItemVersionEn,
       });

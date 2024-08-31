@@ -1,13 +1,26 @@
 import { MutationFunction } from '@apollo/client';
 import { generatePresignedUrlAndUpload } from './generatePresignedUrlAndUpload';
 
+interface PresignedUploadUrlResponse {
+  uploadMedia: {
+    presignedUploadUrl: string;
+  };
+}
+
+interface PresignedUploadUrlVariables {
+  itemPath: string;
+  language: string;
+}
+
 interface ProcessImageUploadParams {
-  presignedUploadUrl: any;
+  presignedUploadUrl: MutationFunction<PresignedUploadUrlResponse, PresignedUploadUrlVariables>;
   uploadPath: string;
   itemName: string;
   imageFile: File | null;
   alt: string;
   title: string;
+  altEn: string;
+  titleEn: string;
   updateAltAndTitleImage: MutationFunction;
   addItemVersionEn: MutationFunction;
 }
@@ -19,6 +32,8 @@ export const processImageUpload = async ({
   imageFile,
   alt,
   title,
+  altEn,
+  titleEn,
   updateAltAndTitleImage,
   addItemVersionEn,
 }: ProcessImageUploadParams) => {
@@ -48,8 +63,8 @@ export const processImageUpload = async ({
     await updateAltAndTitleImage({
       variables: {
         itemId: imageUrl.Id,
-        alt,
-        title,
+        altEn,
+        titleEn,
         language: 'en',
       },
     });

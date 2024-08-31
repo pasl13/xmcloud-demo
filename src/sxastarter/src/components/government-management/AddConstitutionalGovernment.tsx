@@ -5,6 +5,8 @@ import 'react-quill/dist/quill.snow.css';
 import gql from 'graphql-tag';
 import removeAccents from 'remove-accents';
 import { useMutation } from '@apollo/client';
+import { processImageUpload } from 'src/utils/imageUploadUtils';
+import SitecoreGuidUtils from 'src/utils/sitecoreGuid';
 
 interface AddConstitutionalGovernmentProps {
   onAddGovernment: (itemId?: string, title?: string, titleEn?: string, startDate?: string) => void;
@@ -69,6 +71,35 @@ const UPDATE_ITEM_EN = gql`
   }
 `;
 
+const PRESIGNED_UPLOAD_URL = gql`
+  mutation UploadMedia($itemPath: String!, $language: String!) {
+    uploadMedia(input: { itemPath: $itemPath, language: $language }) {
+      presignedUploadUrl
+    }
+  }
+`;
+
+const UPDATE_ALT_AND_TITLE_IMAGE = gql`
+  mutation UpdateAltAndTitleImage(
+    $itemId: ID!
+    $alt: String!
+    $title: String!
+    $language: String!
+  ) {
+    updateItem(
+      input: {
+        itemId: $itemId
+        fields: [{ name: "Alt", value: $alt }, { name: "Title", value: $title }]
+        language: $language
+      }
+    ) {
+      item {
+        itemId
+      }
+    }
+  }
+`;
+
 const AddConstitutionalGovernment = ({
   onAddGovernment,
 }: AddConstitutionalGovernmentProps): JSX.Element => {
@@ -85,6 +116,8 @@ const AddConstitutionalGovernment = ({
 
   const ReactQuill = useMemo(() => dynamic(() => import('react-quill'), { ssr: false }), []);
 
+  const [presignedUploadUrl] = useMutation(PRESIGNED_UPLOAD_URL);
+  const [updateAltAndTitleImage] = useMutation(UPDATE_ALT_AND_TITLE_IMAGE);
   const [createConstitutionalGovernment] = useMutation(CREATE_CONSTITUTIONAL_GOVERNMENT);
   const [addItemVersionEn] = useMutation(ADD_ITEM_VERSION_EN);
   const [updateItemEn] = useMutation(UPDATE_ITEM_EN);
@@ -103,15 +136,29 @@ const AddConstitutionalGovernment = ({
     }
 
     const itemName = removeAccents(governmentName);
-
     const startDateFormatted = startDate.replace(/-/g, '') + 'T000000Z';
 
     try {
+      const logoId = await processImageUpload({
+        presignedUploadUrl,
+        uploadPath: 'Project/Demo/Demo/Logo',
+        itemName,
+        imageFile: logo,
+        alt: title,
+        title,
+        altEn: titleEn,
+        titleEn: titleEn,
+        updateAltAndTitleImage,
+        addItemVersionEn,
+      });
+
       const { data } = await createConstitutionalGovernment({
         variables: {
           itemName,
           title,
-          logo: '<image mediaid="{66D6B393-C6A1-48B9-A9EF-6EA4F844F932}" />',
+          logo: logoId
+            ? `<image mediaid="${SitecoreGuidUtils.convertRawHyphenatedToGuid(logoId)}" />`
+            : '',
           description,
           startDate: startDateFormatted,
           templateId: '{06500B0C-CFF1-48E2-92B0-369995A77C14}',

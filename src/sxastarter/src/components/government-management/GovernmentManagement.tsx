@@ -37,10 +37,7 @@ const sortGovernments = (a: ResultsGovernment, b: ResultsGovernment): number => 
   return b.name.localeCompare(a.name);
 };
 
-const GovernmentManagement = ({
-  params,
-  fields,
-}: GovernmentManagementProps): JSX.Element => {
+const GovernmentManagement = ({ params, fields }: GovernmentManagementProps): JSX.Element => {
   const { RenderingIdentifier: id } = params;
   const { hasChildren, children } = fields.data.datasource;
 
