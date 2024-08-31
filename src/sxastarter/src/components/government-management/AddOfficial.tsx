@@ -7,7 +7,7 @@ import removeAccents from 'remove-accents';
 import 'react-quill/dist/quill.snow.css';
 import Dropdown from 'src/atoms/Shared Components/Dropdown';
 import FileUpload from 'src/atoms/Shared Components/FileUpload';
-import { generatePresignedUrlAndUpload } from 'src/utils/uploadMedia';
+import { processImageUpload } from 'src/utils/imageUploadUtils';
 import SitecoreGuidUtils from 'src/utils/sitecoreGuid';
 
 interface AddOfficialProps {
@@ -95,18 +95,35 @@ const UPDATE_ITEM_EN = gql`
 `;
 
 const PRESIGNED_UPLOAD_URL = gql`
-  mutation UploadMedia($itemPath: String!, $alt: String!) {
-    uploadMedia(input: { itemPath: $itemPath, alt: $alt }) {
+  mutation UploadMedia($itemPath: String!, $language: String!) {
+    uploadMedia(input: { itemPath: $itemPath, language: $language }) {
       presignedUploadUrl
     }
   }
 `;
 
-const AddOfficial = ({
-  onAddOfficial,
-  parent,
-  sexItems,
-}: AddOfficialProps): JSX.Element => {
+const UPDATE_ALT_AND_TITLE_IMAGE = gql`
+  mutation UpdateAltAndTitleImage(
+    $itemId: ID!
+    $alt: String!
+    $title: String!
+    $language: String!
+  ) {
+    updateItem(
+      input: {
+        itemId: $itemId
+        fields: [{ name: "Alt", value: $alt }, { name: "Title", value: $title }]
+        language: $language
+      }
+    ) {
+      item {
+        itemId
+      }
+    }
+  }
+`;
+
+const AddOfficial = ({ onAddOfficial, parent, sexItems }: AddOfficialProps): JSX.Element => {
   const [fullName, setFullName] = useState<string>('');
   const [selectedSex, setSelectedSex] = useState<string>('');
   const [bio, setBio] = useState<string>('');
@@ -119,6 +136,7 @@ const AddOfficial = ({
   const ReactQuill = useMemo(() => dynamic(() => import('react-quill'), { ssr: false }), []);
 
   const [presignedUploadUrl] = useMutation(PRESIGNED_UPLOAD_URL);
+  const [updateAltAndTitleImage] = useMutation(UPDATE_ALT_AND_TITLE_IMAGE);
   const [createGovernmentOfficial] = useMutation(CREATE_GOVERNMENT_OFFICIAL);
   const [updateItem] = useMutation(UPDATE_ITEM);
   const [addItemVersionEn] = useMutation(ADD_ITEM_VERSION_EN);
@@ -130,19 +148,27 @@ const AddOfficial = ({
     const itemName = removeAccents(fullName);
 
     try {
-      const bioPhotoUrl = await generatePresignedUrlAndUpload(
+      const bioPhotoUrlId = await processImageUpload({
         presignedUploadUrl,
-        'Project/Demo/Government Officials/Bio Photo',
+        uploadPath: 'Project/Demo/Demo/Government Officials/Bio Photo',
         itemName,
-        bioPhoto
-      );
+        imageFile: bioPhoto,
+        alt: fullName,
+        title: fullName,
+        updateAltAndTitleImage,
+        addItemVersionEn,
+      });
 
-      const cardPhotoUrl = await generatePresignedUrlAndUpload(
+      const cardPhotoUrlId = await processImageUpload({
         presignedUploadUrl,
-        'Project/Demo/Government Officials/Card Photo',
+        uploadPath: 'Project/Demo/Demo/Government Officials/Card Photo',
         itemName,
-        cardPhoto
-      );
+        imageFile: cardPhoto,
+        alt: fullName,
+        title: fullName,
+        updateAltAndTitleImage,
+        addItemVersionEn,
+      });
 
       const response = await createGovernmentOfficial({
         variables: {
@@ -150,12 +176,12 @@ const AddOfficial = ({
           fullName,
           sexId: SitecoreGuidUtils.convertRawToGuid(selectedSex),
           bio,
-          bioPhoto: `<image mediaid="${SitecoreGuidUtils.convertRawHyphenatedToGuid(
-            bioPhotoUrl?.Id
-          )}" />`,
-          cardPhoto: `<image mediaid="${SitecoreGuidUtils.convertRawHyphenatedToGuid(
-            cardPhotoUrl?.Id
-          )}" />`,
+          bioPhoto: bioPhotoUrlId
+            ? `<image mediaid="${SitecoreGuidUtils.convertRawHyphenatedToGuid(bioPhotoUrlId)}" />`
+            : '',
+          cardPhoto: cardPhotoUrlId
+            ? `<image mediaid="${SitecoreGuidUtils.convertRawHyphenatedToGuid(cardPhotoUrlId)}" />`
+            : '',
           templateId: '{3F331F63-E5A3-4B22-B4E5-1AA7F42C5C48}',
           parent,
         },

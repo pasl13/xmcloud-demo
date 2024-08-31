@@ -8,7 +8,7 @@ interface PresignedUploadUrlResponse {
 
 interface PresignedUploadUrlVariables {
   itemPath: string;
-  alt: string;
+  language: string;
 }
 
 interface UploadMediaResponse {
@@ -32,7 +32,7 @@ export const generatePresignedUrlAndUpload = async (
 
   // Request presigned URL for uploading the file
   const presignedUploadUrlResponse = await presignedUploadUrl({
-    variables: { itemPath, alt: itemName },
+    variables: { itemPath, language: 'pt' },
   });
 
   console.log('presignedUploadUrlResponse', presignedUploadUrlResponse);
