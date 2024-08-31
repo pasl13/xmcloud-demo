@@ -62,7 +62,7 @@ export const processImageUpload = async ({
     });
 
     await addItemVersionEn({
-      variables: { itemId: imageUrl.Id },
+      variables: { itemId },
     });
 
     await updateAltAndTitleImage({
