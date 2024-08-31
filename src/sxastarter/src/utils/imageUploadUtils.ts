@@ -46,6 +46,8 @@ export const processImageUpload = async ({
     imageFile
   );
 
+  console.log('imageUrl', imageUrl);
+
   if (imageUrl?.Id) {
     await updateAltAndTitleImage({
       variables: {
