@@ -1,5 +1,6 @@
 import { MutationFunction } from '@apollo/client';
 import { generatePresignedUrlAndUpload } from './generatePresignedUrlAndUpload';
+import SitecoreGuidUtils from './sitecoreGuid';
 
 interface PresignedUploadUrlResponse {
   uploadMedia: {
@@ -49,9 +50,11 @@ export const processImageUpload = async ({
   console.log('imageUrl', imageUrl);
 
   if (imageUrl?.Id) {
+    const itemId = SitecoreGuidUtils.convertRawHyphenatedToGuid(imageUrl.Id);
+
     await updateAltAndTitleImage({
       variables: {
-        itemId: imageUrl.Id,
+        itemId,
         alt,
         title,
         language: 'pt',
@@ -64,13 +67,15 @@ export const processImageUpload = async ({
 
     await updateAltAndTitleImage({
       variables: {
-        itemId: imageUrl.Id,
+        itemId,
         altEn,
         titleEn,
         language: 'en',
       },
     });
+
+    return itemId;
   }
 
-  return imageUrl?.Id;
+  return null;
 };

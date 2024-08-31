@@ -6,7 +6,6 @@ import gql from 'graphql-tag';
 import removeAccents from 'remove-accents';
 import { useMutation } from '@apollo/client';
 import { processImageUpload } from 'src/utils/imageUploadUtils';
-import SitecoreGuidUtils from 'src/utils/sitecoreGuid';
 
 interface AddConstitutionalGovernmentProps {
   onAddGovernment: (itemId?: string, title?: string, titleEn?: string, startDate?: string) => void;
@@ -156,9 +155,7 @@ const AddConstitutionalGovernment = ({
         variables: {
           itemName,
           title,
-          logo: logoId
-            ? `<image mediaid="${SitecoreGuidUtils.convertRawHyphenatedToGuid(logoId)}" />`
-            : '',
+          logo: logoId,
           description,
           startDate: startDateFormatted,
           templateId: '{06500B0C-CFF1-48E2-92B0-369995A77C14}',
