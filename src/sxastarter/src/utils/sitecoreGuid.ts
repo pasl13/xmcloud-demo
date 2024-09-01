@@ -39,6 +39,22 @@ class SitecoreGuidUtils {
     // Return the hyphenated UUID in uppercase with curly braces.
     return `{${uuid.toUpperCase()}}`;
   }
+
+  /**
+   * Converts a date object to a string in the format YYYYMMDDT000000Z.
+   * @param dateObject - The date object with year, month, and day properties.
+   * @returns The formatted date string.
+   */
+  static formatDateToISOString(dateObject: { year: number; month: number; day: number }): string {
+    const { year, month, day } = dateObject;
+
+    // Pad the month and day with leading zeros if necessary
+    const formattedMonth = month.toString().padStart(2, '0');
+    const formattedDay = day.toString().padStart(2, '0');
+
+    // Construct the date string in the desired format
+    return `${year}${formattedMonth}${formattedDay}T000000Z`;
+  }
 }
 
 export default SitecoreGuidUtils;
