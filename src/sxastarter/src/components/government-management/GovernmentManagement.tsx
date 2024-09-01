@@ -5,6 +5,7 @@ import client from 'src/config/apolloClient';
 import { Tab, Tabs } from '@nextui-org/react';
 import AddConstitutionalGovernment from './AddConstitutionalGovernment';
 import AddPrimeMinister from './AddPrimeMinister';
+import AddOfficial from './AddOfficial';
 
 interface ResultsGovernment {
   id: string;
@@ -86,7 +87,7 @@ const GovernmentManagement = ({ params, fields }: GovernmentManagementProps): JS
                 </div>
               </Tab>
             ))}
-            <Tab key="add-new" title="+ Add New">
+            <Tab key="add-new-government" title="+ Add New Government">
               <Tabs
                 aria-label="Government Management Tabs"
                 selectedKey={selectedGovernmentTab}
@@ -99,6 +100,9 @@ const GovernmentManagement = ({ params, fields }: GovernmentManagementProps): JS
                   <AddPrimeMinister {...governmentDetails} />
                 </Tab>
               </Tabs>
+            </Tab>
+            <Tab key="add-new-official" title="+ Add New Official">
+              <AddOfficial />
             </Tab>
           </Tabs>
         </div>
