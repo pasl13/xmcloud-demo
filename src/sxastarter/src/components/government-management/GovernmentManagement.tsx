@@ -60,6 +60,10 @@ const GovernmentManagement = ({ params, fields }: GovernmentManagementProps): JS
     startDate: '',
   });
 
+  const handleOfficialSelection = (itemId: string) => {
+    console.log('Selected official:', itemId);
+  };
+
   const handleAddGovernment = (
     itemId: string,
     title: string,
@@ -102,7 +106,7 @@ const GovernmentManagement = ({ params, fields }: GovernmentManagementProps): JS
               </Tabs>
             </Tab>
             <Tab key="add-new-official" title="+ Add New Official">
-              <AddOfficial />
+              <AddOfficial onSelectOfficial={handleOfficialSelection} />
             </Tab>
           </Tabs>
         </div>

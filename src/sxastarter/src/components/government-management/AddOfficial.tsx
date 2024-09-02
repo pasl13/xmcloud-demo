@@ -7,10 +7,16 @@ import {
   AutocompleteItem,
   Button,
   Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
   Select,
   SelectItem,
   Spacer,
   Spinner,
+  useDisclosure,
 } from '@nextui-org/react';
 import removeAccents from 'remove-accents';
 import { processImageUpload } from 'src/utils/imageUploadUtils';
@@ -55,6 +61,10 @@ interface FormErrors {
   sex: string;
   bioPhoto?: string;
   cardPhoto?: string;
+}
+
+interface AddOfficialProps {
+  onSelectOfficial: (itemId: string) => void;
 }
 
 const GET_OFFICIALS = gql`
@@ -182,12 +192,12 @@ const UPDATE_ITEM_EN = gql`
   }
 `;
 
-const AddOfficial: React.FC = (): JSX.Element => {
+const AddOfficial = ({ onSelectOfficial }: AddOfficialProps): JSX.Element => {
   const [officialList, setOfficialList] = useState<Official[]>([]);
   const [sexList, setSexList] = useState<Official[]>([]);
-  const [selectedOfficialId, setSelectedOfficialId] = useState<string>('');
   const [submitLoading, setSubmitLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [formData, setFormData] = useState<FormData>({
     fullName: '',
     sex: '',
@@ -203,7 +213,7 @@ const AddOfficial: React.FC = (): JSX.Element => {
 
   const ReactQuill = useMemo(() => dynamic(() => import('react-quill'), { ssr: false }), []);
 
-  const { loading } = useQuery<OfficialsData>(GET_OFFICIALS, {
+  const { loading, refetch } = useQuery<OfficialsData>(GET_OFFICIALS, {
     onCompleted: (data) => {
       setOfficialList(
         data.officials.children.nodes.map((official) => ({
@@ -228,7 +238,7 @@ const AddOfficial: React.FC = (): JSX.Element => {
   const [updateDisplayName] = useMutation(UPDATE_DISPLAY_NAME);
   const [updateItemEn] = useMutation(UPDATE_ITEM_EN);
 
-  const handleOfficialSelect = (officialId: string) => setSelectedOfficialId(officialId);
+  const handleOfficialSelect = (officialId: string) => onSelectOfficial(officialId);
 
   const handleFullNameInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -350,6 +360,15 @@ const AddOfficial: React.FC = (): JSX.Element => {
         await updateDisplayName({
           variables: { itemId: newOfficial.itemId, displayName: formData.fullName, language: 'en' },
         });
+
+        setOfficialList((prevList) => [
+          ...prevList,
+          { name: newOfficial.name, itemId: newOfficial.itemId },
+        ]);
+
+        await refetch();
+
+        onOpenChange();
       } catch (error: unknown) {
         if (error instanceof Error && error.message.includes('The item name')) {
           setErrorMessage('The name already exists, please choose another.');
@@ -359,16 +378,13 @@ const AddOfficial: React.FC = (): JSX.Element => {
       } finally {
         setSubmitLoading(false);
       }
-
-      console.log('Form Submitted:', formData);
-      console.log('selectedOfficialId:', selectedOfficialId);
     }
   };
 
   if (loading) return <Spinner size="lg" />;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 p-6 border rounded-lg shadow-md bg-white">
+    <div className="government-official" style={{ height: '100vh' }}>
       <Autocomplete
         label="Select an official"
         size="lg"
@@ -382,95 +398,112 @@ const AddOfficial: React.FC = (): JSX.Element => {
         ))}
       </Autocomplete>
 
-      <h2 className="text-2xl font-semibold">Add New Official</h2>
+      <Button color="primary" onPress={onOpen}>
+        Add Government Official
+      </Button>
 
-      <Input
-        type="text"
-        label="Full Name"
-        size="lg"
-        isRequired
-        radius="sm"
-        isClearable
-        name="fullName"
-        isInvalid={!!formErrors.fullName}
-        errorMessage={formErrors.fullName}
-        onChange={handleFullNameInputChange}
-        value={formData.fullName}
-      />
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} scrollBehavior="normal">
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <form onSubmit={handleSubmit}>
+                <ModalHeader className="flex flex-col gap-1">Government Official</ModalHeader>
+                <ModalBody>
+                  <Input
+                    type="text"
+                    label="Full Name"
+                    size="lg"
+                    isRequired
+                    radius="sm"
+                    isClearable
+                    name="fullName"
+                    isInvalid={!!formErrors.fullName}
+                    errorMessage={formErrors.fullName}
+                    onChange={handleFullNameInputChange}
+                    value={formData.fullName}
+                  />
 
-      <Spacer x={4} />
+                  <Spacer y={2} />
 
-      <Select
-        label="Select a sex"
-        isRequired
-        size="lg"
-        radius="sm"
-        isInvalid={!!formErrors.sex}
-        errorMessage={formErrors.sex}
-        value={formData.sex}
-        onSelectionChange={(keys) => handleSexSelectionChange(Array.from(keys).join(''))}
-      >
-        {sexList.map((sex) => (
-          <SelectItem key={sex.itemId} value={sex.itemId}>
-            {sex.name}
-          </SelectItem>
-        ))}
-      </Select>
+                  <Select
+                    label="Select a sex"
+                    size="lg"
+                    radius="sm"
+                    isInvalid={!!formErrors.sex}
+                    errorMessage={formErrors.sex}
+                    value={formData.sex}
+                    onSelectionChange={(keys) =>
+                      handleSexSelectionChange(Array.from(keys).join(''))
+                    }
+                  >
+                    {sexList.map((sex) => (
+                      <SelectItem key={sex.itemId} value={sex.itemId}>
+                        {sex.name}
+                      </SelectItem>
+                    ))}
+                  </Select>
 
-      <Spacer x={4} />
+                  <Spacer y={2} />
 
-      <Input
-        type="file"
-        size="lg"
-        isRequired
-        radius="sm"
-        onChange={handleBioPhotoFileChange}
-        isInvalid={!!formErrors.bioPhoto}
-        color={formErrors.bioPhoto ? 'danger' : 'default'}
-        errorMessage={formErrors.bioPhoto}
-        label="Bio Photo"
-      />
+                  <Input
+                    type="file"
+                    size="lg"
+                    isRequired
+                    radius="sm"
+                    onChange={handleBioPhotoFileChange}
+                    isInvalid={!!formErrors.bioPhoto}
+                    color={formErrors.bioPhoto ? 'danger' : 'default'}
+                    errorMessage={formErrors.bioPhoto}
+                    label="Bio Photo"
+                  />
 
-      <Spacer x={4} />
+                  <Spacer y={2} />
 
-      <Input
-        type="file"
-        size="lg"
-        isRequired
-        radius="sm"
-        onChange={handleCardPhotoFileChange}
-        isInvalid={!!formErrors.cardPhoto}
-        color={formErrors.cardPhoto ? 'danger' : 'default'}
-        errorMessage={formErrors.cardPhoto}
-        label="Card Photo"
-      />
+                  <Input
+                    type="file"
+                    size="lg"
+                    isRequired
+                    radius="sm"
+                    onChange={handleCardPhotoFileChange}
+                    isInvalid={!!formErrors.cardPhoto}
+                    color={formErrors.cardPhoto ? 'danger' : 'default'}
+                    errorMessage={formErrors.cardPhoto}
+                    label="Card Photo"
+                  />
 
-      <Spacer x={10} />
+                  <Spacer y={2} />
 
-      <ReactQuill
-        theme="snow"
-        value={formData.bio}
-        onChange={(value) => setFormData((prev) => ({ ...prev, bio: value }))}
-        placeholder="Bio in PT"
-      />
+                  <ReactQuill
+                    theme="snow"
+                    value={formData.bio}
+                    onChange={(value) => setFormData((prev) => ({ ...prev, bio: value }))}
+                    placeholder="Bio in PT"
+                  />
 
-      <Spacer x={10} />
+                  <Spacer y={2} />
 
-      <ReactQuill
-        theme="snow"
-        value={formData.bioEn}
-        onChange={(value) => setFormData((prev) => ({ ...prev, bioEn: value }))}
-        placeholder="Bio in EN"
-      />
+                  <ReactQuill
+                    theme="snow"
+                    value={formData.bioEn}
+                    onChange={(value) => setFormData((prev) => ({ ...prev, bioEn: value }))}
+                    placeholder="Bio in EN"
+                  />
+                </ModalBody>
+                <ModalFooter>
+                  <div className="flex justify-end">
+                    <Button type="submit" color="primary" size="lg" disabled={submitLoading}>
+                      {submitLoading ? <Spinner size="sm" /> : 'Add Official'}
+                    </Button>
+                  </div>
 
-      <div className="flex justify-end">
-        <Button type="submit" color="primary" size="lg" disabled={submitLoading}>
-          {submitLoading ? <Spinner size="sm" /> : 'Add Prime Minister'}
-        </Button>
-      </div>
-
-      {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
-    </form>
+                  {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
+                </ModalFooter>
+              </form>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </div>
   );
 };
 
