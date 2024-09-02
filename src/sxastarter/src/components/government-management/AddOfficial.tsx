@@ -6,15 +6,12 @@ import {
   Autocomplete,
   AutocompleteItem,
   Button,
-  CalendarDate,
-  DatePicker,
   Input,
   Select,
   SelectItem,
   Spacer,
   Spinner,
 } from '@nextui-org/react';
-import { parseDate } from '@internationalized/date';
 import removeAccents from 'remove-accents';
 import { processImageUpload } from 'src/utils/imageUploadUtils';
 import SitecoreGuidUtils from 'src/utils/sitecoreGuid';
@@ -48,7 +45,6 @@ interface FormData {
   fullName: string;
   sex: string;
   bio: string;
-  startDate: CalendarDate;
   bioPhoto: File | null;
   cardPhoto: File | null;
   bioEn: string;
@@ -57,7 +53,6 @@ interface FormData {
 interface FormErrors {
   fullName: string;
   sex: string;
-  startDate?: string;
   bioPhoto?: string;
   cardPhoto?: string;
 }
@@ -198,14 +193,12 @@ const AddOfficial: React.FC = (): JSX.Element => {
     sex: '',
     bio: '',
     bioPhoto: null,
-    startDate: parseDate(new Date().toJSON().slice(0, 10)),
     cardPhoto: null,
     bioEn: '',
   });
   const [formErrors, setFormErrors] = useState<FormErrors>({
     fullName: '',
     sex: '',
-    startDate: '',
   });
 
   const ReactQuill = useMemo(() => dynamic(() => import('react-quill'), { ssr: false }), []);
@@ -269,25 +262,16 @@ const AddOfficial: React.FC = (): JSX.Element => {
     }));
   };
 
-  const handleStartDateChange = (date: CalendarDate | null) => {
-    setFormData((prev) => ({ ...prev, startDate: date! }));
-    if (date) {
-      setFormErrors((prev) => ({ ...prev, startDate: '' }));
-    }
-  };
-
   const validateForm = (): boolean => {
     const errors: FormErrors = {
       fullName: '',
       sex: '',
-      startDate: '',
       bioPhoto: '',
       cardPhoto: '',
     };
 
     if (!formData.fullName.trim()) errors.fullName = 'Please enter a full name';
     if (!formData.sex) errors.sex = 'Please select a sex';
-    if (!formData.startDate) errors.startDate = 'Please select a start date';
     if (!formData.bioPhoto) errors.bioPhoto = 'Please upload a bio photo';
     if (!formData.cardPhoto) errors.cardPhoto = 'Please upload a card photo';
 
@@ -376,8 +360,8 @@ const AddOfficial: React.FC = (): JSX.Element => {
         setSubmitLoading(false);
       }
 
-      console.log('Form Submitted', formData);
-      console.log('Official Selected:', selectedOfficialId);
+      console.log('Form Submitted:', formData);
+      console.log('selectedOfficialId:', selectedOfficialId);
     }
   };
 
@@ -459,19 +443,6 @@ const AddOfficial: React.FC = (): JSX.Element => {
         color={formErrors.cardPhoto ? 'danger' : 'default'}
         errorMessage={formErrors.cardPhoto}
         label="Card Photo"
-      />
-
-      <Spacer x={4} />
-
-      <DatePicker
-        label="Start Date"
-        size="lg"
-        isRequired
-        radius="sm"
-        value={formData.startDate}
-        onChange={handleStartDateChange}
-        isInvalid={!!formErrors.startDate}
-        errorMessage={formErrors.startDate}
       />
 
       <Spacer x={10} />
