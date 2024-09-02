@@ -64,7 +64,7 @@ interface FormErrors {
 }
 
 interface AddOfficialProps {
-  onSelectOfficial: (itemId: string) => void;
+  onSelectOfficial: (official: { itemId: string; name: string }) => void;
 }
 
 const GET_OFFICIALS = gql`
@@ -238,7 +238,15 @@ const AddOfficial = ({ onSelectOfficial }: AddOfficialProps): JSX.Element => {
   const [updateDisplayName] = useMutation(UPDATE_DISPLAY_NAME);
   const [updateItemEn] = useMutation(UPDATE_ITEM_EN);
 
-  const handleOfficialSelect = (officialId: string) => onSelectOfficial(officialId);
+  const handleOfficialSelect = (key: string | null) => {
+    if (!key) return;
+
+    const selectedOfficial = officialList.find((official) => official.itemId === key);
+
+    if (selectedOfficial) {
+      onSelectOfficial?.(selectedOfficial);
+    }
+  };
 
   const handleFullNameInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -384,27 +392,29 @@ const AddOfficial = ({ onSelectOfficial }: AddOfficialProps): JSX.Element => {
   if (loading) return <Spinner size="lg" />;
 
   return (
-    <div className="government-official" style={{ height: '100vh' }}>
-      <Autocomplete
-        label="Select an official"
-        size="lg"
-        radius="sm"
-        onSelectionChange={handleOfficialSelect}
-      >
-        {officialList.map((official) => (
-          <AutocompleteItem key={official.itemId} value={official.itemId}>
-            {official.name}
-          </AutocompleteItem>
-        ))}
-      </Autocomplete>
+    <div className="government-official">
+      <div className="flex items-center space-x-4">
+        <Autocomplete
+          label="Select an official"
+          size="lg"
+          radius="sm"
+          onSelectionChange={handleOfficialSelect}
+        >
+          {officialList.map((official) => (
+            <AutocompleteItem key={official.itemId} value={official.itemId}>
+              {official.name}
+            </AutocompleteItem>
+          ))}
+        </Autocomplete>
 
-      <Button color="primary" onPress={onOpen}>
-        Add Government Official
-      </Button>
+        <Button color="primary" onPress={onOpen} size="lg" radius="sm">
+          Add New Official
+        </Button>
+      </div>
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} scrollBehavior="normal">
         <ModalContent>
-          {(onClose) => (
+          {() => (
             <>
               <form onSubmit={handleSubmit}>
                 <ModalHeader className="flex flex-col gap-1">Government Official</ModalHeader>

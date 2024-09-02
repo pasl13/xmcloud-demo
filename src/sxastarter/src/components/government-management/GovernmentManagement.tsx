@@ -46,7 +46,10 @@ const GovernmentManagement = ({ params, fields }: GovernmentManagementProps): JS
     if (!hasChildren) return [];
     return children.results.sort(sortGovernments);
   }, [hasChildren, children]);
-
+  const [disabledTabs, setDisabledTabs] = useState({
+    'constitutional-management': false,
+    'prime-minister': true,
+  });
   const [selectedGovernmentId, setSelectedGovernmentId] = useState<string>(
     constitutionalGovernments[0]?.id || ''
   );
@@ -60,8 +63,8 @@ const GovernmentManagement = ({ params, fields }: GovernmentManagementProps): JS
     startDate: '',
   });
 
-  const handleOfficialSelection = (itemId: string) => {
-    console.log('Selected official:', itemId);
+  const handleOfficialSelection = (official: { itemId: string; name: string }) => {
+    console.log('Selected official:', official);
   };
 
   const handleAddGovernment = (
@@ -72,6 +75,18 @@ const GovernmentManagement = ({ params, fields }: GovernmentManagementProps): JS
   ): void => {
     setGovernmentDetails({ itemId, title, titleEn, startDate });
     setSelectedGovernmentTab('prime-minister');
+    setDisabledTabs({
+      'constitutional-management': true,
+      'prime-minister': false,
+    });
+  };
+
+  const handleAddPrimeMinister = (itemId: string): void => {
+    console.log('handleAddPrimeMinister', itemId);
+    setDisabledTabs({
+      'constitutional-management': true,
+      'prime-minister': false,
+    });
   };
 
   return (
@@ -97,11 +112,22 @@ const GovernmentManagement = ({ params, fields }: GovernmentManagementProps): JS
                 selectedKey={selectedGovernmentTab}
                 onSelectionChange={(key) => setSelectedGovernmentTab(key as string)}
               >
-                <Tab key="constitutional-management" title="Constitutional Management">
+                <Tab
+                  key="constitutional-management"
+                  title="Constitutional Management"
+                  isDisabled={disabledTabs['constitutional-management']}
+                >
                   <AddConstitutionalGovernment onAddGovernment={handleAddGovernment} />
                 </Tab>
-                <Tab key="prime-minister" title="Prime Minister">
-                  <AddPrimeMinister {...governmentDetails} />
+                <Tab
+                  key="prime-minister"
+                  title="Prime Minister"
+                  isDisabled={disabledTabs['prime-minister']}
+                >
+                  <AddPrimeMinister
+                    {...governmentDetails}
+                    onAddPrimeMinister={handleAddPrimeMinister}
+                  />
                 </Tab>
               </Tabs>
             </Tab>
