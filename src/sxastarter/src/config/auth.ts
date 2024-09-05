@@ -1,7 +1,8 @@
 import fetch from 'cross-fetch';
 
 export const getServerToken = async (): Promise<string> => {
-  const tokenUrl = 'http://localhost:3000/api/auth/getToken';
+  const tokenUrl =
+    'https://xmc-noesis136a1-demob96b-devteamd85c.sitecorecloud.io/api/auth/getToken';
 
   try {
     const response = await fetch(tokenUrl, {

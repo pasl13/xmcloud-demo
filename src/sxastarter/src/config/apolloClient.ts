@@ -12,7 +12,7 @@ import { getServerToken } from './auth';
 // Create HTTP link for connecting to the GraphQL API
 const createHttpLink = (): HttpLink =>
   new HttpLink({
-    uri: 'https://xmc-noesis136a1-demob96b-devteamd85c.sitecorecloud.io/sitecore/api/authoring/graphql/v1',
+    uri: process.env.AUTHORING_GRAPH_QL_ENDPOINT,
     fetch,
   });
 
