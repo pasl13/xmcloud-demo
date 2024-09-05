@@ -1,143 +1,38 @@
-import React, { useMemo, useState } from 'react';
-import { ApolloProvider } from '@apollo/client';
-import { ComponentParams, ComponentRendering } from '@sitecore-jss/sitecore-jss-nextjs';
-import client from 'src/config/apolloClient';
-import { Tab, Tabs } from '@nextui-org/react';
-import AddConstitutionalGovernment from './AddConstitutionalGovernment';
-import AddPrimeMinister from './AddPrimeMinister';
-import AddOfficial from './AddOfficial';
+import React from 'react';
 
-interface ResultsGovernment {
-  id: string;
-  name: string;
-  field: {
-    value: string;
-  };
-}
+const GovernmentManagement = (): JSX.Element => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-interface Fields {
-  data: {
-    datasource: {
-      hasChildren: boolean;
-      children: {
-        results: ResultsGovernment[];
-      };
-    };
-  };
-}
+    try {
+      const response = await fetch('/api/government/official', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-interface GovernmentManagementProps {
-  rendering: ComponentRendering & { params: ComponentParams };
-  params: ComponentParams;
-  fields: Fields;
-}
+      if (!response.ok) {
+        throw new Error('Erro ao criar o governo');
+      }
 
-const sortGovernments = (a: ResultsGovernment, b: ResultsGovernment): number => {
-  if (a.field.value === '1') return -1;
-  if (b.field.value === '1') return 1;
-  return b.name.localeCompare(a.name);
-};
-
-const GovernmentManagement = ({ params, fields }: GovernmentManagementProps): JSX.Element => {
-  const { RenderingIdentifier: id } = params;
-  const { hasChildren, children } = fields.data.datasource;
-
-  const constitutionalGovernments = useMemo<ResultsGovernment[]>(() => {
-    if (!hasChildren) return [];
-    return children.results.sort(sortGovernments);
-  }, [hasChildren, children]);
-  const [disabledTabs, setDisabledTabs] = useState({
-    'constitutional-management': false,
-    'prime-minister': true,
-  });
-  const [selectedGovernmentId, setSelectedGovernmentId] = useState<string>(
-    constitutionalGovernments[0]?.id || ''
-  );
-  const [selectedGovernmentTab, setSelectedGovernmentTab] = useState<string>(
-    'constitutional-management'
-  );
-  const [governmentDetails, setGovernmentDetails] = useState({
-    itemId: '',
-    title: '',
-    titleEn: '',
-    startDate: '',
-  });
-
-  const handleOfficialSelection = (official: { itemId: string; name: string }) => {
-    console.log('Selected official:', official);
-  };
-
-  const handleAddGovernment = (
-    itemId: string,
-    title: string,
-    titleEn: string,
-    startDate: string
-  ): void => {
-    setGovernmentDetails({ itemId, title, titleEn, startDate });
-    setSelectedGovernmentTab('prime-minister');
-    setDisabledTabs({
-      'constitutional-management': true,
-      'prime-minister': false,
-    });
-  };
-
-  const handleAddPrimeMinister = (itemId: string): void => {
-    console.log('handleAddPrimeMinister', itemId);
-    setDisabledTabs({
-      'constitutional-management': true,
-      'prime-minister': false,
-    });
+      const data = await response.json();
+      console.log('Governo criado:', data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
-    <ApolloProvider client={client}>
-      <div className={`component government-management ${params.styles}`} id={id}>
-        <div className="component-content space-y-4">
-          <h1 className="font-bold text-gray-800">Government Management</h1>
-          <Tabs
-            aria-label="Government Tabs"
-            selectedKey={selectedGovernmentId}
-            onSelectionChange={(key) => setSelectedGovernmentId(key as string)}
-          >
-            {constitutionalGovernments.map((gov) => (
-              <Tab key={gov.id} title={gov.name}>
-                <div>
-                  <p>{`Content for ${gov.name}`}</p>
-                </div>
-              </Tab>
-            ))}
-            <Tab key="add-new-government" title="+ Add New Government">
-              <Tabs
-                aria-label="Government Management Tabs"
-                selectedKey={selectedGovernmentTab}
-                onSelectionChange={(key) => setSelectedGovernmentTab(key as string)}
-              >
-                <Tab
-                  key="constitutional-management"
-                  title="Constitutional Management"
-                  isDisabled={disabledTabs['constitutional-management']}
-                >
-                  <AddConstitutionalGovernment onAddGovernment={handleAddGovernment} />
-                </Tab>
-                <Tab
-                  key="prime-minister"
-                  title="Prime Minister"
-                  isDisabled={disabledTabs['prime-minister']}
-                >
-                  <AddPrimeMinister
-                    {...governmentDetails}
-                    onAddPrimeMinister={handleAddPrimeMinister}
-                  />
-                </Tab>
-              </Tabs>
-            </Tab>
-            <Tab key="add-new-official" title="+ Add New Official">
-              <AddOfficial onSelectOfficial={handleOfficialSelection} />
-            </Tab>
-          </Tabs>
-        </div>
+    <div>
+      <div className="component-content">
+        <p>Teste Component</p>
+        {/* Formulário simples para capturar os dados */}
+        <form onSubmit={handleSubmit}>
+          <button type="submit">Criar Governo</button>
+        </form>
       </div>
-    </ApolloProvider>
+    </div>
   );
 };
 
