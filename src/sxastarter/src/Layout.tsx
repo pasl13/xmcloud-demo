@@ -24,10 +24,11 @@ interface RouteFields {
 const Layout = ({ layoutData, headLinks }: LayoutProps): JSX.Element => {
   const { route } = layoutData.sitecore;
   const fields = route?.fields as RouteFields;
+  console.log('fields', fields);
   const isPageEditing = layoutData.sitecore.context.pageEditing;
   const mainClassPageEditing = isPageEditing ? 'editing-mode' : 'prod-mode';
   const isGovernmentManagementLayout = route?.layoutId === '9acf546e-2302-4996-8848-115306dd99f9';
-
+  console.log('isGovernmentManagementLayout', isGovernmentManagementLayout);
   return (
     <>
       <Scripts />
