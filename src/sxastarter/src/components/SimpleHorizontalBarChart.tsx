@@ -13,7 +13,7 @@ interface ChartData {
   fields: Field[];
 }
 
-interface SimpleBarChartProps {
+interface SimpleHorizontalBarChartProps {
   rendering: ComponentRendering & { params: ComponentParams };
   params: ComponentParams;
   fields: {
@@ -23,7 +23,7 @@ interface SimpleBarChartProps {
   };
 }
 
-export const Default = (props: SimpleBarChartProps): JSX.Element => {
+export const Default = (props: SimpleHorizontalBarChartProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
 
   // Destructuring the fields from data.ChartData.fields
@@ -46,10 +46,18 @@ export const Default = (props: SimpleBarChartProps): JSX.Element => {
   const [chartOptions, setChartOptions] = useState({
     title: { text: ChartTitle },
     data: processedData,
-    series: [{ type: 'bar', xKey: ChartXLabel, yKey: ChartYLabel, fill: ChartColor }],
+    series: [
+      {
+        type: 'bar',
+        direction: 'horizontal',
+        xKey: ChartXLabel,
+        yKey: ChartYLabel,
+        fill: ChartColor,
+      },
+    ],
     axes: [
-      { type: 'category', position: 'bottom' },
-      { type: 'number', position: 'left' },
+      { type: 'category', position: 'left' },
+      { type: 'number', position: 'bottom' },
     ],
   });
 
@@ -59,10 +67,18 @@ export const Default = (props: SimpleBarChartProps): JSX.Element => {
       ...prevOptions,
       title: { text: ChartTitle },
       data: processedData,
-      series: [{ type: 'bar', xKey: ChartXLabel, yKey: ChartYLabel, fill: ChartColor }],
+      series: [
+        {
+          type: 'bar',
+          direction: 'horizontal',
+          xKey: ChartXLabel,
+          yKey: ChartYLabel,
+          fill: ChartColor,
+        },
+      ],
       axes: [
-        { type: 'category', position: 'bottom' },
-        { type: 'number', position: 'left' },
+        { type: 'category', position: 'left' },
+        { type: 'number', position: 'bottom' },
       ],
     }));
   }, [ChartTitle, ChartColor, ChartXLabel, ChartYLabel, ChartData]);

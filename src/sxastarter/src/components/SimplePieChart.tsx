@@ -13,7 +13,7 @@ interface ChartData {
   fields: Field[];
 }
 
-interface SimpleBarChartProps {
+interface SimplePieChartProps {
   rendering: ComponentRendering & { params: ComponentParams };
   params: ComponentParams;
   fields: {
@@ -23,7 +23,7 @@ interface SimpleBarChartProps {
   };
 }
 
-export const Default = (props: SimpleBarChartProps): JSX.Element => {
+export const Default = (props: SimplePieChartProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
 
   // Destructuring the fields from data.ChartData.fields
@@ -35,21 +35,24 @@ export const Default = (props: SimpleBarChartProps): JSX.Element => {
     {}
   );
 
-  const { ChartTitle, ChartColor, ChartXLabel, ChartYLabel, ChartData } = fieldsObject;
+  const { ChartTitle, ChartColor, ChartXLabel, ChartYLabel, ChartData } = fieldsObject || {};
 
-  // Process the ChartData into an array format for the chart
+  // Process the ChartData into an array format for the pie chart
   const processedData = ChartData.split('&').map((item) => {
-    const [xKey, yValue] = item.split('=');
-    return { [ChartXLabel]: xKey, [ChartYLabel]: Number(yValue) };
+    const [label, value] = item.split('=');
+    return { [ChartXLabel]: label, [ChartYLabel]: Number(value) };
   });
 
   const [chartOptions, setChartOptions] = useState({
     title: { text: ChartTitle },
     data: processedData,
-    series: [{ type: 'bar', xKey: ChartXLabel, yKey: ChartYLabel, fill: ChartColor }],
-    axes: [
-      { type: 'category', position: 'bottom' },
-      { type: 'number', position: 'left' },
+    series: [
+      {
+        type: 'pie',
+        angleKey: ChartYLabel, // The numeric value for the slice
+        labelKey: ChartXLabel, // The label for the slice (e.g., year or category)
+        fills: [ChartColor], // Optional: if you want to set a single color for the pie
+      },
     ],
   });
 
@@ -59,10 +62,13 @@ export const Default = (props: SimpleBarChartProps): JSX.Element => {
       ...prevOptions,
       title: { text: ChartTitle },
       data: processedData,
-      series: [{ type: 'bar', xKey: ChartXLabel, yKey: ChartYLabel, fill: ChartColor }],
-      axes: [
-        { type: 'category', position: 'bottom' },
-        { type: 'number', position: 'left' },
+      series: [
+        {
+          type: 'pie',
+          angleKey: ChartYLabel, // Numeric value for the slice
+          labelKey: ChartXLabel, // Label for the slice
+          fills: [ChartColor], // Optional: color for pie slices
+        },
       ],
     }));
   }, [ChartTitle, ChartColor, ChartXLabel, ChartYLabel, ChartData]);
