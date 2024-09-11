@@ -37,11 +37,19 @@ export const Default = (props: SimplePieChartProps): JSX.Element => {
 
   const { ChartTitle, ChartColor, ChartXLabel, ChartYLabel, ChartData } = fieldsObject || {};
 
-  // Process the ChartData into an array format for the pie chart
   const processedData = ChartData.split('&').map((item) => {
     const [label, value] = item.split('=');
     return { [ChartXLabel]: label, [ChartYLabel]: Number(value) };
   });
+
+  const generateRandomColors = (numColors: number) => {
+    const colors = [];
+    for (let i = 0; i < numColors; i++) {
+      const color = `#${Math.floor(Math.random() * 16777215).toString(16)}`; // Generates a random hex color
+      colors.push(color);
+    }
+    return colors;
+  };
 
   const [chartOptions, setChartOptions] = useState({
     title: { text: ChartTitle },
@@ -50,14 +58,13 @@ export const Default = (props: SimplePieChartProps): JSX.Element => {
       {
         type: 'pie',
         angleKey: ChartYLabel, // The numeric value for the slice
-        labelKey: ChartXLabel, // The label for the slice (e.g., year or category)
-        fills: [ChartColor], // Optional: if you want to set a single color for the pie
+        sectorLabelKey: ChartXLabel, // The label for the slice (e.g., year or category)
+        fills: generateRandomColors(processedData.length), // Optional: if you want to set a single color for the pie
       },
     ],
   });
 
   useEffect(() => {
-    // Update the chart options if the props change
     setChartOptions((prevOptions) => ({
       ...prevOptions,
       title: { text: ChartTitle },
@@ -66,8 +73,8 @@ export const Default = (props: SimplePieChartProps): JSX.Element => {
         {
           type: 'pie',
           angleKey: ChartYLabel, // Numeric value for the slice
-          labelKey: ChartXLabel, // Label for the slice
-          fills: [ChartColor], // Optional: color for pie slices
+          sectorLabelKey: ChartXLabel, // Label for the slice
+          fills: generateRandomColors(processedData.length), // Optional: color for pie slices
         },
       ],
     }));

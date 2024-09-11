@@ -26,7 +26,6 @@ interface SimpleHorizontalBarChartProps {
 export const Default = (props: SimpleHorizontalBarChartProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
 
-  // Destructuring the fields from data.ChartData.fields
   const fieldsObject = props.fields?.data?.ChartData.fields.reduce(
     (acc: Record<string, string>, field: Field) => {
       acc[field.name] = field.jsonValue.value;
@@ -37,7 +36,6 @@ export const Default = (props: SimpleHorizontalBarChartProps): JSX.Element => {
 
   const { ChartTitle, ChartColor, ChartXLabel, ChartYLabel, ChartData } = fieldsObject;
 
-  // Process the ChartData into an array format for the chart
   const processedData = ChartData.split('&').map((item) => {
     const [xKey, yValue] = item.split('=');
     return { [ChartXLabel]: xKey, [ChartYLabel]: Number(yValue) };
@@ -62,7 +60,6 @@ export const Default = (props: SimpleHorizontalBarChartProps): JSX.Element => {
   });
 
   useEffect(() => {
-    // Update the chart options if the props change
     setChartOptions((prevOptions) => ({
       ...prevOptions,
       title: { text: ChartTitle },
