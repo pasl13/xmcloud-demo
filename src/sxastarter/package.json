@@ -37,6 +37,7 @@
     "@sitecore-jss/sitecore-jss-nextjs": "~22.0.0",
     "@sitecore/components": "^1.1.10",
     "@types/js-cookie": "^3.0.6",
+    "ag-charts-react": "^10.1.0",
     "bootstrap-icons": "^1.11.3",
     "eslint-plugin-graphql": "^4.0.0",
     "font-awesome": "^4.7.0",
@@ -54,7 +55,8 @@
     "react-quill": "^2.0.0",
     "remove-accents": "^0.5.0",
     "sass": "^1.52.3",
-    "sass-alias": "^1.0.5"
+    "sass-alias": "^1.0.5",
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.0",
