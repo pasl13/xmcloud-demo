@@ -15,7 +15,6 @@ export const Default = (props: ChartProps): JSX.Element => {
     {}
   );
 
-  console.log('fieldsObject', fieldsObject);
   const { ChartTitle, ChartXLabel, ChartYLabel, ChartData, ChartRadiusData } = fieldsObject || {};
   const processedData = ChartData.split('&').map((item) => {
     const [label, value] = item.split('=') as [string, string];
