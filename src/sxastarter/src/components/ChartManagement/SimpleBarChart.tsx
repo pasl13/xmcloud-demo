@@ -54,18 +54,18 @@ export const Default = (props: SimpleBarChartProps): JSX.Element => {
     ],
   });
 
-  useEffect(() => {
-    setChartOptions((prevOptions) => ({
-      ...prevOptions,
-      title: { text: ChartTitle },
-      data: processedData,
-      series: [{ type: 'bar', xKey: ChartXLabel, yKey: ChartYLabel, fill: ChartColor }],
-      axes: [
-        { type: 'category', position: 'bottom' },
-        { type: 'number', position: 'left' },
-      ],
-    }));
-  }, [ChartTitle, ChartColor, ChartXLabel, ChartYLabel, ChartData]);
+  // useEffect(() => {
+  //   setChartOptions((prevOptions) => ({
+  //     ...prevOptions,
+  //     title: { text: ChartTitle },
+  //     data: processedData,
+  //     series: [{ type: 'bar', xKey: ChartXLabel, yKey: ChartYLabel, fill: ChartColor }],
+  //     axes: [
+  //       { type: 'category', position: 'bottom' },
+  //       { type: 'number', position: 'left' },
+  //     ],
+  //   }));
+  // }, [ChartTitle, ChartColor, ChartXLabel, ChartYLabel, ChartData]);
 
   if (!fieldsObject) {
     return <div>No data</div>;

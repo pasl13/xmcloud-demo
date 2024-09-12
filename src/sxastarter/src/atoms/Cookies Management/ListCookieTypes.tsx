@@ -1,4 +1,4 @@
-import { SubItemsData } from '../../types/cookiesManagementTypes/cookiesSettingstypes';
+import { SubItemsData } from '../../types/cookies-management-types/cookiesSettingstypes';
 import CookieItem from './CookieItem';
 import { CookieItemType } from 'src/types';
 interface ListCookieTypesProps extends SubItemsData {
