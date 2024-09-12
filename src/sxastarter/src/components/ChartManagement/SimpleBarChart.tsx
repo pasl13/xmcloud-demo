@@ -2,31 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { AgCharts } from 'ag-charts-react';
-import { ComponentParams, ComponentRendering } from '@sitecore-jss/sitecore-jss-nextjs';
 import { AgChartOptions } from 'ag-charts-community';
+import { ChartProps, Field } from 'src/types/chart-management-types/chartManagementTypes';
 
-interface Field {
-  name: string;
-  jsonValue: {
-    value: string;
-  };
-}
-
-interface ChartData {
-  fields: Field[];
-}
-
-interface SimpleBarChartProps {
-  rendering: ComponentRendering & { params: ComponentParams };
-  params: ComponentParams;
-  fields: {
-    data: {
-      ChartData: ChartData;
-    };
-  };
-}
-
-export const Default = (props: SimpleBarChartProps): JSX.Element => {
+export const Default = (props: ChartProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
 
   const fieldsObject = props.fields?.data?.ChartData.fields.reduce(
@@ -54,18 +33,18 @@ export const Default = (props: SimpleBarChartProps): JSX.Element => {
     ],
   });
 
-  // useEffect(() => {
-  //   setChartOptions((prevOptions) => ({
-  //     ...prevOptions,
-  //     title: { text: ChartTitle },
-  //     data: processedData,
-  //     series: [{ type: 'bar', xKey: ChartXLabel, yKey: ChartYLabel, fill: ChartColor }],
-  //     axes: [
-  //       { type: 'category', position: 'bottom' },
-  //       { type: 'number', position: 'left' },
-  //     ],
-  //   }));
-  // }, [ChartTitle, ChartColor, ChartXLabel, ChartYLabel, ChartData]);
+  useEffect(() => {
+    setChartOptions((prevOptions) => ({
+      ...prevOptions,
+      title: { text: ChartTitle },
+      data: processedData,
+      series: [{ type: 'bar', xKey: ChartXLabel, yKey: ChartYLabel, fill: ChartColor }],
+      axes: [
+        { type: 'category', position: 'bottom' },
+        { type: 'number', position: 'left' },
+      ],
+    }));
+  }, [ChartTitle, ChartColor, ChartXLabel, ChartYLabel, ChartData]);
 
   if (!fieldsObject) {
     return <div>No data</div>;

@@ -1,3 +1,5 @@
+import { ComponentParams, ComponentRendering } from '@sitecore-jss/sitecore-jss-nextjs';
+
 export interface Field {
   name: string;
   jsonValue: {

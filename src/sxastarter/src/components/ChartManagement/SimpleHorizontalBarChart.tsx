@@ -2,31 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { AgCharts } from 'ag-charts-react';
-import { ComponentParams, ComponentRendering } from '@sitecore-jss/sitecore-jss-nextjs';
 import { AgChartOptions } from 'ag-charts-community';
+import { ChartProps, Field } from 'src/types/chart-management-types/chartManagementTypes';
 
-interface Field {
-  name: string;
-  jsonValue: {
-    value: string;
-  };
-}
-
-interface ChartData {
-  fields: Field[];
-}
-
-interface SimpleHorizontalBarChartProps {
-  rendering: ComponentRendering & { params: ComponentParams };
-  params: ComponentParams;
-  fields: {
-    data: {
-      ChartData: ChartData;
-    };
-  };
-}
-
-export const Default = (props: SimpleHorizontalBarChartProps): JSX.Element => {
+export const Default = (props: ChartProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
 
   const fieldsObject = props.fields?.data?.ChartData.fields.reduce(
