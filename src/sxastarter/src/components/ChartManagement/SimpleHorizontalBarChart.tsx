@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { AgCharts } from 'ag-charts-react';
 import { ComponentParams, ComponentRendering } from '@sitecore-jss/sitecore-jss-nextjs';
+import { AgChartOptions } from 'ag-charts-community';
 
 interface Field {
   name: string;
@@ -43,7 +44,7 @@ export const Default = (props: SimpleHorizontalBarChartProps): JSX.Element => {
     return { [ChartXLabel]: xKey, [ChartYLabel]: Number(yValue) };
   });
 
-  const [chartOptions, setChartOptions] = useState({
+  const [chartOptions, setChartOptions] = useState<AgChartOptions>({
     title: { text: ChartTitle },
     data: processedData,
     series: [

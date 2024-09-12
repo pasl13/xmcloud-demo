@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { AgCharts } from 'ag-charts-react';
 import { ComponentParams, ComponentRendering } from '@sitecore-jss/sitecore-jss-nextjs';
+import { AgChartOptions } from 'ag-charts-community';
 
 interface Field {
   name: string;
@@ -28,7 +29,6 @@ interface SimpleBarChartProps {
 export const Default = (props: SimpleBarChartProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
 
-  // Destructuring the fields from data.ChartData.fields
   const fieldsObject = props.fields?.data?.ChartData.fields.reduce(
     (acc: Record<string, string>, field: Field) => {
       acc[field.name] = field.jsonValue.value;
@@ -39,13 +39,12 @@ export const Default = (props: SimpleBarChartProps): JSX.Element => {
 
   const { ChartTitle, ChartColor, ChartXLabel, ChartYLabel, ChartData } = fieldsObject;
 
-  // Process the ChartData into an array format for the chart
   const processedData = ChartData.split('&').map((item) => {
     const [xKey, yValue] = item.split('=');
     return { [ChartXLabel]: xKey, [ChartYLabel]: Number(yValue) };
   });
 
-  const [chartOptions, setChartOptions] = useState({
+  const [chartOptions, setChartOptions] = useState<AgChartOptions>({
     title: { text: ChartTitle },
     data: processedData,
     series: [{ type: 'bar', xKey: ChartXLabel, yKey: ChartYLabel, fill: ChartColor }],
@@ -56,7 +55,6 @@ export const Default = (props: SimpleBarChartProps): JSX.Element => {
   });
 
   useEffect(() => {
-    // Update the chart options if the props change
     setChartOptions((prevOptions) => ({
       ...prevOptions,
       title: { text: ChartTitle },

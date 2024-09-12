@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { AgCharts } from 'ag-charts-react';
 import { ComponentParams, ComponentRendering } from '@sitecore-jss/sitecore-jss-nextjs';
+import { AgPolarChartOptions } from 'ag-charts-community';
 
 interface Field {
   name: string;
@@ -51,7 +52,7 @@ export const Default = (props: SimpleDonutChartProps): JSX.Element => {
     return colors;
   };
 
-  const [chartOptions, setChartOptions] = useState({
+  const [chartOptions, setChartOptions] = useState<AgPolarChartOptions>({
     title: { text: ChartTitle },
     data: processedData,
     series: [
@@ -59,8 +60,8 @@ export const Default = (props: SimpleDonutChartProps): JSX.Element => {
         type: 'donut',
         calloutLabelKey: ChartXLabel,
         angleKey: ChartYLabel,
-        innerRadiusRatio: 0.7, // Donut Chart shape
-        fills: generateRandomColors(processedData.length), // Random colors for donut slices
+        innerRadiusRatio: 0.7,
+        fills: generateRandomColors(processedData.length),
       },
     ],
   });
@@ -73,10 +74,10 @@ export const Default = (props: SimpleDonutChartProps): JSX.Element => {
       series: [
         {
           type: 'donut',
-          calloutLabelKey: ChartXLabel, // The label for each slice
-          angleKey: ChartYLabel, // Numeric value for each slice
-          innerRadiusRatio: 0.7, // Donut shape
-          fills: generateRandomColors(processedData.length), // Random colors for donut slices
+          calloutLabelKey: ChartXLabel,
+          angleKey: ChartYLabel,
+          innerRadiusRatio: 0.7,
+          fills: generateRandomColors(processedData.length),
         },
       ],
     }));
