@@ -16,7 +16,7 @@ import { AgoraTailwindConfig } from '@ama-pt/agora-design-system';
 import type { Config } from 'tailwindcss';
 
 const TailwindConfig: Config = {
-  content: ['src/**/*.{ts,tsx}'],
+  content: ['src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: AgoraTailwindConfig.theme,
   plugins: AgoraTailwindConfig.plugins,
   safelist: AgoraTailwindConfig.safelist,
