@@ -1,16 +1,17 @@
 // const {nextui} = require("@nextui-org/react");
+// import { AgoraTailwindConfig } from '@ama-pt/agora-design-system';
 
 // /** @type {import('tailwindcss').Config} */
 // module.exports = {
 //   content: [
 //     "./src/**/*.{js,ts,jsx,tsx,mdx}",
-//     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+//     // "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
 //   ],
 //   theme: {
 //     extend: {},
 //   },
-//   plugins: [nextui()],
-// }
+//   plugins: [],
+// };
 
 import { AgoraTailwindConfig } from '@ama-pt/agora-design-system';
 import type { Config } from 'tailwindcss';
