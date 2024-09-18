@@ -18,18 +18,20 @@ interface SwitchProps {
 }
 
 export const Default = (props: SwitchProps): JSX.Element | null => {
+  const { RenderingIdentifier: id, styles = '' } = props.params;
+
   const [args, setArgs] = useState<AgoraSwitchProps | null>(null);
   const [isOn, setIsOn] = useState(true);
 
-  const text = props.fields ? (
+  const label = props.fields ? (
     <JssRichText field={props.fields.SwtichText} />
   ) : (
     <span className="is-empty-hint">Rich text</span>
   );
 
   useEffect(() => {
-    async function fetchData() {
-      const labelValue = props.fields?.SwtichText?.value || 'Default label';
+    const fetchData = async () => {
+      const labelValue = props.fields.SwtichText?.value || 'Default label';
 
       const updatedArgs: AgoraSwitchProps = {
         label: labelValue,
@@ -38,23 +40,24 @@ export const Default = (props: SwitchProps): JSX.Element | null => {
       startTransition(() => {
         setArgs(updatedArgs);
       });
-    }
+    };
 
     fetchData();
-  }, [props.fields]);
+  }, [props.fields.SwtichText]);
 
-  const onChange = () => setIsOn(!isOn);
+  const handleChange = () => setIsOn((prevState) => !prevState);
 
   if (!args) {
     return null;
   }
 
   return (
-    <div className="p-16">
-      <Switch onChange={onChange} checked={isOn} />
-      <div className="component-content">{text}</div>
-      <div className="p-8">
-        <p>Toggle IsOn: {isOn ? 'true' : 'false'}</p>
+    <div className={`component switch ${styles.trimEnd()}`} id={id ? id : undefined}>
+      <div className="switch-container">
+        <Switch onChange={handleChange} checked={isOn} />
+      </div>
+      <div className="component-content">
+        {label}
       </div>
     </div>
   );
