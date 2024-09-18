@@ -7,6 +7,7 @@ import {
   Field,
   LinkField,
 } from '@sitecore-jss/sitecore-jss-nextjs';
+import { CardCollection, CardCollectionProps } from '@ama-pt/agora-design-system';
 
 interface Fields {
   PromoIcon: ImageField;
@@ -79,5 +80,54 @@ export const WithText = (props: PromoProps): JSX.Element => {
     );
   }
 
+  return <PromoDefaultComponent {...props} />;
+};
+
+export const WithTextAndLink = (props: PromoProps): JSX.Element => {
+  const id = props.params.RenderingIdentifier;
+  const args: CardCollectionProps = {
+    headingLevel: 'h2',
+  };
+
+  if (props.fields) {
+    return (
+      <>
+        <div className={`component promo ${props.params.styles}`} id={id ? id : undefined}>
+          <div className="component-content">
+            <CardCollection
+              {...args}
+              title="Card Article Link only with icon"
+              mainAnchor={{
+                href: 'https://zeroheight.com/1be481dc2/p/94dc7b-componentes',
+                target: '_blank',
+                iconOnly: true,
+                hasIcon: true,
+                title: 'Praesent vitae Link',
+              }}
+            >
+              <div>
+                <h1>teste</h1>
+              </div>
+            </CardCollection>
+          </div>
+        </div>
+      </>
+      // <div className={`component promo ${props.params.styles}`} id={id ? id : undefined}>
+      //   <div className="component-content">
+      //     <div className="field-promoicon">
+      //       <JssImage field={props.fields.PromoIcon} />
+      //     </div>
+      //     <div className="promo-text">
+      //       <div className="field-promotext">
+      //         <JssRichText className="promo-text" field={props.fields.PromoText} />
+      //       </div>
+      //     </div>
+      //     <div className="promo-link">
+
+      //     </div>
+      //   </div>
+      // </div>
+    );
+  }
   return <PromoDefaultComponent {...props} />;
 };
