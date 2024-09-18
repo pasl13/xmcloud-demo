@@ -1,14 +1,10 @@
-import React, { startTransition, useEffect, useState } from 'react';
-import {
-  ComponentParams,
-  ComponentRendering,
-  Field,
-  RichText as JssRichText,
-} from '@sitecore-jss/sitecore-jss-nextjs';
-import { Switch, SwitchProps as AgoraSwitchProps } from '@ama-pt/agora-design-system';
+import React, { useEffect, useState } from 'react';
+import { ComponentParams, ComponentRendering } from '@sitecore-jss/sitecore-jss-nextjs';
+import { Switch } from '@ama-pt/agora-design-system';
 
 interface Fields {
-  SwtichText: Field<string>;
+  LabelOn: { value: string };
+  LabelOff: { value: string };
 }
 
 interface SwitchProps {
@@ -17,47 +13,25 @@ interface SwitchProps {
   fields: Fields;
 }
 
-export const Default = (props: SwitchProps): JSX.Element | null => {
-  const { RenderingIdentifier: id, styles = '' } = props.params;
-
-  const [args, setArgs] = useState<AgoraSwitchProps | null>(null);
+export const Default = ({ params, fields }: SwitchProps): JSX.Element | null => {
+  const { RenderingIdentifier: id, styles = '' } = params;
   const [isOn, setIsOn] = useState(true);
-
-  const label = props.fields ? (
-    <JssRichText field={props.fields.SwtichText} />
-  ) : (
-    <span className="is-empty-hint">Rich text</span>
-  );
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const labelValue = props.fields.SwtichText?.value || 'Default label';
-
-      const updatedArgs: AgoraSwitchProps = {
-        label: labelValue,
-      };
-
-      startTransition(() => {
-        setArgs(updatedArgs);
-      });
-    };
-
-    fetchData();
-  }, [props.fields.SwtichText]);
+    setIsHydrated(true);
+  }, []);
 
   const handleChange = () => setIsOn((prevState) => !prevState);
 
-  if (!args) {
-    return null;
-  }
+  if (!isHydrated) return null;
+
+  const currentLabel = isOn ? fields.LabelOn.value : fields.LabelOff.value;
 
   return (
-    <div className={`component switch ${styles.trimEnd()}`} id={id ? id : undefined}>
+    <div className={`component switch ${styles.trimEnd()}`} id={id || undefined}>
       <div className="switch-container">
-        <Switch onChange={handleChange} checked={isOn} />
-      </div>
-      <div className="component-content">
-        {label}
+        <Switch onChange={handleChange} checked={isOn} label={currentLabel} />
       </div>
     </div>
   );
