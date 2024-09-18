@@ -41,6 +41,7 @@
     "@sitecore/components": "^1.1.10",
     "@types/js-cookie": "^3.0.6",
     "ag-charts-react": "^10.1.0",
+    "bootstrap": "^5.3.3",
     "eslint-plugin-graphql": "^4.0.0",
     "font-awesome": "^4.7.0",
     "framer-motion": "^11.3.30",
