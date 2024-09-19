@@ -7,7 +7,12 @@ import {
   Field,
   LinkField,
 } from '@sitecore-jss/sitecore-jss-nextjs';
-import { CardCollection, CardCollectionProps } from '@ama-pt/agora-design-system';
+import {
+  Button,
+  ButtonProps,
+  CardCollection,
+  CardCollectionProps,
+} from '@ama-pt/agora-design-system';
 
 interface Fields {
   PromoIcon: ImageField;
@@ -142,4 +147,37 @@ export const WithTextAndLink = (props: PromoProps): JSX.Element => {
       </div>
     </div>
   );
+};
+
+export const WithButton = (props: PromoProps): JSX.Element => {
+  const id = props.params.RenderingIdentifier;
+  const args: ButtonProps = {
+    children: props.fields.PromoLink.value.text,
+    appearance: 'outline',
+  };
+  if (props.fields) {
+    return (
+      <div className={`component promo ${props.params.styles}`} id={id ? id : undefined}>
+        <div className="component-content">
+          <div className="promo-text">
+            <div>
+              <div className="field-promotext">
+                <JssRichText field={props.fields.PromoText} />
+              </div>
+            </div>
+            <div className="field-promolink">
+              <JssLink field={props.fields.PromoLink}>
+                <Button {...args} />
+              </JssLink>
+            </div>
+          </div>
+          <div className="field-promoicon">
+            <JssImage field={props.fields.PromoIcon} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return <PromoDefaultComponent {...props} />;
 };
