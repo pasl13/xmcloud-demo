@@ -47,7 +47,11 @@ export const Default = (props: GalleryProps): JSX.Element => {
         ?.value;
       const image: ImageField | undefined =
         typeof imageField === 'object' && imageField !== null && 'src' in imageField
-          ? { value: { src: imageField.src, editable: true } }
+          ? {
+              value: { src: imageField.src, editable: true },
+              editable: galleryItem.fields.find((field) => field.name === 'Image')?.jsonValue
+                ?.editable,
+            }
           : undefined;
 
       // Extract the ImageTitle field
