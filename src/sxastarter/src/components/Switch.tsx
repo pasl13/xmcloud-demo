@@ -1,14 +1,10 @@
-import React, { startTransition, useEffect, useState } from 'react';
-import {
-  ComponentParams,
-  ComponentRendering,
-  Field,
-  RichText as JssRichText,
-} from '@sitecore-jss/sitecore-jss-nextjs';
-import { Switch, SwitchProps as AgoraSwitchProps } from '@ama-pt/agora-design-system';
+import React, { useEffect, useState } from 'react';
+import { ComponentParams, ComponentRendering } from '@sitecore-jss/sitecore-jss-nextjs';
+import { Switch } from '@ama-pt/agora-design-system';
 
 interface Fields {
-  SwtichText: Field<string>;
+  LabelOn: { value: string };
+  LabelOff: { value: string };
 }
 
 interface SwitchProps {
@@ -17,44 +13,25 @@ interface SwitchProps {
   fields: Fields;
 }
 
-export const Default = (props: SwitchProps): JSX.Element | null => {
-  const [args, setArgs] = useState<AgoraSwitchProps | null>(null);
+export const Default = ({ params, fields }: SwitchProps): JSX.Element | null => {
+  const { RenderingIdentifier: id, styles = '' } = params;
   const [isOn, setIsOn] = useState(true);
-
-  const text = props.fields ? (
-    <JssRichText field={props.fields.SwtichText} />
-  ) : (
-    <span className="is-empty-hint">Rich text</span>
-  );
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    async function fetchData() {
-      const labelValue = props.fields?.SwtichText?.value || 'Default label';
+    setIsHydrated(true);
+  }, []);
 
-      const updatedArgs: AgoraSwitchProps = {
-        label: labelValue,
-      };
+  const handleChange = () => setIsOn((prevState) => !prevState);
 
-      startTransition(() => {
-        setArgs(updatedArgs);
-      });
-    }
+  if (!isHydrated) return null;
 
-    fetchData();
-  }, [props.fields]);
-
-  const onChange = () => setIsOn(!isOn);
-
-  if (!args) {
-    return null;
-  }
+  const currentLabel = isOn ? fields.LabelOn.value : fields.LabelOff.value;
 
   return (
-    <div className="p-16">
-      <Switch onChange={onChange} checked={isOn} />
-      <div className="component-content">{text}</div>
-      <div className="p-8">
-        <p>Toggle IsOn: {isOn ? 'true' : 'false'}</p>
+    <div className={`component switch ${styles.trimEnd()}`} id={id || undefined}>
+      <div className="switch-container">
+        <Switch onChange={handleChange} checked={isOn} label={currentLabel} />
       </div>
     </div>
   );
