@@ -7,7 +7,7 @@ import {
   Field,
   LinkField,
 } from '@sitecore-jss/sitecore-jss-nextjs';
-import { Button } from '@ama-pt/agora-design-system';
+import { Button, ButtonProps } from '@ama-pt/agora-design-system';
 
 interface Fields {
   PromoIcon: ImageField;
@@ -85,7 +85,10 @@ export const WithText = (props: PromoProps): JSX.Element => {
 
 export const WithButton = (props: PromoProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
-
+  const args: ButtonProps = {
+    children: props.fields.PromoLink.value.text,
+    appearance: 'outline',
+  };
   if (props.fields) {
     return (
       <div className={`component promo ${props.params.styles}`} id={id ? id : undefined}>
@@ -98,7 +101,7 @@ export const WithButton = (props: PromoProps): JSX.Element => {
             </div>
             <div className="field-promolink">
               <JssLink field={props.fields.PromoLink}>
-                <Button children={props.fields.PromoLink.value.text} appearance="outline" />
+                <Button {...args} />
               </JssLink>
             </div>
           </div>

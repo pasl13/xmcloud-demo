@@ -71,10 +71,10 @@ export const Default = (props: GalleryProps): JSX.Element => {
             }
           : undefined;
 
-      console.log();
+      console.log(galleries, image, text, description, index);
 
       return (
-        <div className={styles} id={id ? id : undefined}>
+        <div className={styles} id={id ? id : undefined} key={index}>
           <div className="component-content"></div>
         </div>
       );
