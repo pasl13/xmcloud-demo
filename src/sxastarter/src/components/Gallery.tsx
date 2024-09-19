@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextField, ImageField, Image as JssImage } from '@sitecore-jss/sitecore-jss-nextjs';
+import { Text, Image, ImageField, TextField } from '@sitecore-jss/sitecore-jss-nextjs';
 
 type ImageValue = {
   src: string;
@@ -42,6 +42,7 @@ export const Default = (props: GalleryProps): JSX.Element => {
 
   if (datasource) {
     const galleries = datasource.children.results.map((galleryItem, index) => {
+      // Extract the Image field
       const imageField = galleryItem.fields.find((field) => field.name === 'Image')?.jsonValue
         ?.value;
       const image: ImageField | undefined =
@@ -49,6 +50,7 @@ export const Default = (props: GalleryProps): JSX.Element => {
           ? { value: { src: imageField.src, editable: true } }
           : undefined;
 
+      // Extract the ImageTitle field
       const textField = galleryItem.fields.find((field) => field.name === 'ImageTitle')?.jsonValue
         ?.value;
       const text: TextField | undefined =
@@ -60,6 +62,7 @@ export const Default = (props: GalleryProps): JSX.Element => {
             }
           : undefined;
 
+      // Extract the ImageDescription field
       const descriptionField = galleryItem.fields.find((field) => field.name === 'ImageDescription')
         ?.jsonValue?.value;
       const description: TextField | undefined =
@@ -71,11 +74,11 @@ export const Default = (props: GalleryProps): JSX.Element => {
             }
           : undefined;
 
-      console.log(text, description, index);
-
       return (
         <div className={styles} id={id ? id : undefined} key={index}>
-          <JssImage field={image} key={index} />
+          {image && <Image field={image} />}
+          {text && <Text field={text} tag="h3" />}
+          {description && <Text field={description} tag="p" />}
         </div>
       );
     });
