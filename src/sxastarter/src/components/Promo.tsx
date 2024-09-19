@@ -90,7 +90,6 @@ export const WithTextAndLink = (props: PromoProps): JSX.Element => {
   };
 
   if (props.fields.PromoIcon.value?.src && props.fields.PromoText.value) {
-    // console.log("props.fields", props.fields);
     return (
       <>
         <div className={`component promo ${props.params.styles}`} id={id ? id : undefined}>
@@ -110,7 +109,7 @@ export const WithTextAndLink = (props: PromoProps): JSX.Element => {
                 target: '_blank',
                 iconOnly: true,
                 hasIcon: true,
-                title: 'Praesent vitae Link',
+                title: props.fields.PromoText.value,
                 leadingIcon: 'agora-line-arrow-right-circle',
                 leadingIconHover: 'agora-solid-arrow-right-circle',
               }}
