@@ -1,17 +1,17 @@
 import React from 'react';
-import { Text, Image, ImageField, TextField } from '@sitecore-jss/sitecore-jss-nextjs';
-
-type ImageValue = {
-  src: string;
-  alt: string;
-  width: string;
-  height: string;
-};
+import {
+  //   Text,
+  Image,
+  ImageField,
+  //   TextField,
+  //   RichTextField,
+  //   RichText,
+} from '@sitecore-jss/sitecore-jss-nextjs';
 
 type GalleryField = {
   name: string;
   jsonValue: {
-    value: ImageValue | string;
+    value: string;
     editable: string;
   };
 };
@@ -42,47 +42,30 @@ export const Default = (props: GalleryProps): JSX.Element => {
 
   if (datasource) {
     const galleries = datasource.children.results.map((galleryItem, index) => {
-      // Extract the Image field
       const imageField = galleryItem.fields.find((field) => field.name === 'Image')?.jsonValue
         ?.value;
-      const image: ImageField | undefined =
-        typeof imageField === 'object' && imageField !== null && 'src' in imageField
-          ? {
-              value: { src: imageField.src, editable: true },
-              editable: galleryItem.fields.find((field) => field.name === 'Image')?.jsonValue
-                ?.editable,
-            }
-          : undefined;
+      const image: ImageField = {
+        value: typeof imageField === 'object' && 'src' in imageField ? imageField : undefined,
+        editable: galleryItem.fields.find((field) => field.name === 'Image')?.jsonValue?.editable,
+      };
 
-      // Extract the ImageTitle field
-      const textField = galleryItem.fields.find((field) => field.name === 'ImageTitle')?.jsonValue
-        ?.value;
-      const text: TextField | undefined =
-        typeof textField === 'string'
-          ? {
-              value: textField,
-              editable: galleryItem.fields.find((field) => field.name === 'ImageTitle')?.jsonValue
-                ?.editable,
-            }
-          : undefined;
+      //   const textField = galleryItem.fields.find((field) => field.name === 'ImageTitle')?.jsonValue;
+      //   const text: TextField = {
+      //     value: textField?.value,
+      //     editable: textField?.editable,
+      //   };
 
-      // Extract the ImageDescription field
-      const descriptionField = galleryItem.fields.find((field) => field.name === 'ImageDescription')
-        ?.jsonValue?.value;
-      const description: TextField | undefined =
-        typeof descriptionField === 'string'
-          ? {
-              value: descriptionField,
-              editable: galleryItem.fields.find((field) => field.name === 'ImageDescription')
-                ?.jsonValue?.editable,
-            }
-          : undefined;
+      //   const descriptionField = galleryItem.fields.find(
+      //     (field) => field.name === 'ImageDescription'
+      //   )?.jsonValue;
+      //   const description: RichTextField = {
+      //     value: descriptionField?.value,
+      //     editable: descriptionField?.editable,
+      //   };
 
       return (
         <div className={styles} id={id ? id : undefined} key={index}>
           {image && <Image field={image} />}
-          {text && <Text field={text} tag="h3" />}
-          {description && <Text field={description} tag="p" />}
         </div>
       );
     });
