@@ -1,0 +1,29 @@
+.with-text-and-link {
+  width: 280px;
+
+  // background-color: red;
+  // background: linear-gradient(195deg, rgba(0, 0, 0, 0.00) 49.88%, rgba(0, 0, 0, 0.60) 90.04%), url(<path-to-image>) lightgray -151.024px 0px / 266.237% 100% no-repeat;
+  .agora-card-collection{
+    box-shadow: 0px 10px 20px 0px rgba(36, 72, 85, 0.25);
+
+    .card-info{
+      align-items: center;
+      justify-content: center;
+      .title-container{
+        background-color: white;
+        padding: 20px;
+        color: #fff;
+        text-align: center;
+        border-radius: 8px;
+        height: 54px;
+      }
+
+      .anchor-container{
+        position: absolute;
+        bottom: 20px;
+        left: 32px;
+        z-index: 2;
+      }
+    }
+  }
+}

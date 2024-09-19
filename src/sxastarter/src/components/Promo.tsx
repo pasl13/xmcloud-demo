@@ -89,45 +89,58 @@ export const WithTextAndLink = (props: PromoProps): JSX.Element => {
     headingLevel: 'h2',
   };
 
-  if (props.fields) {
+  if (props.fields.PromoIcon.value?.src && props.fields.PromoText.value) {
+    // console.log("props.fields", props.fields);
     return (
       <>
         <div className={`component promo ${props.params.styles}`} id={id ? id : undefined}>
-          <div className="component-content">
+          <div
+            className="component-content with-text-and-link"
+            style={{
+              backgroundImage: `url(${props.fields.PromoIcon.value.src})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          >
             <CardCollection
               {...args}
-              title="Card Article Link only with icon"
+              title={props.fields.PromoText.value}
               mainAnchor={{
-                href: 'https://zeroheight.com/1be481dc2/p/94dc7b-componentes',
+                href: props.fields.PromoLink.value.href,
                 target: '_blank',
                 iconOnly: true,
                 hasIcon: true,
                 title: 'Praesent vitae Link',
+                leadingIcon: 'agora-line-arrow-right-circle',
+                leadingIconHover: 'agora-solid-arrow-right-circle',
               }}
             >
-              <div>
-                <h1>teste</h1>
-              </div>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa reiciendis ducimus
+              facere repudiandae! Officiis pariatur provident saepe voluptates facilis sint modi
+              quod architecto voluptatibus! Aut cupiditate voluptatibus modi a totam.
             </CardCollection>
           </div>
         </div>
       </>
-      // <div className={`component promo ${props.params.styles}`} id={id ? id : undefined}>
-      //   <div className="component-content">
-      //     <div className="field-promoicon">
-      //       <JssImage field={props.fields.PromoIcon} />
-      //     </div>
-      //     <div className="promo-text">
-      //       <div className="field-promotext">
-      //         <JssRichText className="promo-text" field={props.fields.PromoText} />
-      //       </div>
-      //     </div>
-      //     <div className="promo-link">
-
-      //     </div>
-      //   </div>
-      // </div>
     );
   }
-  return <PromoDefaultComponent {...props} />;
+  return (
+    <div className={`component promo ${props.params.styles}`} id={id ? id : undefined}>
+      <div className="component-content">
+        <div className="field-promoicon">
+          <JssImage field={props.fields.PromoIcon} />
+        </div>
+        <div className="promo-text">
+          <div>
+            <div className="field-promotext">
+              <JssRichText className="promo-text" field={props.fields.PromoText} />
+            </div>
+          </div>
+        </div>
+        <div className="field-promolink">
+          <JssLink field={props.fields.PromoLink} />
+        </div>
+      </div>
+    </div>
+  );
 };
