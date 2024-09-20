@@ -36,14 +36,14 @@ export const Default = (props: ComponentProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
 
   return (
-    <div className={`row component column-splitter flex ${styles}`} id={id ? id : undefined}>
+    <div className={`row component column-splitter ${styles}`} id={id ? id : undefined}>
       {enabledPlaceholders.map((ph, index) => {
         const phKey = `column-${ph}-{*}`;
         const phStyles = `${columnWidths[+ph - 1]} ${columnStyles[+ph - 1] ?? ''}`.trimEnd();
 
         return (
           <div key={index} className={phStyles}>
-            <div key={index} className="row">
+            <div key={index} className="row ">
               <Placeholder key={index} name={phKey} rendering={props.rendering} />
             </div>
           </div>
