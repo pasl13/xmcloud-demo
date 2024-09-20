@@ -119,7 +119,7 @@
 
 // Responsive breakpoints for sm (min-width: 640px)
 
-@media (min-width: 640px) {
+@media (min-width: 768px) {
   .sm\:basis-0 {
     flex-basis: 0px;
   }
@@ -239,7 +239,7 @@
 
 // Responsive breakpoints for md (min-width: 768px)
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .md\:basis-0 {
     flex-basis: 0px;
   }
@@ -359,7 +359,7 @@
 
 // Responsive breakpoints for lg (min-width: 1024px)
 
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   .lg\:basis-0 {
     flex-basis: 0px;
   }
@@ -479,7 +479,7 @@
 
 // Responsive breakpoints for xl (min-width: 1280px)
 
-@media (min-width: 1280px) {
+@media (min-width: 1536px) {
   .xl\:basis-0 {
     flex-basis: 0px;
   }
