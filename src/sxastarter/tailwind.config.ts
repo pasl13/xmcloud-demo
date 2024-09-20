@@ -16,14 +16,54 @@
 import { AgoraTailwindConfig } from '@ama-pt/agora-design-system';
 import type { Config } from 'tailwindcss';
 
+const customSafelist = [
+  {
+    pattern: /^basis-./,
+    variants: ['sm', 'md', 'lg', 'xl', '2xl'],
+  },
+  {
+    pattern: /^grow$/,
+    variants: ['sm', 'md', 'lg', 'xl', '2xl'],
+  },
+  {
+    pattern: /^order-./,
+    variants: ['sm', 'md', 'lg', 'xl', '2xl'],
+  },
+  {
+    pattern: /^(hidden|inline|inline-block|block)$/,
+    variants: ['sm', 'md', 'lg', 'xl', '2xl'],
+  },
+  {
+    pattern: /^(table|table-row|table-cell)$/,
+    variants: ['sm', 'md', 'lg', 'xl', '2xl'],
+  },
+  {
+    pattern: /^(flex|inline-flex)$/,
+    variants: ['sm', 'md', 'lg', 'xl', '2xl'],
+  },
+  {
+    pattern: /^(ml|mr)-0$/,
+    variants: ['sm', 'md', 'lg', 'xl', '2xl'],
+  },
+  {
+    pattern: /^(ml|mr|mx)-auto$/,
+    variants: ['sm', 'md', 'lg', 'xl', '2xl'],
+  },
+  {
+    pattern: /^self-(center|end|start)$/,
+    variants: ['sm', 'md', 'lg', 'xl', '2xl'],
+  },
+];
+
 const TailwindConfig: Config = {
   content: ['src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: AgoraTailwindConfig.theme,
   plugins: AgoraTailwindConfig.plugins,
-  safelist: AgoraTailwindConfig.safelist,
+  // safelist: AgoraTailwindConfig.safelist,
   corePlugins: {
     preflight: false,
   },
+  safelist: [...AgoraTailwindConfig.safelist, ...customSafelist],
 };
 
 export default TailwindConfig;
