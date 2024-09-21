@@ -63,7 +63,20 @@ const ContentComponent: FC<{
   hasPrev: boolean;
   currentIndex: number;
   totalImages: number;
-}> = ({ modalData, darkMode, onNext, onPrev, hasNext, hasPrev, currentIndex, totalImages }) => {
+  nextTitle?: string;
+  prevTitle?: string;
+}> = ({
+  modalData,
+  darkMode,
+  onNext,
+  onPrev,
+  hasNext,
+  hasPrev,
+  currentIndex,
+  totalImages,
+  nextTitle,
+  prevTitle,
+}) => {
   const textColor = darkMode ? 'white' : '[var(--color-neutral-900)]';
   console.log(textColor);
 
@@ -85,19 +98,27 @@ const ContentComponent: FC<{
 
   return (
     <div className="modal">
-      <div className="modal-header">
-        <span>{`${currentIndex + 1}/${totalImages}`}</span>
-      </div>
-
-      <div className="modal-container">
-        {hasPrev && (
-          <button onClick={onPrev} className="modal-arrow modal-prev">
-            <Image src="/images/icons/chevron-left.png" alt="left-arrow" width={50} height={50} />
-          </button>
-        )}
-
-        <div className="modal-content">
-          <h3>{modalData.title && <Text field={modalData.title} />}</h3>
+      <div className="modal-content">
+        <div className="modal-container">
+          {hasPrev && (
+            <div className="modal-arrow modal-prev">
+              <button onClick={onPrev}>
+                <Image
+                  src="/images/icons/chevron-left.png"
+                  alt="left-arrow"
+                  width={50}
+                  height={50}
+                />
+              </button>
+              {prevTitle && <p className="arrow-title">{prevTitle}</p>}
+            </div>
+          )}
+          <div className="modal-header">
+            <span>{`${currentIndex + 1}/${totalImages}`}</span>
+          </div>
+          <div className="modal-title">
+            <h3>{modalData.title && <Text field={modalData.title} />}</h3>{' '}
+          </div>
           <div className="modal-body">
             <div className="modal-image">
               {modalData.image && <JSSImage field={modalData.image} />}
@@ -106,19 +127,20 @@ const ContentComponent: FC<{
               {modalData.description && <RichText field={modalData.description} />}
             </div>
           </div>
+          {hasNext && (
+            <div className="modal-arrow modal-next">
+              <button onClick={onNext}>
+                <Image
+                  src="/images/icons/chevron-right.png"
+                  alt="right-arrow"
+                  width={50}
+                  height={50}
+                />
+              </button>
+              {nextTitle && <p className="arrow-title">{nextTitle}</p>}
+            </div>
+          )}
         </div>
-
-        {hasNext && (
-          <button onClick={onNext} className="modal-arrow modal-next">
-            <Image
-              src="/images/icons/chevron-right.png"
-              alt="left-right"
-              layout="intrinsic"
-              width={30}
-              height={30}
-            />
-          </button>
-        )}
       </div>
     </div>
   );
@@ -181,16 +203,34 @@ const CurrentStory: FC<CurrentStoryProps> = ({ datasource, styles, id }) => {
   const showModal = useCallback(
     (modalData: ModalData, index: number) => {
       const totalImages = datasource.data.datasource.children.results.length;
+
+      // Use nullish coalescing (??) to handle null values
+      const nextTitle =
+        index < totalImages - 1
+          ? datasource.data.datasource.children.results[index + 1].fields.find(
+              (field) => field.name === 'ImageTitle'
+            )?.jsonValue?.value ?? undefined
+          : undefined;
+
+      const prevTitle =
+        index > 0
+          ? datasource.data.datasource.children.results[index - 1].fields.find(
+              (field) => field.name === 'ImageTitle'
+            )?.jsonValue?.value ?? undefined
+          : undefined;
+
       show(
         <ContentComponent
           modalData={modalData}
           darkMode={darkMode}
           onNext={handleNext}
           onPrev={handlePrev}
-          hasNext={index < datasource.data.datasource.children.results.length - 1}
+          hasNext={index < totalImages - 1}
           hasPrev={index > 0}
           currentIndex={index}
           totalImages={totalImages}
+          nextTitle={nextTitle} // No longer null
+          prevTitle={prevTitle} // No longer null
         />,
         {
           closeButtonLabel: 'Close',
