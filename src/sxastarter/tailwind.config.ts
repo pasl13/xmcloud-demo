@@ -55,9 +55,26 @@ const customSafelist = [
   },
 ];
 
+const customTheme = {
+  theme: {
+    screens: {
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+      '2xl': '1536px',
+    },
+  },
+};
+
+const mergedTheme = {
+  ...AgoraTailwindConfig.theme,
+  ...customTheme.theme,
+};
+
 const TailwindConfig: Config = {
   content: ['src/**/*.{js,ts,jsx,tsx,mdx}'],
-  theme: AgoraTailwindConfig.theme,
+  theme: mergedTheme,
   plugins: AgoraTailwindConfig.plugins,
   // safelist: AgoraTailwindConfig.safelist,
   corePlugins: {
