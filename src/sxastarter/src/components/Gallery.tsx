@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
 import {
-  Image,
+  Image as JSSImage,
   ImageField,
   RichTextField,
   TextField,
@@ -13,6 +13,7 @@ import {
   ModalProviderProps,
   useModalContext,
 } from '@ama-pt/agora-design-system';
+import Image from 'next/image';
 
 type GalleryField = {
   name: string;
@@ -60,28 +61,62 @@ const ContentComponent: FC<{
   onPrev: () => void;
   hasNext: boolean;
   hasPrev: boolean;
-}> = ({ modalData, darkMode, onNext, onPrev, hasNext, hasPrev }) => {
+  currentIndex: number;
+  totalImages: number;
+}> = ({ modalData, darkMode, onNext, onPrev, hasNext, hasPrev, currentIndex, totalImages }) => {
   const textColor = darkMode ? 'white' : '[var(--color-neutral-900)]';
   console.log(textColor);
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowRight' && hasNext) {
+        onNext();
+      } else if (event.key === 'ArrowLeft' && hasPrev) {
+        onPrev();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [hasNext, hasPrev, onNext, onPrev]);
+
   return (
     <div className="modal">
-      <h3>{modalData.title && <Text field={modalData.title} />}</h3>
-      <div className="modal-content">
-        <div className="modal-image">{modalData.image && <Image field={modalData.image} />}</div>
-        <div className="modal-description">
-          {modalData.description && <RichText field={modalData.description} />}
-        </div>
+      <div className="modal-header">
+        <span>{`${currentIndex + 1}/${totalImages}`}</span>
       </div>
-      <div className="modal-navigation">
+
+      <div className="modal-container">
         {hasPrev && (
-          <button onClick={onPrev} className="modal-prev">
-            &lt; Prev
+          <button onClick={onPrev} className="modal-arrow modal-prev">
+            <Image src="/images/icons/chevron-left.png" alt="left-arrow" width={50} height={50} />
           </button>
         )}
+
+        <div className="modal-content">
+          <h3>{modalData.title && <Text field={modalData.title} />}</h3>
+          <div className="modal-body">
+            <div className="modal-image">
+              {modalData.image && <JSSImage field={modalData.image} />}
+            </div>
+            <div className="modal-description">
+              {modalData.description && <RichText field={modalData.description} />}
+            </div>
+          </div>
+        </div>
+
         {hasNext && (
-          <button onClick={onNext} className="modal-next">
-            Next &gt;
+          <button onClick={onNext} className="modal-arrow modal-next">
+            <Image
+              src="/images/icons/chevron-right.png"
+              alt="left-right"
+              layout="intrinsic"
+              width={30}
+              height={30}
+            />
           </button>
         )}
       </div>
@@ -145,6 +180,7 @@ const CurrentStory: FC<CurrentStoryProps> = ({ datasource, styles, id }) => {
   // Memoize showModal to prevent unnecessary re-renders
   const showModal = useCallback(
     (modalData: ModalData, index: number) => {
+      const totalImages = datasource.data.datasource.children.results.length;
       show(
         <ContentComponent
           modalData={modalData}
@@ -153,6 +189,8 @@ const CurrentStory: FC<CurrentStoryProps> = ({ datasource, styles, id }) => {
           onPrev={handlePrev}
           hasNext={index < datasource.data.datasource.children.results.length - 1}
           hasPrev={index > 0}
+          currentIndex={index}
+          totalImages={totalImages}
         />,
         {
           closeButtonLabel: 'Close',
@@ -194,7 +232,7 @@ const CurrentStory: FC<CurrentStoryProps> = ({ datasource, styles, id }) => {
           key={index}
           onClick={() => openModalHandler(index)}
         >
-          {image && <Image field={image} />}
+          {image && <JSSImage field={image} />}
         </div>
       );
     }
@@ -212,6 +250,7 @@ export const Default: FC<GalleryProps> = (props) => {
   if (datasource) {
     const modalProviderProps: ModalProviderProps = {
       children: undefined,
+      dismissOnEscape: true,
     };
 
     return (
