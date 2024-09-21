@@ -1,20 +1,21 @@
 import React from 'react';
-import CarouselSlide from 'src/atoms/CarouselManagement/CarouselSlide';
 import { ComponentParams, ComponentRendering } from '@sitecore-jss/sitecore-jss-nextjs';
 
-interface CarouselProps {
+interface CarouselSlideProps {
   rendering: ComponentRendering & { params: ComponentParams };
   params: ComponentParams;
 }
 
-export const Default = (props: CarouselProps): JSX.Element => {
+const CarouselSlide = (props: CarouselSlideProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
-  console.log('Carousel component data:', props);
+
   return (
     <div className={`component ${props.params.styles}`} id={id ? id : undefined}>
       <div className="component-content">
-        <p>Carousel Component</p>
+        <p>CarouselSlide Component</p>
       </div>
     </div>
   );
 };
+
+export default CarouselSlide;
