@@ -1,5 +1,5 @@
 // Type for the Carousel configuration data
-interface CarouselData {
+export interface CarouselDataType {
   CarouselTitle: string;
   CarouselTransitionSpeed: number | null;
   CarouselAutoplay: boolean;
@@ -8,7 +8,7 @@ interface CarouselData {
 }
 
 // Type for each individual slide
-interface CarouselSlide {
+export interface CarouselSlideType {
   CarouselSlideImage: {
     src: string;
     alt: string;
@@ -20,4 +20,9 @@ interface CarouselSlide {
   CarouselSlideLink: {
     href: string;
   };
+}
+
+export interface CarouselDataProps {
+  carouselData: CarouselDataType;
+  carouselSlidesData: CarouselSlideType[];
 }
