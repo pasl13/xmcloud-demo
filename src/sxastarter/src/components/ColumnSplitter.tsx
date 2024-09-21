@@ -43,7 +43,7 @@ export const Default = (props: ComponentProps): JSX.Element => {
 
         return (
           <div key={index} className={phStyles}>
-            <div key={index} className="row flex flex wrap">
+            <div key={index} className="row flex flex-wrap">
               <Placeholder key={index} name={phKey} rendering={props.rendering} />
             </div>
           </div>
