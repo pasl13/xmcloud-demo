@@ -12,9 +12,9 @@
 //   },
 //   plugins: [],
 // };
-import { AgoraTailwindConfig } from '@ama-pt/agora-design-system';
-import type { Config } from 'tailwindcss';
-import withMT from '@material-tailwind/react/utils/withMT';
+// import { AgoraTailwindConfig } from '@ama-pt/agora-design-system';
+// import type { Config } from 'tailwindcss';
+// import withMT from '@material-tailwind/react/utils/withMT';
 
 const customSafelist = [
   {
@@ -53,6 +53,16 @@ const customSafelist = [
     pattern: /^self-(center|end|start)$/,
     variants: ['sm', 'md', 'lg', 'xl', '2xl'],
   },
+  {
+    pattern: /^w-(\d+|auto|full|min|max)$/,
+    variants: ['sm', 'md', 'lg', 'xl', '2xl'],
+  },
+  {
+    pattern: /^h-(\d+|auto|full|min|max)$/,
+    variants: ['sm', 'md', 'lg', 'xl', '2xl'],
+  },
+  // 'w-12', // Add this explicitly
+  // 'h-12', // Add this explicitly
 ];
 
 const customTheme = {
@@ -67,45 +77,48 @@ const customTheme = {
   },
 };
 
-const mergedTheme = {
-  ...AgoraTailwindConfig.theme,
-  ...customTheme.theme,
-};
+// const mergedTheme = {
+//   ...AgoraTailwindConfig.theme,
+//   ...customTheme.theme,
+// };
 
-////////////////////////////////////////////////////////
-const TailwindConfig: Config = withMT({
-  content: [
-    'src/**/*.{js,ts,jsx,tsx,mdx}',
-    './node_modules/@material-tailwind/react/**/*.{js,ts,jsx,tsx}',
-  ],
-  theme: mergedTheme,
-  // theme: customTheme.theme,
-  plugins: [...AgoraTailwindConfig.plugins],
-  // plugins: [],
-  // safelist: AgoraTailwindConfig.safelist,
-  corePlugins: {
-    preflight: false,
-  },
-  // safelist: [...customSafelist],
-  safelist: [...AgoraTailwindConfig.safelist, ...customSafelist],
-}) as Config;
-
-export default TailwindConfig;
-///////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////
 // const TailwindConfig: Config = withMT({
 //   content: [
-//     'src/**/*.{js,ts,jsx,tsx,mdx}',
-//     './node_modules/@material-tailwind/react/**/*.{js,ts,jsx,tsx}',
+//     './src/**/*.{js,ts,jsx,tsx,mdx}',
+//     // './node_modules/@material-tailwind/react/**/*.{js,ts,jsx,tsx,mdx}',
 //     // './node_modules/@material-tailwind/react/components/**/*.{js,ts,jsx,tsx}',
 //     // './node_modules/@material-tailwind/react/theme/components/**/*.{js,ts,jsx,tsx}',
 //   ],
-//   theme: customTheme.theme,
-//   plugins: [],
-//   // safelist: AgoraTailwindConfig.safelist,
+//   safelist: [...AgoraTailwindConfig.safelist, ...customSafelist],
+//   theme: mergedTheme,
+//   plugins: [...AgoraTailwindConfig.plugins],
 //   corePlugins: {
 //     preflight: false,
 //   },
-//   safelist: [...customSafelist],
 // }) as Config;
 
 // export default TailwindConfig;
+///////////////////////////////////////////////////////////////////////
+
+// FINAL TAILWIND CONFIG STEP-BY-STEP
+import type { Config } from 'tailwindcss';
+import withMT from '@material-tailwind/react/utils/withMT';
+import { AgoraTailwindConfig } from '@ama-pt/agora-design-system';
+
+const config: Config = withMT({
+  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
+  safelist: [...AgoraTailwindConfig.safelist, ...customSafelist],
+  theme: {
+    extend: {
+      ...AgoraTailwindConfig.theme,
+      screens: customTheme.theme.screens,
+    },
+  },
+  plugins: [...AgoraTailwindConfig.plugins],
+  corePlugins: {
+    preFlight: false,
+  },
+}) as Config;
+
+export default config;
