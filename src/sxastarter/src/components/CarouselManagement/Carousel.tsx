@@ -4,7 +4,7 @@ import CarouselSlide from 'src/atoms/CarouselManagement/CarouselSlide';
 import { ComponentParams, ComponentRendering } from '@sitecore-jss/sitecore-jss-nextjs';
 import { CarouselResponse } from 'src/types/carousel-management-types';
 import { parseCarouselData } from 'src/utils/parseCarouselDataFields';
-// import { Button } from 'src/material-tailwind-components/Button';
+import { Carousel } from '@material-tailwind/react';
 interface CarouselProps {
   rendering: ComponentRendering & { params: ComponentParams };
   params: ComponentParams;
@@ -17,13 +17,13 @@ export const Default = (props: CarouselProps): JSX.Element => {
   const slides = carouselData.carouselSlides.map((slide, index) => (
     <CarouselSlide key={index} {...slide} />
   ));
-  console.log("carouselData:",carouselData.carouselData.CarouselTitle);
+  // console.log("carouselData:",carouselData.carouselData.CarouselTitle);
   // console.log('Carousel component data:', props);
   return (
     <div className={`component ${props.params.styles}`} id={id ? id : undefined}>
       <div className="component-content">
         <div>
-          carousel
+          <Carousel className="rounded-xl">{slides}</Carousel>
         </div>
       </div>
     </div>

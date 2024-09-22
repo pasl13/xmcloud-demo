@@ -1,6 +1,4 @@
 import React from 'react';
-import { ComponentParams, ComponentRendering } from '@sitecore-jss/sitecore-jss-nextjs';
-
 // interface CarouselSlideProps {
 //   rendering: ComponentRendering & { params: ComponentParams };
 //   params: ComponentParams;
@@ -8,12 +6,16 @@ import { ComponentParams, ComponentRendering } from '@sitecore-jss/sitecore-jss-
 
 const CarouselSlide = (props): JSX.Element => {
   console.log('CarouselSlide component data:', props);
+  const carouselSlideImageData = props.CarouselSlideImage;
+  console.log('carouselSlideImageData:', carouselSlideImageData);
   return (
-    <div>
-      <div className="component-content">
-        <p>CarouselSlide Component</p>
-      </div>
-    </div>
+    <>
+      <img
+        src={carouselSlideImageData.src}
+        alt={carouselSlideImageData.alt}
+        className="h-full w-full object-cover"
+      />
+    </>
   );
 };
 
