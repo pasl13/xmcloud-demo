@@ -1,4 +1,4 @@
-import { Button } from '@nextui-org/react';
+import { Button } from '@ama-pt/agora-design-system';
 import { CookieItemType } from 'src/types';
 interface CookieTypeProps {
   fields: CookieItemType;
