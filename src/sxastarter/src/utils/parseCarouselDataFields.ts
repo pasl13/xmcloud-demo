@@ -2,7 +2,6 @@
 import { CarouselResponseData } from 'src/types/carousel-management-types';
 
 export const parseCarouselData = (data: CarouselResponseData) => {
-  console.log('data:', data);
   const carouselData = {
     CarouselTitle:
       data.carouselData.fields.find((field) => field.name === 'CarouselTitle')?.jsonValue.value ||
