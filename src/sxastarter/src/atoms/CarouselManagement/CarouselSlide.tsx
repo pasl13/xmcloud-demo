@@ -1,19 +1,38 @@
 import React from 'react';
-import { ComponentParams, ComponentRendering } from '@sitecore-jss/sitecore-jss-nextjs';
+interface CarouselSlideProps {
+  CarouselSlideImage: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+  };
+  CarouselSlideTitle: string;
+  CarouselSlideDescription: string;
+  CarouselSlideLink: {
+    href: string;
+  };
+}
 
-// interface CarouselSlideProps {
-//   rendering: ComponentRendering & { params: ComponentParams };
-//   params: ComponentParams;
-// }
-
-const CarouselSlide = (props): JSX.Element => {
-  console.log('CarouselSlide component data:', props);
+const CarouselSlide: React.FC<CarouselSlideProps> = ({
+  CarouselSlideImage,
+  CarouselSlideTitle,
+  // CarouselSlideDescription,
+  // CarouselSlideLink
+}): JSX.Element => {
+  // console.log('CarouselSlide component data:', props);
   return (
-    <div>
-      <div className="component-content">
-        <p>CarouselSlide Component</p>
+    <>
+      <div className="relative h-full w-full">
+        <img
+          src={CarouselSlideImage.src}
+          alt={CarouselSlideImage.alt}
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <h2 className="text-white text-xl font-bold">{CarouselSlideTitle}</h2>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
