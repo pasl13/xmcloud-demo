@@ -1,25 +1,19 @@
-import React, { FC, useState, useEffect, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
-  Image as JSSImage,
   ImageField,
+  Image as JSSImage,
+  RichText as JSSRichText,
   RichTextField,
+  Text as JSSText,
   TextField,
-  Text,
-  RichText,
 } from '@sitecore-jss/sitecore-jss-nextjs';
-import {
-  ModalConfiguration,
-  ModalProvider,
-  ModalProviderProps,
-  useModalContext,
-} from '@ama-pt/agora-design-system';
-import Image from 'next/image';
+import { Button, Dialog, DialogHeader, DialogBody } from '@material-tailwind/react';
 
 type GalleryField = {
   name: string;
   jsonValue: {
-    value: string;
-    editable: string;
+    value: string | undefined;
+    editable: string | undefined;
   };
 };
 
@@ -37,274 +31,174 @@ interface Fields {
   };
 }
 
-type CurrentStoryProps = {
-  datasource: Fields;
-  styles: string;
-  id?: string;
-};
-
 type GalleryProps = {
   params: { [key: string]: string };
   fields: Fields;
 };
 
-type ModalData = {
-  title: TextField;
-  description: RichTextField;
-  image: ImageField;
-};
-
-const ContentComponent: FC<{
-  modalData: ModalData;
-  darkMode: boolean;
-  onNext: () => void;
-  onPrev: () => void;
-  hasNext: boolean;
-  hasPrev: boolean;
-  currentIndex: number;
-  totalImages: number;
-  nextTitle?: string;
-  prevTitle?: string;
-}> = ({
-  modalData,
-  darkMode,
-  onNext,
-  onPrev,
-  hasNext,
-  hasPrev,
-  currentIndex,
-  totalImages,
-  nextTitle,
-  prevTitle,
-}) => {
-  const textColor = darkMode ? 'white' : '[var(--color-neutral-900)]';
-  console.log(textColor);
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'ArrowRight' && hasNext) {
-        onNext();
-      } else if (event.key === 'ArrowLeft' && hasPrev) {
-        onPrev();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [hasNext, hasPrev, onNext, onPrev]);
-
-  return (
-    <div className="modal">
-      <div className="modal-content">
-        <div className="modal-container">
-          {hasPrev && (
-            <div className="modal-arrow modal-prev">
-              <button onClick={onPrev}>
-                <Image
-                  src="/images/icons/chevron-left.png"
-                  alt="left-arrow"
-                  width={50}
-                  height={50}
-                />
-              </button>
-              {prevTitle && <p className="arrow-title">{prevTitle}</p>}
-            </div>
-          )}
-          <div className="modal-header">
-            <span>{`${currentIndex + 1}/${totalImages}`}</span>
-          </div>
-          <div className="modal-title">
-            <h3>{modalData.title && <Text field={modalData.title} />}</h3>{' '}
-          </div>
-          <div className="modal-body">
-            <div className="modal-image">
-              {modalData.image && <JSSImage field={modalData.image} />}
-            </div>
-            <div className="modal-description">
-              {modalData.description && <RichText field={modalData.description} />}
-            </div>
-          </div>
-          {hasNext && (
-            <div className="modal-arrow modal-next">
-              <button onClick={onNext}>
-                <Image
-                  src="/images/icons/chevron-right.png"
-                  alt="right-arrow"
-                  width={50}
-                  height={50}
-                />
-              </button>
-              {nextTitle && <p className="arrow-title">{nextTitle}</p>}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const CurrentStory: FC<CurrentStoryProps> = ({ datasource, styles, id }) => {
-  const { show } = useModalContext();
-  const darkMode = false;
-  const [currentIndex, setCurrentIndex] = useState<number | null>(null);
-
-  // Memoize getModalDataByIndex to prevent unnecessary recalculations
-  const getModalDataByIndex = useCallback(
-    (index: number): ModalData => {
-      const galleryItem = datasource.data.datasource.children.results[index];
-      const imageField = galleryItem.fields.find((field) => field.name === 'Image')?.jsonValue
-        ?.value;
-      const titleField = galleryItem.fields.find((field) => field.name === 'ImageTitle')?.jsonValue;
-      const descriptionField = galleryItem.fields.find(
-        (field) => field.name === 'ImageDescription'
-      )?.jsonValue;
-
-      const image: ImageField = {
-        value: typeof imageField === 'object' && 'src' in imageField ? imageField : undefined,
-        editable: galleryItem.fields.find((field) => field.name === 'Image')?.jsonValue?.editable,
-      };
-
-      const title: TextField = {
-        value: titleField?.value || '',
-        editable: titleField?.editable || '',
-      };
-
-      const description: RichTextField = {
-        value: descriptionField?.value || '',
-        editable: descriptionField?.editable || '',
-      };
-
-      return { title, description, image };
-    },
-    [datasource]
-  );
-
-  // Memoize handleNext to prevent unnecessary recalculations
-  const handleNext = useCallback(() => {
-    if (
-      currentIndex !== null &&
-      currentIndex < datasource.data.datasource.children.results.length - 1
-    ) {
-      setCurrentIndex(currentIndex + 1);
-    }
-  }, [currentIndex, datasource]);
-
-  // Memoize handlePrev to prevent unnecessary recalculations
-  const handlePrev = useCallback(() => {
-    if (currentIndex !== null && currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
-  }, [currentIndex]);
-
-  // Memoize showModal to prevent unnecessary re-renders
-  const showModal = useCallback(
-    (modalData: ModalData, index: number) => {
-      const totalImages = datasource.data.datasource.children.results.length;
-
-      // Use nullish coalescing (??) to handle null values
-      const nextTitle =
-        index < totalImages - 1
-          ? datasource.data.datasource.children.results[index + 1].fields.find(
-              (field) => field.name === 'ImageTitle'
-            )?.jsonValue?.value ?? undefined
-          : undefined;
-
-      const prevTitle =
-        index > 0
-          ? datasource.data.datasource.children.results[index - 1].fields.find(
-              (field) => field.name === 'ImageTitle'
-            )?.jsonValue?.value ?? undefined
-          : undefined;
-
-      show(
-        <ContentComponent
-          modalData={modalData}
-          darkMode={darkMode}
-          onNext={handleNext}
-          onPrev={handlePrev}
-          hasNext={index < totalImages - 1}
-          hasPrev={index > 0}
-          currentIndex={index}
-          totalImages={totalImages}
-          nextTitle={nextTitle} // No longer null
-          prevTitle={prevTitle} // No longer null
-        />,
-        {
-          closeButtonLabel: 'Close',
-          darkMode: false,
-          onClose: () => {
-            setCurrentIndex(null);
-          },
-        } as ModalConfiguration
-      );
-    },
-    [darkMode, datasource, handleNext, handlePrev, show]
-  );
-
-  // Effect to update modal content whenever currentIndex changes
-  useEffect(() => {
-    if (currentIndex !== null) {
-      const modalData = getModalDataByIndex(currentIndex);
-      showModal(modalData, currentIndex);
-    }
-  }, [currentIndex, getModalDataByIndex, showModal]);
-
-  const openModalHandler = (index: number) => {
-    setCurrentIndex(index);
-  };
-
-  const renderGalleryItems = datasource.data.datasource.children.results.map(
-    (galleryItem, index) => {
-      const imageField = galleryItem.fields.find((field) => field.name === 'Image')?.jsonValue
-        ?.value;
-      const image: ImageField = {
-        value: typeof imageField === 'object' && 'src' in imageField ? imageField : undefined,
-        editable: galleryItem.fields.find((field) => field.name === 'Image')?.jsonValue?.editable,
-      };
-
-      return (
-        <div
-          className={styles}
-          id={id || undefined}
-          key={index}
-          onClick={() => openModalHandler(index)}
-        >
-          {image && <JSSImage field={image} />}
-        </div>
-      );
-    }
-  );
-
-  return <>{renderGalleryItems}</>;
-};
-
-export const Default: FC<GalleryProps> = (props) => {
+export const Default = (props: GalleryProps): JSX.Element => {
   const { fields, params } = props;
   const datasource = fields?.data?.datasource;
   const styles = `component gallery ${params.styles}`.trim();
   const id = params.RenderingIdentifier;
 
-  if (datasource) {
-    const modalProviderProps: ModalProviderProps = {
-      children: undefined,
-      dismissOnEscape: true,
+  const [open, setOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [galleryItems, setGalleryItems] = useState<
+    { image: ImageField; title: TextField; description: RichTextField }[]
+  >([]);
+
+  useEffect(() => {
+    if (datasource) {
+      const items = datasource.children.results.map((galleryItem) => {
+        const imageField = galleryItem.fields.find((field) => field.name === 'Image')?.jsonValue
+          ?.value;
+        const image: ImageField = {
+          value: typeof imageField === 'object' && 'src' in imageField ? imageField : undefined,
+          editable: galleryItem.fields.find((field) => field.name === 'Image')?.jsonValue?.editable,
+        };
+
+        const titleField = galleryItem.fields.find(
+          (field) => field.name === 'ImageTitle'
+        )?.jsonValue;
+        const title: TextField = {
+          value: titleField?.value || '',
+          editable: titleField?.editable || '',
+        };
+
+        const descriptionField = galleryItem.fields.find(
+          (field) => field.name === 'ImageDescription'
+        )?.jsonValue;
+        const description: RichTextField = {
+          value: descriptionField?.value || '',
+          editable: descriptionField?.editable || '',
+        };
+
+        return { image, title, description };
+      });
+
+      setGalleryItems(items);
+    }
+  }, [datasource]);
+
+  const handleOpen = (index: number) => {
+    setCurrentIndex(index);
+    setOpen(true);
+  };
+
+  const handleClose = () => setOpen(false);
+
+  const goToNext = useCallback(() => {
+    if (currentIndex < galleryItems.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  }, [currentIndex, galleryItems.length]);
+
+  const goToPrev = useCallback(() => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  }, [currentIndex]);
+
+  // Add keyboard navigation for left and right arrows
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowRight') {
+        goToNext();
+      } else if (event.key === 'ArrowLeft') {
+        goToPrev();
+      }
     };
 
+    if (open) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [open, goToNext, goToPrev]);
+
+  if (!datasource || galleryItems.length === 0) {
     return (
-      <ModalProvider {...modalProviderProps}>
-        <CurrentStory datasource={fields} styles={styles} id={id} />
-      </ModalProvider>
+      <div className={styles} id={id || undefined}>
+        <div className="gallery-items">
+          <h3>Gallery</h3>
+        </div>
+      </div>
     );
   }
 
+  const currentItem = galleryItems[currentIndex];
+  const nextIndex = (currentIndex + 1) % galleryItems.length;
+  const prevIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
+  const nextItem = galleryItems[nextIndex];
+  const prevItem = galleryItems[prevIndex];
+
   return (
-    <div className={styles} id={id || undefined}>
-      <div className="gallery-items">
-        <h3>Gallery</h3>
-      </div>
-    </div>
+    <>
+      {galleryItems.map((galleryItem, index) => (
+        <div className={styles} id={id || undefined} key={index} onClick={() => handleOpen(index)}>
+          {galleryItem.image && <JSSImage field={galleryItem.image} />}
+        </div>
+      ))}
+
+      {currentItem && (
+        <Dialog open={open} handler={handleClose} className="rounded-xl p-6 relative">
+          <button
+            onClick={handleClose}
+            className="absolute top-0 right-0 mt-4 mr-4 text-gray-500 hover:text-gray-800 cursor-pointer z-50"
+            aria-label="Close"
+          >
+            <span className="text-3xl font-bold">×</span>
+          </button>
+
+          <div className="flex justify-center items-center text-gray-600 text-sm mt-4">
+            <span className="font-bold">{currentIndex + 1}</span>/{galleryItems.length}
+          </div>
+
+          <DialogHeader className="text-2xl font-bold text-center mt-4 mb-4">
+            {currentItem.title && <JSSText field={currentItem.title} />}
+          </DialogHeader>
+
+          <DialogBody className="flex items-center justify-between gap-4">
+            <Button
+              variant="text"
+              className="rounded-full p-2 border border-gray-300 hover:bg-gray-100"
+              onClick={goToPrev}
+              disabled={currentIndex === 0}
+            >
+              <span className="text-2xl">←</span>
+            </Button>
+
+            <div className="flex flex-col items-center justify-center">
+              {currentItem.image && <JSSImage field={currentItem.image} className="mb-4" />}
+              {currentItem.description && (
+                <JSSRichText
+                  field={currentItem.description}
+                  className="text-center text-gray-700"
+                />
+              )}
+            </div>
+
+            <Button
+              variant="text"
+              className="rounded-full p-2 border border-gray-300 hover:bg-gray-100"
+              onClick={goToNext}
+              disabled={currentIndex === galleryItems.length - 1}
+            >
+              <span className="text-2xl">→</span>
+            </Button>
+          </DialogBody>
+
+          <div className="flex justify-between mt-4 text-sm text-gray-500">
+            <div className="text-left">
+              {prevItem && <span className="font-semibold">{prevItem.title.value}</span>}
+            </div>
+            <div className="text-right">
+              {nextItem && <span className="font-semibold">{nextItem.title.value}</span>}
+            </div>
+          </div>
+        </Dialog>
+      )}
+    </>
   );
 };
