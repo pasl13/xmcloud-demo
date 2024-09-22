@@ -25,8 +25,11 @@ const Layout = ({ layoutData, headLinks }: LayoutProps): JSX.Element => {
   const { route } = layoutData.sitecore;
   const fields = route?.fields as RouteFields;
   const isPageEditing = layoutData.sitecore.context.pageEditing;
+  const customSitename = layoutData.sitecore.context?.site?.name;
   const mainClassPageEditing = isPageEditing ? 'editing-mode' : 'prod-mode';
   const isGovernmentManagementLayout = route?.layoutId === '9acf546e-2302-4996-8848-115306dd99f9';
+
+  const concatenatedMainClass = `${mainClassPageEditing} ${customSitename}`;
   return (
     <>
       <Scripts />
@@ -39,7 +42,7 @@ const Layout = ({ layoutData, headLinks }: LayoutProps): JSX.Element => {
       </Head>
 
       {/* root placeholder for the app, which we add components to using route data */}
-      <div className={mainClassPageEditing}>
+      <div className={concatenatedMainClass}>
         {!isGovernmentManagementLayout && (
           <header>
             <div id="header">
