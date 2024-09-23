@@ -7,7 +7,8 @@ import {
   Text as JSSText,
   TextField,
 } from '@sitecore-jss/sitecore-jss-nextjs';
-import { Button, Dialog, DialogHeader, DialogBody } from '@material-tailwind/react';
+import { Button } from '@ama-pt/agora-design-system';
+import { Dialog, DialogHeader, DialogBody } from '@material-tailwind/react';
 
 type GalleryField = {
   name: string;
@@ -100,7 +101,6 @@ export const Default = (props: GalleryProps): JSX.Element => {
     }
   }, [currentIndex]);
 
-  // Add keyboard navigation for left and right arrows
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'ArrowRight') {
@@ -161,13 +161,14 @@ export const Default = (props: GalleryProps): JSX.Element => {
 
           <DialogBody className="flex items-center justify-between gap-4">
             <Button
-              variant="text"
-              className="rounded-full p-2 border border-gray-300 hover:bg-gray-100"
+              appearance="outline"
+              hasIcon={true}
+              iconOnly={true}
+              leadingIcon="agora-line-chevron-left"
+              leadingIconHover="agora-line-chevron-left"
               onClick={goToPrev}
               disabled={currentIndex === 0}
-            >
-              <span className="text-2xl">←</span>
-            </Button>
+            />
 
             <div className="flex flex-col items-center justify-center">
               {currentItem.image && <JSSImage field={currentItem.image} className="mb-4" />}
@@ -178,15 +179,15 @@ export const Default = (props: GalleryProps): JSX.Element => {
                 />
               )}
             </div>
-
             <Button
-              variant="text"
-              className="rounded-full p-2 border border-gray-300 hover:bg-gray-100"
+              appearance="outline"
+              hasIcon={true}
+              iconOnly={true}
+              leadingIcon="agora-line-chevron-right"
+              leadingIconHover="agora-line-chevron-right"
               onClick={goToNext}
               disabled={currentIndex === galleryItems.length - 1}
-            >
-              <span className="text-2xl">→</span>
-            </Button>
+            />
           </DialogBody>
 
           <div className="flex justify-between mt-4 text-sm text-gray-500">
