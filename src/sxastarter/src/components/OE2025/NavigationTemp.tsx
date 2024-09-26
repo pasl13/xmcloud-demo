@@ -1,15 +1,8 @@
 import React, { ReactElement, useMemo } from 'react';
+import { ComponentParams, ComponentRendering, TextField } from '@sitecore-jss/sitecore-jss-nextjs';
 import {
-  ComponentParams,
-  ComponentRendering,
-  Placeholder,
-  TextField,
-} from '@sitecore-jss/sitecore-jss-nextjs';
-import {
-  Brand,
   HeaderV2,
   HeaderV2Props,
-  Institutional,
   NavigationBar,
   NavigationLink,
   NavigationLinkProps,
@@ -239,35 +232,9 @@ export const Default = (props: NavigationProps): JSX.Element => {
     return ret;
   }, []);
 
-  const phKey = `navigationtemp-logo-${props.params.DynamicPlaceholderId}`;
-
   return (
-    <div className={`component navigation min-h-screen mx-auto max-w-[1440px]`}>
-      <Placeholder name={phKey} rendering={props.rendering} />
+    <div className={`component navigation`}>
       <HeaderV2 {...args}>
-        <Brand>
-          <Placeholder name={phKey} rendering={props.rendering} />
-
-          <Institutional>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem modi, nesciunt iusto
-            alias illum.
-          </Institutional>
-        </Brand>
-
-        {/* <GeneralBar aria-label="Utilities menu">
-          <Languages aria-label="Language list" onChange={handleLanguageChange}>
-            <Language checked={selectedLang === 'PT'} value={'PT'} label="Portuguese" abbr="PT" />
-            <Language checked={selectedLang === 'ES'} value={'ES'} label="Spanish" abbr="ES" />
-            <Language checked={selectedLang === 'EN'} value={'EN'} label="English" abbr="EN" />
-          </Languages>
-
-          <Areas aria-label="Areas menu" onChange={handleAreaChange}>
-            <Area label="Area 1" value="area-1" active={selectedArea === 'area-1'} />
-            <Area label="Area 2" value="area-2" active={selectedArea === 'area-2'} />
-            <Area label="Area 3" value="area-3" active={selectedArea === 'area-3'} />
-          </Areas>
-        </GeneralBar> */}
-
         <NavigationBar
           label="Main navigation menu"
           openMenuLabel="Menu"
