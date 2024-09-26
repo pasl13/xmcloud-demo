@@ -676,7 +676,8 @@ export const Default = (props: HeaderProps): JSX.Element => {
     return storyArgs;
   })();
 
-  const phKey = `header-${props.params.DynamicPlaceholderId}`;
+  const phKey1 = `header-1-${props.params.DynamicPlaceholderId}`;
+  const phKey2 = `header-2-${props.params.DynamicPlaceholderId}`;
 
   return (
     <div className="min-h-screen mx-auto max-w-[1440px]">
@@ -732,8 +733,8 @@ export const Default = (props: HeaderProps): JSX.Element => {
       <main className="bg-neutral-400">
         <div className="container mx-auto flex flex-col gap-32">
           <h1>Placeholder</h1>
-          <Placeholder key="teste1" name={phKey} rendering={props.rendering} />
-          <Placeholder key="teste2" name={phKey} rendering={props.rendering} />
+          <Placeholder name={phKey1} rendering={props.rendering} />
+          <Placeholder name={phKey2} rendering={props.rendering} />
         </div>
       </main>
     </div>
