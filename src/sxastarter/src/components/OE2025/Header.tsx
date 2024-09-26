@@ -73,6 +73,7 @@ interface Fields {
 
 type HeaderProps = {
   rendering: ComponentRendering & { params: ComponentParams };
+  params: ComponentParams;
   fields: Fields;
 };
 
@@ -675,6 +676,8 @@ export const Default = (props: HeaderProps): JSX.Element => {
     return storyArgs;
   })();
 
+  const phKey = `headless-test-${props.params.DynamicPlaceholderId}`;
+
   return (
     <div className="min-h-screen mx-auto max-w-[1440px]">
       <header className="sticky top-0 z-sticky">
@@ -729,7 +732,7 @@ export const Default = (props: HeaderProps): JSX.Element => {
       <main className="bg-neutral-400">
         <div className="container mx-auto flex flex-col gap-32">
           <h1>Placeholder</h1>
-          <Placeholder name="headless-test" rendering={props.rendering} />
+          <Placeholder name={phKey} rendering={props.rendering} />
         </div>
       </main>
     </div>
