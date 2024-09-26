@@ -728,6 +728,7 @@ export const Default = (props: HeaderProps): JSX.Element => {
 
       <main className="bg-neutral-400">
         <div className="container mx-auto flex flex-col gap-32">
+          <h1>Placeholder</h1>
           <Placeholder name="headless-test" rendering={props.rendering} />
         </div>
       </main>
