@@ -732,7 +732,8 @@ export const Default = (props: HeaderProps): JSX.Element => {
       <main className="bg-neutral-400">
         <div className="container mx-auto flex flex-col gap-32">
           <h1>Placeholder</h1>
-          <Placeholder name={phKey} rendering={props.rendering} />
+          <Placeholder key="teste1" name={phKey} rendering={props.rendering} />
+          <Placeholder key="teste2" name={phKey} rendering={props.rendering} />
         </div>
       </main>
     </div>
