@@ -78,7 +78,7 @@ type HeaderProps = {
 };
 
 export const Default = (props: HeaderProps): JSX.Element => {
-  console.log('HeaderProps', props);
+  console.log('HeaderProps', props.params);
   const [selectedLang, setSelectedLang] = useState('PT');
 
   const handleLanguageChange = (val: string) => {
@@ -676,8 +676,8 @@ export const Default = (props: HeaderProps): JSX.Element => {
     return storyArgs;
   })();
 
-  const phKey1 = `header-1-${props.params.DynamicPlaceholderId}`;
-  const phKey2 = `header-2-${props.params.DynamicPlaceholderId}`;
+  const phKey1 = `header-main-${props.params.DynamicPlaceholderId}`;
+  const phKey2 = `header-navigation-${props.params.DynamicPlaceholderId}`;
 
   return (
     <div className="min-h-screen mx-auto max-w-[1440px]">
