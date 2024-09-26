@@ -243,6 +243,7 @@ export const Default = (props: NavigationProps): JSX.Element => {
 
   return (
     <div className={`component navigation min-h-screen mx-auto max-w-[1440px]`}>
+      <Placeholder name={phKey} rendering={props.rendering} />
       <HeaderV2 {...args}>
         <Brand>
           <Placeholder name={phKey} rendering={props.rendering} />
