@@ -676,7 +676,7 @@ export const Default = (props: HeaderProps): JSX.Element => {
     return storyArgs;
   })();
 
-  const phKey = `headless-test-${props.params.DynamicPlaceholderId}`;
+  const phKey = `header-${props.params.DynamicPlaceholderId}`;
 
   return (
     <div className="min-h-screen mx-auto max-w-[1440px]">
