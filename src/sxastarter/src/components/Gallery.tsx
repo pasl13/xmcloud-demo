@@ -7,7 +7,7 @@ import {
   Text as JSSText,
   TextField,
 } from '@sitecore-jss/sitecore-jss-nextjs';
-import { Button, Dialog, DialogHeader, DialogBody } from '@material-tailwind/react';
+import { Button, Dialog, DialogHeader, DialogBody, DialogFooter } from '@material-tailwind/react';
 
 type GalleryField = {
   name: string;
@@ -142,58 +142,50 @@ export const Default = (props: GalleryProps): JSX.Element => {
       ))}
 
       {currentItem && (
-        <Dialog open={open} handler={handleClose} className="rounded-xl p-6 relative">
-          <button
-            onClick={handleClose}
-            className="absolute top-0 right-0 mt-4 mr-4 text-gray-500 hover:text-gray-800 cursor-pointer z-50"
-            aria-label="Close"
-          >
-            <span className="text-3xl font-bold">×</span>
-          </button>
-
-          <div className="flex justify-center items-center text-gray-600 text-sm mt-4">
-            <span className="font-bold">{currentIndex + 1}</span>/{galleryItems.length}
-          </div>
-
-          <DialogHeader className="text-2xl font-bold text-center mt-4 mb-4">
+        <Dialog open={open} handler={handleClose} className="modal-container">
+          <DialogHeader className="modal-title">
+            <div className="modal-count">
+              <span className="modal-count-index">{currentIndex + 1}</span>/{galleryItems.length}
+            </div>
             {currentItem.title && <JSSText field={currentItem.title} />}
+            <button onClick={handleClose} className="modal-close" aria-label="Close">
+              <span className="modal-close-icon">×</span>
+            </button>
           </DialogHeader>
 
-          <DialogBody className="flex items-center justify-between gap-4">
+          <DialogBody className="modal-body">
+            <div className="modal-content">
+              {currentItem.image && <JSSImage field={currentItem.image} className="modal-image" />}
+              {currentItem.description && (
+                <JSSRichText field={currentItem.description} className="modal-description" />
+              )}
+            </div>
+          </DialogBody>
+          <DialogFooter>
             <Button
               variant="text"
-              className="rounded-full p-2 border border-gray-300 hover:bg-gray-100"
+              className="modal-button-previous"
               onClick={goToPrev}
               disabled={currentIndex === 0}
             >
-              <span className="text-2xl">←</span>
+              <span className="modal-button-icon">←</span>
             </Button>
-
-            <div className="flex flex-col items-center justify-center">
-              {currentItem.image && <JSSImage field={currentItem.image} className="mb-4" />}
-              {currentItem.description && (
-                <JSSRichText
-                  field={currentItem.description}
-                  className="text-center text-gray-700"
-                />
-              )}
-            </div>
 
             <Button
               variant="text"
-              className="rounded-full p-2 border border-gray-300 hover:bg-gray-100"
+              className="modal-button-next"
               onClick={goToNext}
               disabled={currentIndex === galleryItems.length - 1}
             >
-              <span className="text-2xl">→</span>
+              <span className="modal-button-icon">→</span>
             </Button>
-          </DialogBody>
+          </DialogFooter>
 
-          <div className="flex justify-between mt-4 text-sm text-gray-500">
-            <div className="text-left">
+          <div className="modal-footer">
+            <div className="modal-prev">
               {prevItem && <span className="font-semibold">{prevItem.title.value}</span>}
             </div>
-            <div className="text-right">
+            <div className="modal-next text-right">
               {nextItem && <span className="font-semibold">{nextItem.title.value}</span>}
             </div>
           </div>
