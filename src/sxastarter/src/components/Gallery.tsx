@@ -2,12 +2,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
   ImageField,
   Image as JSSImage,
-  RichText as JSSRichText,
   RichTextField,
-  Text as JSSText,
   TextField,
 } from '@sitecore-jss/sitecore-jss-nextjs';
-import { Button, Dialog, DialogHeader, DialogBody, DialogFooter } from '@material-tailwind/react';
+import Modal from 'src/atoms/Shared Components/Modal';
 
 type GalleryField = {
   name: string;
@@ -130,8 +128,8 @@ export const Default = (props: GalleryProps): JSX.Element => {
   const currentItem = galleryItems[currentIndex];
   const nextIndex = (currentIndex + 1) % galleryItems.length;
   const prevIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
-  const nextItem = galleryItems[nextIndex];
-  const prevItem = galleryItems[prevIndex];
+  const nextItem = galleryItems[nextIndex]?.title?.value?.toString() || '';
+  const prevItem = galleryItems[prevIndex]?.title?.value?.toString() || '';
 
   return (
     <>
@@ -142,54 +140,17 @@ export const Default = (props: GalleryProps): JSX.Element => {
       ))}
 
       {currentItem && (
-        <Dialog open={open} handler={handleClose} className="modal-container">
-          <DialogHeader className="modal-title">
-            <div className="modal-count">
-              <span className="modal-count-index">{currentIndex + 1}</span>/{galleryItems.length}
-            </div>
-            {currentItem.title && <JSSText field={currentItem.title} />}
-            <button onClick={handleClose} className="modal-close" aria-label="Close">
-              <span className="modal-close-icon">×</span>
-            </button>
-          </DialogHeader>
-
-          <DialogBody className="modal-body">
-            <div className="modal-content">
-              {currentItem.image && <JSSImage field={currentItem.image} className="modal-image" />}
-              {currentItem.description && (
-                <JSSRichText field={currentItem.description} className="modal-description" />
-              )}
-            </div>
-          </DialogBody>
-          <DialogFooter>
-            <Button
-              variant="text"
-              className="modal-button-previous"
-              onClick={goToPrev}
-              disabled={currentIndex === 0}
-            >
-              <span className="modal-button-icon">←</span>
-            </Button>
-
-            <Button
-              variant="text"
-              className="modal-button-next"
-              onClick={goToNext}
-              disabled={currentIndex === galleryItems.length - 1}
-            >
-              <span className="modal-button-icon">→</span>
-            </Button>
-          </DialogFooter>
-
-          <div className="modal-footer">
-            <div className="modal-prev">
-              {prevItem && <span className="font-semibold">{prevItem.title.value}</span>}
-            </div>
-            <div className="modal-next text-right">
-              {nextItem && <span className="font-semibold">{nextItem.title.value}</span>}
-            </div>
-          </div>
-        </Dialog>
+        <Modal
+          open={open}
+          currentIndex={currentIndex}
+          totalItems={galleryItems.length}
+          onClose={handleClose}
+          onNext={goToNext}
+          onPrev={goToPrev}
+          currentItem={currentItem}
+          nextLabel={nextItem}
+          prevLabel={prevItem}
+        />
       )}
     </>
   );
