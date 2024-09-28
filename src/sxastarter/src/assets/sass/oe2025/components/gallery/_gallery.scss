@@ -1,0 +1,58 @@
+.oe2025-gallery {
+  margin: 10px 30px;
+
+  h3 {
+    font-family: 'Gotham', sans-serif;
+    font-size: 35px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #132e39;
+    text-align: left;
+    margin-bottom: 33px;
+
+    .highlight {
+      background-color: #e2f4a2;
+      padding: 8px 12px;
+      border-radius: 4px;
+      color: #132e39;
+      font-weight: 700;
+      display: inline-block;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 35px;
+      line-height: 1.5;
+      text-align: left;
+
+      .highlight {
+        font-size: 35px;
+        padding: 8px 12px;
+      }
+    }
+  }
+
+  .rich-text {
+    padding: 0;
+  }
+
+  .flex-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 16px;
+    margin-top: 0;
+    padding-top: 0;
+
+    .gallery {
+      flex-basis: 30%;
+      flex-grow: 1;
+      height: auto;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+}

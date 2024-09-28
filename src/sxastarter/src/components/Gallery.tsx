@@ -2,12 +2,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
   ImageField,
   Image as JSSImage,
-  RichText as JSSRichText,
   RichTextField,
-  Text as JSSText,
   TextField,
 } from '@sitecore-jss/sitecore-jss-nextjs';
-import { Button, Dialog, DialogHeader, DialogBody } from '@material-tailwind/react';
+import Modal from 'src/atoms/Shared Components/Modal';
 
 type GalleryField = {
   name: string;
@@ -130,8 +128,8 @@ export const Default = (props: GalleryProps): JSX.Element => {
   const currentItem = galleryItems[currentIndex];
   const nextIndex = (currentIndex + 1) % galleryItems.length;
   const prevIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
-  const nextItem = galleryItems[nextIndex];
-  const prevItem = galleryItems[prevIndex];
+  const nextItem = galleryItems[nextIndex]?.title?.value?.toString() || '';
+  const prevItem = galleryItems[prevIndex]?.title?.value?.toString() || '';
 
   return (
     <>
@@ -142,62 +140,17 @@ export const Default = (props: GalleryProps): JSX.Element => {
       ))}
 
       {currentItem && (
-        <Dialog open={open} handler={handleClose} className="rounded-xl p-6 relative">
-          <button
-            onClick={handleClose}
-            className="absolute top-0 right-0 mt-4 mr-4 text-gray-500 hover:text-gray-800 cursor-pointer z-50"
-            aria-label="Close"
-          >
-            <span className="text-3xl font-bold">×</span>
-          </button>
-
-          <div className="flex justify-center items-center text-gray-600 text-sm mt-4">
-            <span className="font-bold">{currentIndex + 1}</span>/{galleryItems.length}
-          </div>
-
-          <DialogHeader className="text-2xl font-bold text-center mt-4 mb-4">
-            {currentItem.title && <JSSText field={currentItem.title} />}
-          </DialogHeader>
-
-          <DialogBody className="flex items-center justify-between gap-4">
-            <Button
-              variant="text"
-              className="rounded-full p-2 border border-gray-300 hover:bg-gray-100"
-              onClick={goToPrev}
-              disabled={currentIndex === 0}
-            >
-              <span className="text-2xl">←</span>
-            </Button>
-
-            <div className="flex flex-col items-center justify-center">
-              {currentItem.image && <JSSImage field={currentItem.image} className="mb-4" />}
-              {currentItem.description && (
-                <JSSRichText
-                  field={currentItem.description}
-                  className="text-center text-gray-700"
-                />
-              )}
-            </div>
-
-            <Button
-              variant="text"
-              className="rounded-full p-2 border border-gray-300 hover:bg-gray-100"
-              onClick={goToNext}
-              disabled={currentIndex === galleryItems.length - 1}
-            >
-              <span className="text-2xl">→</span>
-            </Button>
-          </DialogBody>
-
-          <div className="flex justify-between mt-4 text-sm text-gray-500">
-            <div className="text-left">
-              {prevItem && <span className="font-semibold">{prevItem.title.value}</span>}
-            </div>
-            <div className="text-right">
-              {nextItem && <span className="font-semibold">{nextItem.title.value}</span>}
-            </div>
-          </div>
-        </Dialog>
+        <Modal
+          open={open}
+          currentIndex={currentIndex}
+          totalItems={galleryItems.length}
+          onClose={handleClose}
+          onNext={goToNext}
+          onPrev={goToPrev}
+          currentItem={currentItem}
+          nextLabel={nextItem}
+          prevLabel={prevItem}
+        />
       )}
     </>
   );

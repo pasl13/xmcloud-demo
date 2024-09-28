@@ -67,6 +67,7 @@
   <ItemGroup>
     <Content Include="App_Config\Include\TestPatchFileSetting.config" />
     <Content Include="App_Config\Include\CORS\Custom.GraphQL.CORS.Patch.Localhost.config" />
+    <Content Include="App_Config\Include\LinkProviders\z.Custom.LinkProviders.config" />
     <Content Include="sitecore\shell\Controls\Rich Text Editor\ToolsFile.xml" />
     <None Include="Platform.wpp.targets" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
