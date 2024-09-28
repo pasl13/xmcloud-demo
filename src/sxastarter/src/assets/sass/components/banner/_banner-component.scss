@@ -1,0 +1,84 @@
+/* General container for the banner */
+.component.banner {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #1E4F5F; /* Assuming a dark teal background similar to the design */
+  color: white;
+}
+
+.component-content {
+  flex: 1;
+  padding: 20px;
+}
+
+.banner-breadcrump {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7); /* Light color for breadcrumbs */
+  margin-bottom: 20px;
+}
+
+/* Lecture Time */
+.banner-field-lecturetime {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 10px;
+}
+
+/* Title Section */
+.banner-field-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+
+/* Text Section */
+.banner-field-text {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+/* Update Message Section */
+.banner-field-updatemessage {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 40px;
+}
+
+/* Image Section */
+.banner-field-image {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.banner-field-image img {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .component.banner {
+    flex-direction: column;
+  }
+
+  .banner-field-title {
+    font-size: 2rem;
+  }
+
+  .banner-field-text {
+    font-size: 1rem;
+  }
+
+  .banner-field-image {
+    justify-content: center;
+    margin-top: 20px;
+  }
+}
+
