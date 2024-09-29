@@ -57,6 +57,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Sitecore.JavaScriptServices.Configuration" VersionOverride="21.0.583" />
+	<PackageReference Include="Sitecore.JavaScriptServices.ViewEngine" VersionOverride="21.0.583" />
     <PackageReference Include="Sitecore.XmCloud.Kernel" />
     <PackageReference Include="Sitecore.XmCloud.ContentSearch" />
     <PackageReference Include="Sitecore.XmCloud.ContentSearch.Linq" />
@@ -74,7 +76,9 @@
     <None Include="README.md" />
     <None Include="web.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Pipelines\ContextExtension.cs" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
