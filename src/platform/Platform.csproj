@@ -44,6 +44,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Sitecore.JavaScriptServices.Configuration, Version=40.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Sitecore.JavaScriptServices.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Sitecore.JavaScriptServices.ViewEngine, Version=40.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Sitecore.JavaScriptServices.ViewEngine.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -69,12 +77,15 @@
     <Content Include="App_Config\Include\CORS\Custom.GraphQL.CORS.Patch.Localhost.config" />
     <Content Include="App_Config\Include\LinkProviders\z.Custom.LinkProviders.config" />
     <Content Include="sitecore\shell\Controls\Rich Text Editor\ToolsFile.xml" />
+    <Content Include="App_Config\Include\Pipelines\z.Pipelines.ContextExtension.config" />
     <None Include="Platform.wpp.targets" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="README.md" />
     <None Include="web.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Pipelines\ContextExtension.cs" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
