@@ -2,6 +2,7 @@ import { Image } from '@sitecore-jss/sitecore-jss-nextjs';
 import { SatisfactionFormModel } from 'src/models/SatisfactionFormModel';
 import StepCancel from './StepCancel'; // Import StepTwoA component (adjust the path if needed)
 import StepTwoPositive from './StepTwoPositive';
+import { useState } from 'react';
 const StepTwoNegative = ({
   satisfaction: initialSatisfaction,
   ...props
