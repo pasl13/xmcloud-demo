@@ -48,8 +48,6 @@ type BreadcrumbProps = {
 
 const Breadcrumb = (props: BreadcrumbProps): JSX.Element => {
   const ancestors = props.fields.data.datasource?.ancestors;
-  console.log(props);
-  debugger;
   return (
     <ol className="breadcrumb">
       <li className="breadcrumb-item-home">
