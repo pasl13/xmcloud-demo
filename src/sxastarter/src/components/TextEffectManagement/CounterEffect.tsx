@@ -18,6 +18,8 @@ interface CounterEffectProps {
     counterDuration: CounterField<string>;
     counterAutoplayOption: CounterField<boolean>;
     counterTitleText: CounterField<string>;
+    counterBackgroundColor: CounterField<string>;
+    counterTextColor: CounterField<string>;
   };
 }
 
@@ -33,6 +35,10 @@ export const Default = (props: CounterEffectProps): JSX.Element => {
   const autoplay = fields.counterAutoplayOption.value;
   const titleText = fields.counterTitleText.value;
 
+  // Get the colors from the fields
+  const backgroundColor = fields.counterBackgroundColor.value;
+  const textColor = fields.counterTextColor.value;
+
   useEffect(() => {
     if (counterRef.current) {
       const countUp = new CountUp(counterRef.current, targetNumber, {
@@ -47,16 +53,29 @@ export const Default = (props: CounterEffectProps): JSX.Element => {
     }
   }, [targetNumber, prefix, suffix, duration, autoplay]);
 
+  // Inline styles for dynamic colors
+  const counterStyles = {
+    backgroundColor: backgroundColor,
+    color: textColor,
+    padding: '10px',
+    borderRadius: '5px',
+    display: 'inline-block',
+  };
+
   return (
     <div className={`component ${props.params.styles}`} id={id ? id : undefined}>
       {titleText ? (
         <div className="component-content-with-title">
           <h2>{titleText}</h2>
-          <span ref={counterRef}>0</span>
+          <span ref={counterRef} style={counterStyles}>
+            0
+          </span>
         </div>
       ) : (
-        <div className="component-content-counter">
-          <span ref={counterRef}>0</span>
+        <div className="component-content">
+          <span ref={counterRef} style={counterStyles}>
+            0
+          </span>
         </div>
       )}
     </div>
