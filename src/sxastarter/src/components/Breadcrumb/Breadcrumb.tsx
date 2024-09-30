@@ -47,19 +47,19 @@ type BreadcrumbProps = {
 };
 
 const Breadcrumb = (props: BreadcrumbProps): JSX.Element => {
-  const ancestors = props.fields.data.datasource.ancestors;
+  const ancestors = props.fields.data.datasource?.ancestors;
   console.log(props);
   debugger;
   return (
     <ol className="breadcrumb">
       <li className="breadcrumb-item-home">
-        <a href={props.fields.data.datasource.ancestors[ancestors.length - 1].url.url}>
-          <span>{props.fields.data.datasource.rootname.value}</span>
+        <a href={props.fields.data.datasource?.ancestors[ancestors.length - 1].url.url}>
+          <span>{props.fields.data.datasource?.rootname.value}</span>
         </a>
       </li>
-      {ancestors.length > 2 &&
+      {ancestors?.length > 2 &&
         ancestors
-          .slice(1, -2)
+          .slice(1, -1)
           .reverse()
           .map((ancestor, index) => (
             <React.Fragment key={index}>
@@ -73,7 +73,7 @@ const Breadcrumb = (props: BreadcrumbProps): JSX.Element => {
               </li>
             </React.Fragment>
           ))}
-      {ancestors.length > 1 && (
+      {ancestors?.length > 1 && (
         <React.Fragment key={0}>
           <li className="breadcrumb-icon">
             <Image field={props.fields.data.datasource.iconimage.jsonValue} />
