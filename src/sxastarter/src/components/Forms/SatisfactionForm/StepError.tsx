@@ -15,7 +15,7 @@ const StepError = ({ props }: { props: SatisfactionFormModel }) => {
       {!showSatisfactionForm ? (
         <>
           <div>
-            <Image field={props.fields.AlertImage} alt="Alert Image" />
+            <Image field={props.fields.AlertImage} />
           </div>
           <div>
             <h3>{props.fields.NotSubmittedTitle.value}</h3>
