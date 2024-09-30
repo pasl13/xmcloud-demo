@@ -9,7 +9,9 @@ const StepOne = ({ props }: { props: SatisfactionFormModel }) => {
   const [showStepTwoPositive, setShowStepTwoPositive] = useState<boolean>(false); // Track if we should show the next step
   const [responseMessage, setResponseMessage] = useState<string | null>(null);
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
-
+  if (responseMessage) {
+    // Do nothing
+  }
   useEffect(() => {
     const submitted = localStorage.getItem(window.location.href);
     if (submitted === 'true') {

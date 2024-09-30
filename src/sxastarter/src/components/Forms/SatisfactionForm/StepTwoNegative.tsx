@@ -13,7 +13,9 @@ const StepTwoNegative = ({
   const [textInput, setText] = useState<string>('');
   const [inputError, setInputError] = useState<boolean>(false);
   const [responseMessage, setResponseMessage] = useState<string | null>(null);
-
+  if (responseMessage) {
+    // Do nothing
+  }
   const handleBackClick = () => {
     setSatisfaction('');
     setShowStepCancel(true); // Show the second part of the form after a selection
