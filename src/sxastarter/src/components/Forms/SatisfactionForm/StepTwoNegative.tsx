@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Image } from '@sitecore-jss/sitecore-jss-nextjs';
 import { SatisfactionFormModel } from 'src/models/SatisfactionFormModel';
 import StepCancel from './StepCancel'; // Import StepTwoA component (adjust the path if needed)
@@ -13,6 +12,7 @@ const StepTwoNegative = ({
   const [textInput, setText] = useState<string>('');
   const [inputError, setInputError] = useState<boolean>(false);
   const [responseMessage, setResponseMessage] = useState<string | null>(null);
+
   const handleBackClick = () => {
     setSatisfaction('');
     setShowStepCancel(true); // Show the second part of the form after a selection
@@ -29,6 +29,7 @@ const StepTwoNegative = ({
     } else {
       setSatisfaction(satisfaction);
       createSitecoreItem(formatedDate, randomNumber, safeTextInput);
+      localStorage.setItem(window.location.href, 'true');
       setShowStepTwoPositive(true);
     }
   };

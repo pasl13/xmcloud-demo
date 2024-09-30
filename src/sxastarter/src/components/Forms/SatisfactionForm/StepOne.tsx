@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import StepTwoNegative from './StepTwoNegative'; // Import StepTwoA component (adjust the path if needed)
 import StepTwoPositive from './StepTwoPositive';
 import { SatisfactionFormModel } from 'src/models/SatisfactionFormModel';
@@ -8,12 +8,20 @@ const StepOne = ({ props }: { props: SatisfactionFormModel }) => {
   const [showStepTwoNegative, setShowStepTwoNegative] = useState<boolean>(false); // Track if we should show the next step
   const [showStepTwoPositive, setShowStepTwoPositive] = useState<boolean>(false); // Track if we should show the next step
   const [responseMessage, setResponseMessage] = useState<string | null>(null);
+  const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
 
+  useEffect(() => {
+    const submitted = localStorage.getItem(window.location.href);
+    if (submitted === 'true') {
+      setIsFormSubmitted(true);
+    }
+  }, []);
   const handleSatisfactionPositiveClick = (value: string) => {
     const formatedDate = formatDate(new Date());
     const randomNumber = Math.floor(10000 + Math.random() * 90000);
     setSatisfaction(value);
     createSitecoreItem(formatedDate, randomNumber);
+    localStorage.setItem(window.location.href, 'true');
     setShowStepTwoPositive(true);
   };
   const handleSatisfactionNegativeClick = (value: string) => {
@@ -87,7 +95,7 @@ const StepOne = ({ props }: { props: SatisfactionFormModel }) => {
   return (
     <div>
       {/* Conditionally render Step One or Step Two */}
-      {!showStepTwoNegative && !showStepTwoPositive ? (
+      {!showStepTwoNegative && !showStepTwoPositive && !isFormSubmitted ? (
         <div>
           <h2>{props.fields.Question.value}</h2>
           {/* Buttons for Yes and No */}
