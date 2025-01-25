@@ -72,6 +72,7 @@
     <Content Include="App_Config\Include\LinkProviders\z.Custom.LinkProviders.config" />
     <Content Include="sitecore\shell\Controls\Rich Text Editor\ToolsFile.xml" />
     <Content Include="App_Config\Include\Pipelines\z.Pipelines.ContextExtension.config" />
+    <Content Include="App_Config\Include\GraphQL\z.GraphQL.MaxDepth.config" />
     <None Include="Platform.wpp.targets" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="README.md" />
