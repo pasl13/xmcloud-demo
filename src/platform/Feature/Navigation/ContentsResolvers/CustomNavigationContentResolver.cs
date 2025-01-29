@@ -9,16 +9,17 @@ namespace XmCloudSXAStarter.Feature.Navigation.ContentsResolvers
     public class CustomNavigationContentResolver : NavigationContentResolver
     {
         protected override void AddFields(
-            NavigationItemModel navigationItem,
-            JObject navigationChildNode,
-            IEnumerable<string> fields)
+           NavigationItemModel navigationItem,
+           JObject navigationChildNode,
+           IEnumerable<string> fields)
         {
             base.AddFields(navigationItem, navigationChildNode, fields);
 
-            Field pageDescriptionField = navigationItem.Item.Fields["PageDescription"];
-            if (pageDescriptionField != null && !string.IsNullOrEmpty(pageDescriptionField.Value))
+            Field subtitleField = navigationItem.Item.Fields["Subtitle"];
+            if (subtitleField != null && !string.IsNullOrEmpty(subtitleField.Value))
             {
-                navigationChildNode["PageDescription"] = pageDescriptionField.Value;
+                JToken subtitleJson = JToken.Parse(SerializeField(subtitleField));
+                navigationChildNode.Add(subtitleJson.First);
             }
         }
     }
