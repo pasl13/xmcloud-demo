@@ -12,7 +12,6 @@ interface Fields {
   DisplayName: string;
   Title: TextField;
   NavigationTitle: TextField;
-  Subtitle: TextField;
   Href: string;
   Querystring: string;
   Children: Array<Fields>;
@@ -49,7 +48,6 @@ const getLinkField = (props: NavigationProps): LinkField => ({
 });
 
 export const Default = (props: NavigationProps): JSX.Element => {
-  console.log(props);
   const [isOpenMenu, openMenu] = useState(false);
   const { sitecoreContext } = useSitecoreContext();
   const styles =
@@ -141,7 +139,6 @@ const NavigationList = (props: NavigationProps) => {
         >
           {getNavigationText(props)}
         </Link>
-        <Text field={props.fields.Subtitle} />;
       </div>
       {children.length > 0 ? <ul className="clearfix">{children}</ul> : null}
     </li>
