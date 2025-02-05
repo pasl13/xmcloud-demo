@@ -44,18 +44,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Sitecore.XA.Foundation.FEaaS.Integration, Version=40.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Sitecore.XA.Foundation.FEaaS.Integration.dll</HintPath>
-    </Reference>
-    <Reference Include="Sitecore.XA.Foundation.RenderingVariants, Version=40.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Sitecore.XA.Foundation.RenderingVariants.dll</HintPath>
-    </Reference>
-    <Reference Include="Sitecore.XA.JSS.Feature.Navigation, Version=40.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Sitecore.XA.JSS.Feature.Navigation.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -91,7 +79,6 @@
     <None Include="web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Feature\Navigation\ContentsResolvers\CustomNavigationContentResolver.cs" />
     <Compile Include="Pipelines\ContextExtension.cs" />
   </ItemGroup>
   <PropertyGroup>
